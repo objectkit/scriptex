@@ -4,8 +4,15 @@
   "description": "A micro library and standalone build tool for the Apple Scripter MIDI-FX plugin",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "gulp": "gulp -f ./tool/gulp/gulpfile.coffee"
   },
   "author": "axel@objectkit.com",
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "coffeescript": "^2.5.1",
+    "gulp": "^4.0.2",
+    "rollup": "^1.31.1",
+    "rollup-stream": "^1.24.1"
+  }
 }
