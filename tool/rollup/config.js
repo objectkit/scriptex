@@ -2,6 +2,7 @@ import pkg from "../../package.json"
 import path from "path"
 import includePaths from "rollup-plugin-includepaths"
 import multiEntry from "@rollup/plugin-multi-entry"
+import {terser} from "rollup-plugin-terser"
 
 // TODO consider `process.chdir("../../")` instead
 const ROOT_DIR = path.resolve(__dirname, `../../`)
@@ -34,8 +35,14 @@ export default {
     file: `${OUT_DIR}/scriptex-${pkg.version}.js`,
     format: "esm",
     /* @see https://rollupjs.org/guide/en/#outputinterop */
-    interop: false,
-    plugins: [ /* @todo terser */ ]
+    // interop: false,
+    plugins: [
+      /* @see https://github.com/terser/terser#minify-options */
+      terser({
+        keep_classnames: true,
+        safari10: true
+      })
+    ]
   },
 
   /* @see https://rollupjs.org/guide/en/#plugins */
@@ -49,6 +56,6 @@ export default {
     /* @see https://github.com/rollup/plugins/tree/master/packages/multi-entry */
     multiEntry({
       exports: true
-    })
+    }),
   ]
 }
