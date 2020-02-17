@@ -5,14 +5,15 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "gulp": "gulp -f ./tool/gulp/gulpfile.coffee"
+    "build": "npm run rollup",
+    "rollup": "rollup -c ./tool/rollup/config.js"
   },
   "author": "axel@objectkit.com",
   "license": "Apache-2.0",
   "devDependencies": {
+    "@rollup/plugin-multi-entry": "^3.0.0",
     "coffeescript": "^2.5.1",
-    "gulp": "^4.0.2",
     "rollup": "^1.31.1",
-    "rollup-stream": "^1.24.1"
+    "rollup-plugin-includepaths": "^0.2.3"
   }
 }
