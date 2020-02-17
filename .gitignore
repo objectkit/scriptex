@@ -1,5 +1,8 @@
 ### Dev ###
+# the common trashpile area used during development
 .trash
+# the project build directory
+build
 
 
 # Created by https://www.gitignore.io/api/node,linux,macos,windows
