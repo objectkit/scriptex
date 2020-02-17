@@ -1,4 +1,4 @@
-import `com/objectkit/scriptex/Scriptex`
+import Scriptex from "com/objectkit/scriptex/Scriptex"
 
 export default class Plugin {
   static deploy (system=void(0)) {
@@ -8,3 +8,6 @@ export default class Plugin {
     return deployer.deploy(deployee)
   }
 }
+
+/* FIXME added to force inclusion of files */
+Plugin.deploy()
