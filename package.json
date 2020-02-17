@@ -1,0 +1,11 @@
+{
+  "name": "com.objectkit.scriptex",
+  "version": "1.0.0",
+  "description": "A micro library and standalone build tool for the Apple Scripter MIDI-FX plugin",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "axel@objectkit.com",
+  "license": "Apache-2.0"
+}
