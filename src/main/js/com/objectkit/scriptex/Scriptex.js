@@ -1,7 +1,7 @@
 import Scripter from "com/objectkit/scriptex/system/Scripter"
 
 export default class Scriptex {
-  constructor (system=Scripter) {
+  constructor(system=Scripter) {
     this.system = system
   }
   deploy (plugin) {

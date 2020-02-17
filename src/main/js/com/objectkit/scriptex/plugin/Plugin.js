@@ -8,6 +8,3 @@ export default class Plugin {
     return deployer.deploy(deployee)
   }
 }
-
-/* FIXME added to force inclusion of files */
-Plugin.deploy()
