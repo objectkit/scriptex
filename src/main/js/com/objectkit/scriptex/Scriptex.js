@@ -25,8 +25,8 @@ export default class Scriptex {
     plugin.engine = this.engine
 
     get(`NeedsTimingInfo`, `needsTiming`)
-    get(`ResetParameterDefaults`, `resetParams`)
-    get(`PluginParameters`, `params`)
+    get(`ResetParameterDefaults`, `resetParameters`)
+    get(`PluginParameters`, `parameters`)
 
     fun(`HandleMIDI`, `handleMIDI`)
     fun(`ProcessMIDI`, `handleProcess`)
