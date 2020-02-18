@@ -7,7 +7,9 @@ export default class Scriptex {
   }
 
   deploy (plugin, customisable=false) {
+
     let api = []
+
     let def = (target, key, val, attribute, configurable=customisable) =>
       Reflect.defineProperty(target, key, { configurable, [ attribute ] : val } )
 
