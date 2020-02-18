@@ -4,10 +4,9 @@
   "description": "A micro library and standalone build tool for the Apple Scripter MIDI-FX plugin",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --file ./tool/mocha/config.coffee --require coffeescript/register",
-    "test-help": "mocha -h",
+    "test": "mocha src/test/coffee/**/*Spec.coffee --file tool/mocha/config.coffee --require coffeescript/register",
     "build": "npm run rollup",
-    "rollup": "rollup -c ./tool/rollup/config.js"
+    "rollup": "rollup -c tool/rollup/config.js"
   },
   "author": "axel@objectkit.com",
   "license": "Apache-2.0",

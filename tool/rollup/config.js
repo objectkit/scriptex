@@ -5,9 +5,13 @@ import multiEntry from "@rollup/plugin-multi-entry"
 import {terser} from "rollup-plugin-terser"
 
 // TODO consider `process.chdir("../../")` instead
+// TODO process.PRODUCTION | TEST flags terser interop
 const ROOT_DIR = path.resolve(__dirname, `../../`)
-const OUT_DIR = path.resolve(ROOT_DIR, `build`)
 const SRC_DIR = path.resolve(ROOT_DIR, `src/main/js`)
+const OUT_DIR = path.resolve(ROOT_DIR, `build`)
+// const OUT_BUILD_DIR
+// const OUT_TEST_DIR
+
 
 export default {
 
@@ -31,19 +35,39 @@ export default {
   },
 
   /* @see https://rollupjs.org/guide/en/#output */
-  output: {
-    file: `${OUT_DIR}/scriptex-${pkg.version}.js`,
-    format: "esm",
-    /* @see https://rollupjs.org/guide/en/#outputinterop */
-    // interop: false,
-    plugins: [
-      /* @see https://github.com/terser/terser#minify-options */
-      terser({
-        keep_classnames: true,
-        safari10: true
-      })
-    ]
-  },
+  output:
+  [
+    /* RELEASE */
+    {
+      file: `${OUT_DIR}/RELEASE-${pkg.version}/scriptex.js`,
+      format: "esm",
+      /* @see https://rollupjs.org/guide/en/#outputinterop */
+      // interop: false,
+      plugins: [
+        /* @see https://github.com/terser/terser#minify-options */
+        terser({
+          keep_classnames: true,
+          safari10: true
+        })
+      ]
+    },
+    /* TEST */
+    {
+      file: `${OUT_DIR}/RELEASE-${pkg.version}/scriptex-test.js`,
+      format: "cjs",
+      /* @see https://rollupjs.org/guide/en/#outputinterop */
+      // interop: false,
+      plugins: [
+        /* @see https://github.com/terser/terser#minify-options */
+        terser({
+          keep_classnames: true,
+          safari10: true
+        })
+      ]
+    }
+
+
+  ],
 
   /* @see https://rollupjs.org/guide/en/#plugins */
   plugins: [
