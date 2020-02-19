@@ -1,104 +1,63 @@
-{
-  Scriptex
-  Scripter
-  Plugin
-} = require(SCRIPTEX_TEST)
+Help = require("./ScriptexSpecHelp")
 
 describe "Scriptex", ->
 
-  Help =
-    checkEngine: ->
-      mockEngine = {}
-      mockPlugin = {}
-      # does not have #engine
-      new Scriptex(mockEngine).deploy(mockPlugin)
-      expect(mockPlugin).property("engine").eql(mockEngine)
+  describe "Object #engine", ->
 
-    runDeployMethod: (engineKey, pluginKey) ->
-      mockEngine = {}
-      mockPlugin = {[pluginKey]: ->}
-      scriptex = new Scriptex(mockEngine)
-      returned = scriptex.deploy(mockPlugin)
-      expect(returned).to.be.instanceof(Array).with.lengthOf(1)
-      expect(returned[0]).to.eql(engineKey)
-      # TODO method invoke
-      return
+    context "Given Scriptex has been instantiated with an engine for testing", ->
+      specify "Then Scriptex#engine is set to that engine", ->
+        Help.testScriptexEngine()
 
-    runDeployField: (engineKey, pluginKey) ->
-      mockValue = uuid()
-      mockPlugin = { [pluginKey]: mockValue }
-      mockEngine = { }
-      fixture = new Scriptex(mockEngine)
-      returned = fixture.deploy(mockPlugin)
-      expect(returned).to.be.instanceof(Array).with.lengthOf(1)
-      expect(returned[0]).to.eql(engineKey)
-      # TODO field access
-      return
+    context "Given Scriptex has been instantiated *without* an engine for deployment", ->
+      specify "Then Scriptex#engine is set to Scripter", ->
+        Help.testDefaultScriptexEngine()
 
-    runDeploy: (engine, plugin) ->
-      new Scriptex(engine).deploy(plugin)
+  describe "Array<string> #deploy(plugin, customisable=false)", ->
 
-  describe "#engine", ->
-    context "Given a new Scriptex instance has been constructed", ->
-      context "And no engine parameter was provided", ->
-        specify "Then #engine is set to Scripter", ->
-          mockEngine = undefined
-          expect(new Scriptex(mockEngine)).property("engine").eql(Scripter)
-          return
-        return
-      context "And an engine parameter was specified", ->
-        specify "Then #engine is set to the engine parameter", ->
-          mockEngine = {}
-          expect(new Scriptex(mockEngine)).property("engine").eql(mockEngine)
-          return
-        return
-      return
-    return
-  describe "#deploy(plugin, customisable=false)", ->
-    context "Given Scriptex has deployed Plugin to #engine", ->
-      specify "Then Plugin#engine is set to Scriptex#engine", ->
-        Help.checkEngine()
-        return
-      context "When Plugin#needsTiming is a field", ->
+    context "Given Scriptex has deployed a plugin to #engine", ->
+
+      context "When customisable is set to false [default]", ->
+        specify "Then #engine properties cannot be deleted", ->
+          Help.testNonConfigurableDeployment()
+
+      context "When customisable is set to true", ->
+        specify "Then #engine properties can be deleted", ->
+          Help.testConfigurableDeployment()
+
+      context "When plugin#needsTiming is a field", ->
         specify "Then #engine.NeedsTimingInfo is that fields delegate", ->
-          Help.runDeployField("NeedsTimingInfo", "needsTiming")
-          return
-        return
-      context "When Plugin#resetParameters is a field", ->
+          Help.testDeployedField("NeedsTimingInfo", "needsTiming")
+
+      context "When plugin#resetParameters is a field", ->
         specify "Then #engine.ResetParameterDefaults is that fields delegate", ->
-          Help.runDeployField("ResetParameterDefaults", "resetParameters")
-          return
-        return
-      context "When Plugin#parameters is a field", ->
+          Help.testDeployedField("ResetParameterDefaults", "resetParameters")
+
+      context "When plugin#parameters is a field", ->
         specify "Then #engine.PluginParameters is that fields delegate", ->
-          Help.runDeployField("PluginParameters", "parameters")
-          return
-        return
-      context "When Plugin#handleMIDI is a method", ->
+          Help.testDeployedField("PluginParameters", "parameters")
+
+      context "When plugin#handleMIDI is a method", ->
         specify "Then #engine.HandleMIDI is that methods delegate", ->
-          Help.runDeployMethod("HandleMIDI", "handleMIDI")
-          return
-        return
-      context "When Plugin#handleProcess is a method", ->
+          Help.testDeployedMethod("HandleMIDI", "handleMIDI")
+
+      context "When plugin#handleProcess is a method", ->
         specify "Then #engine.ProcessMIDI is that methods delegate", ->
-          Help.runDeployMethod("ProcessMIDI", "handleProcess")
-          return
-        return
-      context "When Plugin#handleParameter is a method", ->
+          Help.testDeployedMethod("ProcessMIDI", "handleProcess")
+
+      context "When plugin#handleParameter is a method", ->
         specify "Then #engine.ParameterChanged is that methods delegate", ->
-          Help.runDeployMethod("ParameterChanged", "handleParameter")
-          return
-        return
-      context "When Plugin#handleIdle is a method", ->
+          Help.testDeployedMethod("ParameterChanged", "handleParameter")
+
+      context "When plugin#handleIdle is a method", ->
         specify "Then #engine.Idle is that methods delegate", ->
-          Help.runDeployMethod("Idle", "handleIdle")
-          return
-        return
-      context "When Plugin#handleReset is a method", ->
+          Help.testDeployedMethod("Idle", "handleIdle")
+
+      context "When plugin#handleReset is a method", ->
         specify "Then #engine.Reset is that methods delegate", ->
-          Help.runDeployMethod("Reset", "handleReset")
-          return
-        return
-      return
-    return
-  return
+          Help.testDeployedMethod("Reset", "handleReset")
+
+      specify "Then plugin#engine is set to Scriptex#engine", ->
+        Help.testDeployedEngine({})
+
+      specify "Then Scriptex returns a list of binding Scripter keys", ->
+        Help.testDeployedAPI()

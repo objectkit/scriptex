@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha src/test/coffee/**/*Spec.coffee --file tool/mocha/config.coffee --require coffeescript/register",
+    "watch:test": "mocha src/test/coffee/**/*Spec.coffee --file tool/mocha/config.coffee --require coffeescript/register --watch",
     "build": "npm run rollup",
     "rollup": "rollup -c tool/rollup/config.js"
   },

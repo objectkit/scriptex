@@ -45,10 +45,10 @@ export default {
       // interop: false,
       plugins: [
         /* @see https://github.com/terser/terser#minify-options */
-        terser({
-          keep_classnames: true,
-          safari10: true
-        })
+        // terser({
+        //   keep_classnames: false,
+        //   safari10: true
+        // })
       ]
     },
     /* TEST */
@@ -59,10 +59,10 @@ export default {
       // interop: false,
       plugins: [
         /* @see https://github.com/terser/terser#minify-options */
-        terser({
-          keep_classnames: true,
-          safari10: true
-        })
+        // terser({
+        //   keep_classnames: false,
+        //   safari10: true
+        // })
       ]
     }
 
