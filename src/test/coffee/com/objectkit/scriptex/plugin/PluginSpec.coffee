@@ -58,7 +58,7 @@ describe "Plugin", ->
         specify "Then properties deployed to engine are non-configurable", ->
           engine = new ScripterFixture()
           keys = PluginFixture.deploy(engine, false)
-          for engineKey in keys
+          
             expect(engine)
               .ownPropertyDescriptor(engineKey)
                 .to.have.property("configurable")
