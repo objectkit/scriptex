@@ -10,19 +10,22 @@ describe "Plugin", ->
 
   describe "static deploy(engine,customisable) : Array<string>", ->
 
+    beforeEach ->
+      sinon.spy(Scriptex::, "deploy")
+
+    afterEach ->
+      Scriptex::deploy.restore()
+
     context "Given Plugin.deploy(...rest) has deployed a plugin", ->
 
-      beforeEach ->
-        sinon.spy(Scriptex::, "deploy")
-
-      afterEach ->
-        Scriptex::deploy.restore()
+      getDeployedPlugin = ->
+        Scriptex::deploy.lastCall.args[0]
 
       context "When engine argument was provided", ->
         specify "Then plugin is deployed to provided engine", ->
           engine = new ScripterFixture()
           Plugin.deploy(engine)
-          plugin = Scriptex::deploy.lastCall.args[0]
+          plugin = getDeployedPlugin()
           expect(plugin.engine).eql(engine)
           return
 
@@ -30,8 +33,8 @@ describe "Plugin", ->
 
       context "When engine argument was not provided", ->
         specify "Then plugin is deployed to Scripter", ->
-          Plugin.deploy(undefined)
-          plugin = Scriptex::deploy.lastCall.args[0]
+          Plugin.deploy()
+          plugin = getDeployedPlugin()
           expect(plugin.engine).eql(Scripter)
           return
 
@@ -39,17 +42,17 @@ describe "Plugin", ->
 
       context "When customisable argument was provided as true", ->
         specify "Then properties deployed to engine are configurable", ->
-            engine = new ScripterFixture()
-            keys = PluginFixture.deploy(engine, true)
-            for key in keys
-              expect(engine)
-                .ownPropertyDescriptor(key)
-                  .to.have.property("configurable")
-                    .eql(true)
-
-            return
+          engine = new ScripterFixture()
+          keys = PluginFixture.deploy(engine, true)
+          for key in keys
+            expect(engine)
+              .ownPropertyDescriptor(key)
+                .to.have.property("configurable")
+                  .eql(true)
 
           return
+
+        return
 
       context "When customisable argument was provided as false", ->
         specify "Then properties deployed to engine are non-configurable", ->
@@ -82,3 +85,5 @@ describe "Plugin", ->
       return
 
     return
+
+  return

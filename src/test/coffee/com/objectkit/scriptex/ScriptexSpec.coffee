@@ -12,7 +12,7 @@ describe "Scriptex", ->
       specify "Then Scriptex#engine is set to Scripter", ->
         Help.testDefaultScriptexEngine()
 
-  describe "Array<string> #deploy(plugin, customisable=false)", ->
+  describe "#deploy(plugin, customisable=false):Array<string>", ->
 
     context "Given Scriptex has deployed a plugin to #engine", ->
 
