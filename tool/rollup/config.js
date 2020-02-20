@@ -9,9 +9,6 @@ import {terser} from "rollup-plugin-terser"
 const ROOT_DIR = path.resolve(__dirname, `../../`)
 const SRC_DIR = path.resolve(ROOT_DIR, `src/main/js`)
 const OUT_DIR = path.resolve(ROOT_DIR, `build`)
-// const OUT_BUILD_DIR
-// const OUT_TEST_DIR
-
 
 export default {
 
@@ -45,10 +42,10 @@ export default {
       // interop: false,
       plugins: [
         /* @see https://github.com/terser/terser#minify-options */
-        // terser({
-        //   keep_classnames: false,
-        //   safari10: true
-        // })
+        terser({
+          keep_classnames: false,
+          safari10: true
+        })
       ]
     },
     /* TEST */
@@ -59,10 +56,10 @@ export default {
       // interop: false,
       plugins: [
         /* @see https://github.com/terser/terser#minify-options */
-        // terser({
-        //   keep_classnames: false,
-        //   safari10: true
-        // })
+        terser({
+          keep_classnames: false,
+          safari10: true
+        })
       ]
     }
 

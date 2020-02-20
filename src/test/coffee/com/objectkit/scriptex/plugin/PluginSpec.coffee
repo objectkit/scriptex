@@ -3,13 +3,10 @@
   Scripter
 } = require(SCRIPTEX_TEST)
 
-APIKeys = require("../APIKeys")
 PluginFixture = require("./PluginFixture")
 ScripterFixture = require("../engine/ScripterFixture")
 
-describe.only "Plugin", ->
-
-  API = new APIKeys()
+describe "Plugin", ->
 
   describe "static deploy(engine,customisable) : Array<string>", ->
 
@@ -20,18 +17,6 @@ describe.only "Plugin", ->
 
       afterEach ->
         Scriptex::deploy.restore()
-
-      context "When no arguments were provided", ->
-        specify "Then plugin is deployed with Scriptex defaults", ->
-          keys = Plugin.deploy()
-          # property writing to global scope avoided in this case
-          expect(keys).to.be.empty
-          plugin = Scriptex::deploy.lastCall.args[0]
-          # Scriptex uses Scripter as the default engine
-          expect(plugin.engine).eql(Scripter)
-          return
-
-        return
 
       context "When engine argument was provided", ->
         specify "Then plugin is deployed to provided engine", ->
@@ -52,30 +37,48 @@ describe.only "Plugin", ->
 
         return
 
-      context "When true is passed to customisable argument", ->
+      context "When customisable argument was provided as true", ->
         specify "Then properties deployed to engine are configurable", ->
-          customisable = true
-          engine = new ScripterFixture()
-          keys = PluginFixture.deploy(engine, customisable)
-          expect(keys).to.have.members(API.getScripterKeys())
-          for key in keys
-            expect(engine)
-              .ownPropertyDescriptor(key)
-                .property("configurable", customisable)
+            engine = new ScripterFixture()
+            keys = PluginFixture.deploy(engine, true)
+            for key in keys
+              expect(engine)
+                .ownPropertyDescriptor(key)
+                  .to.have.property("configurable")
+                    .eql(true)
+
+            return
 
           return
 
-        return
-
-      context "When false is passed to customisable argument", ->
+      context "When customisable argument was provided as false", ->
         specify "Then properties deployed to engine are non-configurable", ->
-          customisable = false
           engine = new ScripterFixture()
-          keys = PluginFixture.deploy(engine, customisable)
-          expect(keys).to.have.members(API.getScripterKeys())
+          keys = PluginFixture.deploy(engine, false)
           for engineKey in keys
-            expect(engine).ownPropertyDescriptor(engineKey).property("configurable", customisable)
+            expect(engine)
+              .ownPropertyDescriptor(engineKey)
+                .to.have.property("configurable")
+                  .eql(false)
 
           return
 
         return
+
+      context "When customisable argument was not provided", ->
+        specify "Then properties deployed to engine are non-configurable", ->
+          engine = new ScripterFixture()
+          keys = PluginFixture.deploy(engine)
+          for engineKey in keys
+            expect(engine)
+              .ownPropertyDescriptor(engineKey)
+                .to.have.property("configurable")
+                  .eql(false)
+
+          return
+
+        return
+
+      return
+
+    return
