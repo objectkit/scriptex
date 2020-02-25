@@ -38,20 +38,23 @@ ScriptexSpecHelp =
     return deployed
 
   testScriptexEngine: () ->
+    plugin = {}
     engine = @newMockEngine()
     scriptex = new Scriptex(engine)
-    expect(scriptex).to.have.property("engine").eql(engine)
+    scriptex.deploy(plugin)
+    expect(plugin).property("engine").eql(engine)
     return
 
   testDefaultScriptexEngine: ->
+    plugin = {}
     scriptex = new Scriptex()
-    expect(scriptex).to.have.property("engine").eql(Scripter)
+    scriptex.deploy(plugin)
+    expect(plugin).property("engine").eql(Scripter)
     return
 
   testDeployedEngine: (engine) ->
     plugin = new Object()
     scriptex = new Scriptex(engine)
-    expect(scriptex).to.have.property("engine").eql(engine)
     expect(plugin).not.to.have.property("engine")
     scriptex.deploy(plugin)
     expect(plugin).to.have.property("engine").eql(engine)

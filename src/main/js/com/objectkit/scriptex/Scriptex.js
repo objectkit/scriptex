@@ -3,23 +3,31 @@ import Scripter from "com/objectkit/scriptex/engine/Scripter"
 export default class Scriptex {
 
   /* @protected Map<String,String>*/
-  static getDeploymentMethodMap_ () {
-    return {
-      "HandleMIDI": "handleMIDI"
-    , "ProcessMIDI": "handleProcess"
-    , "ParameterChanged": "handleParameter"
-    , "Idle": "handleIdle"
-    , "Reset": "handleReset"
-    }
+  static getDeploymentFieldMap_ () {
+    return new Map(
+      [
+        ["NeedsTimingInfo", "needsTiming"]
+      , ["ResetParameterDefaults", "resetParameters"]
+      , ["PluginParameters", "parameters"]
+      ]
+    )
   }
 
   /* @protected Map<String,String>*/
-  static getDeploymentFieldMap_ () {
-    return {
-      "NeedsTimingInfo": "needsTiming"
-    , "ResetParameterDefaults": "resetParameters"
-    , "PluginParameters": "parameters"
-    }
+  static getDeploymentMethodMap_ () {
+    return new Map(
+      [
+        ["HandleMIDI", "handleMIDI"]
+      , ["ProcessMIDI", "handleProcess"]
+      , ["ParameterChanged", "handleParameter"]
+      , ["Idle", "handleIdle"]
+      , ["Reset", "handleReset"]
+      ]
+    )
+  }
+
+  static getDeploymentEngine_ () {
+    return Scripter
   }
 
   /*
@@ -29,13 +37,18 @@ export default class Scriptex {
    * @param {Object} [methodMap=Map<String,String>] [description]
    * @constructor
    */
-  constructor(engine=Scripter, fieldMap=new.target.getDeploymentFieldMap_(), methodMap=new.target.getDeploymentMethodMap_()) {
-    /* @protected @type {Object} */
-    this.engine = engine
+  constructor(
+    engine = new.target.getDeploymentEngine_(),
+    fieldMap = new.target.getDeploymentFieldMap_(),
+    methodMap = new.target.getDeploymentMethodMap_()
+  )
+  {
+    /* @public @type {Object} */
+    this.engine_ = engine
     /* @protected @type Map<String,String> */
-    this.fieldMap_ = new Map(Object.entries(fieldMap))
+    this.fieldMap_ = fieldMap
     /* @protected @type Map<String,String> */
-    this.methodMap_ = new Map(Object.entries(methodMap))
+    this.methodMap_ = methodMap
   }
 
   /*
@@ -46,7 +59,7 @@ export default class Scriptex {
    */
   deploy (plugin, customisable=false) {
     let api = []
-    let ngn = ( plugin.engine = this.engine )
+    let ngn = ( plugin.engine = this.engine_ )
     let def = (target, key, val, attribute, configurable=customisable) =>
       Reflect.defineProperty(target, key, { configurable, [ attribute ] : val } )
 
