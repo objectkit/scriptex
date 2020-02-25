@@ -2,8 +2,13 @@ import Scripter from "com/objectkit/scriptex/engine/Scripter"
 
 export default class Scriptex {
 
-  /* @protected Map<String,String>*/
-  static getDeploymentFieldMap_ () {
+  /* @protected */
+  static getEngine_ () {
+    return Scripter
+  }
+
+  /* @protected */
+  static getEngineFieldMap_ () {
     return new Map(
       [
         ["NeedsTimingInfo", "needsTiming"]
@@ -13,8 +18,8 @@ export default class Scriptex {
     )
   }
 
-  /* @protected Map<String,String>*/
-  static getDeploymentMethodMap_ () {
+  /* @protected */
+  static getEngineMethodMap_ () {
     return new Map(
       [
         ["HandleMIDI", "handleMIDI"]
@@ -26,10 +31,6 @@ export default class Scriptex {
     )
   }
 
-  static getDeploymentEngine_ () {
-    return Scripter
-  }
-
   /*
    * [constructor description]
    * @param {Object} [engine=Scripter] [description]
@@ -38,12 +39,12 @@ export default class Scriptex {
    * @constructor
    */
   constructor(
-    engine = new.target.getDeploymentEngine_(),
-    fieldMap = new.target.getDeploymentFieldMap_(),
-    methodMap = new.target.getDeploymentMethodMap_()
+    engine = new.target.getEngine_(),
+    fieldMap = new.target.getEngineFieldMap_(),
+    methodMap = new.target.getEngineMethodMap_()
   )
   {
-    /* @public @type {Object} */
+    /* @protected @type {Object} */
     this.engine_ = engine
     /* @protected @type Map<String,String> */
     this.fieldMap_ = fieldMap
@@ -58,11 +59,14 @@ export default class Scriptex {
    * @return {Array<string>} [description]
    */
   deploy (plugin, customisable=false) {
+    /* @type Array<string> */
     let api = []
+    /* @type Object */
     let ngn = ( plugin.engine = this.engine_ )
+    /* define a property on an object */
     let def = (target, key, val, attribute, configurable=customisable) =>
       Reflect.defineProperty(target, key, { configurable, [ attribute ] : val } )
-
+      
     /* define field delegates */
     for (let [engineKey, pluginKey] of this.fieldMap_)
       pluginKey in plugin
