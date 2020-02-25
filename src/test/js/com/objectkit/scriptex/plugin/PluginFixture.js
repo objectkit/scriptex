@@ -1,28 +1,66 @@
 import Plugin from "com/objectkit/scriptex/plugin/Plugin"
-import ScripterFixture from "com/objectkit/scriptex/engine/ScripterFixture"
 
 export default class PluginFixture extends Plugin {
 
-  constructor () {
-    super()
-    /* defining engine here for testing */
-    this.engine = new ScripterFixture()
+  get needsTiming () {
+    return true
   }
 
-  get needsTiming () { }
+  get resetParameters () {
+    return true
+  }
 
-  get resetParameters () { }
+  get parameters () {
+    return [
+      {
+        ID: "muted"
+      , type: "checkbox"
+      },
+      {
+        ID: "note"
+      , type: "menu"
+      , valueStrings: [
+          "C", "E", "G"
+        ]
+      , defaultValue: 0
+      , readOnly: false
+      , hidden: false
+      },
+      {
+        ID: "midiPanic"
+      , type: "momentary"
+      }
+    ]
+  }
 
-  get parameters () { }
+  /* @see handleParameter */
+  set midiPanic (pressed) {
+    this.engine.MIDI.allNotesOff()
+  }
 
-  handleMIDI (midi) {}
+  handleMIDI (midi) {
+    if (this.muted)
+      return
+    this.engine.SendMIDIEventNow(midi)
+  }
 
-  handleProcess () {}
+  handleProcess () {
+    this.hostInfo = this.engine.GetTimingInfo()
+  }
 
-  handleParameter (index, data) {}
+  handleParameter (index, data) {
+    let model = this
+    let param = this.parameters[index]
+    let key = param.ID
+    model[key] = data
+    return
+  }
 
-  handleReset () {}
+  handleReset () {
+    this.engine.Trace(`Reset`)
+  }
 
-  handleIdle () {}
-
+  handleIdle () {
+    this.engine.UpdatePluginParameters()
+  }
 }
