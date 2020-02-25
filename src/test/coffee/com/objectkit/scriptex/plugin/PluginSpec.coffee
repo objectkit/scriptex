@@ -1,10 +1,11 @@
 { Plugin
   Scriptex
   Scripter
+  PluginFixture
 } = require(SCRIPTEX_TEST)
 
-PluginFixture = require("./PluginFixture")
-ScripterFixture = require("../engine/ScripterFixture")
+# PluginFixture = require("./PluginFixture")
+# ScripterFixture = require("../engine/ScripterFixture")
 
 describe "Plugin", ->
 

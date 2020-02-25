@@ -2,13 +2,40 @@ import Scripter from "com/objectkit/scriptex/engine/Scripter"
 
 export default class Scriptex {
 
+  /* @protected Map<String,String>*/
+  static getDeploymentMethodMap_ () {
+    return {
+      "HandleMIDI": "handleMIDI"
+    , "ProcessMIDI": "handleProcess"
+    , "ParameterChanged": "handleParameter"
+    , "Idle": "handleIdle"
+    , "Reset": "handleReset"
+    }
+  }
+
+  /* @protected Map<String,String>*/
+  static getDeploymentFieldMap_ () {
+    return {
+      "NeedsTimingInfo": "needsTiming"
+    , "ResetParameterDefaults": "resetParameters"
+    , "PluginParameters": "parameters"
+    }
+  }
+
   /*
    * [constructor description]
    * @param {Object} [engine=Scripter] [description]
+   * @param {Object} [fieldMap=Map<String,String>] [description]
+   * @param {Object} [methodMap=Map<String,String>] [description]
    * @constructor
    */
-  constructor(engine=Scripter) {
-    this.engine = engine
+  constructor(engine=Scripter, fieldMap=new.target.getDeploymentFieldMap_(), methodMap=new.target.getDeploymentMethodMap_()) {
+    /* @protected @type {Object} */
+    this.engine_ = engine
+    /* @protected @type Map<String,String> */
+    this.fieldMap_ = fieldMap
+    /* @protected @type Map<String,String> */
+    this.methodMap_ = methodMap
   }
 
   /*
@@ -18,8 +45,20 @@ export default class Scriptex {
    * @return {Array<string>} [description]
    */
   deploy (plugin, customisable=false) {
-    /* @type {Object} */
-    let engine = ( plugin.engine = this.engine )
+    /*
+      Provide the opportunity for the Plugin to provide its own engine context
+      Bootstrap the plugin by setting its engine for all other cases
+      @example
+         // setting up a test
+         let testEngine = new ScripterFixture()
+         Reflect.defineProperty(ProductionPlugin.prototype, "engine", () => testEngine)
+         plugin = ProductionPlugin.deploy()
+         engine = plugin.engine
+         expect(engine).eql(testEngine)
+
+      @type {Object}
+     */
+    let ngn = ( plugin.engine = this.engine_ )
     /* @type {Array<string>} */
     let api = []
     /*
@@ -44,9 +83,12 @@ export default class Scriptex {
       @return {number}
      */
     let get = (engineKey, pluginKey) =>
+      // when the plugin has the property
       pluginKey in plugin
+        // ensure the property is defined as a data property
         && def(plugin, pluginKey, plugin[pluginKey], `value`, true)
-          && def(engine, engineKey, () => plugin[pluginKey], `get`)
+          // define the delegate accessor for the plugin property
+          && def(ngn, engineKey, () => plugin[pluginKey], `get`)
             && api.push(engineKey)
     /*
       Given plugin[pluginKey] is a method
@@ -59,20 +101,16 @@ export default class Scriptex {
      */
     let fun = (engineKey, pluginKey) =>
       typeof(plugin[pluginKey]) === `function`
-        && def(engine, engineKey, (...args) => plugin[pluginKey](...args), `value`)
+        && def(ngn, engineKey, (...args) => plugin[pluginKey](...args), `value`)
           && api.push(engineKey)
 
     /* define field delegates */
-    get(`NeedsTimingInfo`, `needsTiming`)
-    get(`ResetParameterDefaults`, `resetParameters`)
-    get(`PluginParameters`, `parameters`)
+    for (let [engineKey, pluginKey] of this.fieldMap_)
+      get(engineKey, pluginKey)
 
     /* define method delegates */
-    fun(`HandleMIDI`, `handleMIDI`)
-    fun(`ProcessMIDI`, `handleProcess`)
-    fun(`ParameterChanged`, `handleParameter`)
-    fun(`Idle`, `handleIdle`)
-    fun(`Reset`, `handleReset`)
+    for (let [engineKey,pluginKey] of this.methodMap_)
+      fun(engineKey, pluginKey)
 
     /* return the added engine property keys */
     return api
