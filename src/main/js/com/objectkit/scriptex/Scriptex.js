@@ -8,7 +8,7 @@ export default class Scriptex {
   }
 
   /* @protected */
-  static getEngineFieldMap_ () {
+  static getFieldMap_ () {
     return new Map(
       [
         ["NeedsTimingInfo", "needsTiming"]
@@ -19,7 +19,7 @@ export default class Scriptex {
   }
 
   /* @protected */
-  static getEngineMethodMap_ () {
+  static getMethodMap_ () {
     return new Map(
       [
         ["HandleMIDI", "handleMIDI"]
@@ -40,8 +40,8 @@ export default class Scriptex {
    */
   constructor(
     engine = new.target.getEngine_(),
-    fieldMap = new.target.getEngineFieldMap_(),
-    methodMap = new.target.getEngineMethodMap_()
+    fieldMap = new.target.getFieldMap_(),
+    methodMap = new.target.getMethodMap_()
   )
   {
     /* @protected @type {Object} */
@@ -66,7 +66,7 @@ export default class Scriptex {
     /* define a property on an object */
     let def = (target, key, val, attribute, configurable=customisable) =>
       Reflect.defineProperty(target, key, { configurable, [ attribute ] : val } )
-      
+
     /* define field delegates */
     for (let [engineKey, pluginKey] of this.fieldMap_)
       pluginKey in plugin
