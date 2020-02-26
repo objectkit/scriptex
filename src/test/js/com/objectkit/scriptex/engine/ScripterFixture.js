@@ -40,13 +40,21 @@ export default class ScripterFixture {
       let parameter = this[FIND](key)
       if (parameter) {
         this[DATA].set(parameter.name, +val)
+        /* invoke ParameterChanged if it is implemented */
+        if (this.ParameterChanged) {
+          let index = this.PluginParameters.indexOf(parameter)
+          this.ParameterChanged(index, this[DATA].get(parameter.name))
+        }
       }
     }
 
     UpdatePluginParameters () {}
 
     GetTimingInfo () {
-      return new TimingInfoFixture()
+      if (this.NeedsTimingInfo) {
+        return new TimingInfoFixture()
+      }
+      return void(this)
     }
 
     Trace (any) {}
@@ -60,6 +68,7 @@ export default class ScripterFixture {
     SendMIDIEventNow (midi) {}
 
     /* private utilities */
+
     [FIND] (key) {
       let parameters = this.PluginParameters
       if (Array.isArray(parameters)) {
