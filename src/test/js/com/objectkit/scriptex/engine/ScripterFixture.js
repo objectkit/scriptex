@@ -37,24 +37,59 @@ export default class ScripterFixture {
     }
 
     SetParameter (key, val) {
-      let parameter = this[FIND](key)
-      if (parameter) {
-        this[DATA].set(parameter.name, +val)
-        /* invoke ParameterChanged if it is implemented */
-        if (this.ParameterChanged) {
-          let index = this.PluginParameters.indexOf(parameter)
-          this.ParameterChanged(index, this[DATA].get(parameter.name))
+      let parameters = this.PluginParameters
+      if (Array.isArray(parameters)) {
+        let parameter = this[FIND](key)
+        if (parameter) {
+          this[DATA].set(parameter.name, +val)
+          /* invoke ParameterChanged if it is implemented */
+          if (this.ParameterChanged) {
+            let key = this.PluginParameters.indexOf(parameter)
+            let val = this[DATA].get(parameter.name)
+            this.ParameterChanged(key, val)
+          }
         }
       }
     }
 
-    UpdatePluginParameters () {}
+    UpdatePluginParameters () {
+      if (this.ParameterChanged) {
+        let parameters = this.PluginParameters
+        if (Array.isArray(parameters)) {
+          for (let [index, parameter] of parameters.entries()) {
+            let key = parameter.name
+            let val = this[DATA].get(key)
+            this.ParameterChanged(index, val)
+          }
+        }
+      }
+    }
+
+    /* TODO improve and harmonise
+    UpdatePluginParameters () {
+      if (this.PluginParameters instanceof Array) {
+        if (this.ParameterChanged instanceof Function) {
+          for (let [index, parameter] of this.PluginParameters.entries()) {
+            let key = parameter.name
+            let val = this[DATA].get(key)
+            if (null == val) {
+              val = (parameter.defaultValue || 0)
+              this[DATA].set(key, val)
+            }
+            this.ParameterChanged(index, val)
+          }
+        }
+      }
+    }
+    */
+
+
+
 
     GetTimingInfo () {
       if (this.NeedsTimingInfo) {
         return new TimingInfoFixture()
       }
-      return void(this)
     }
 
     Trace (any) {}
