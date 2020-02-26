@@ -25,6 +25,7 @@ let buildRelease =
       terser({
         mangle: {
           safari10: true
+        , keep_classnames: true
         , properties: {
             regex: /^_|_$/
           }
