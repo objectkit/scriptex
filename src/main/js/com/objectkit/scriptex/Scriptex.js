@@ -33,21 +33,22 @@ class Scriptex {
   }
 
   deploy(plugin) {
-    let ngn = plugin.engine = this._engine
 
     let api = []
+
+    let ngn = plugin.engine = this._engine
 
     let def = (obj, key, val, tag, configurable = this._configurable) =>
       Reflect.defineProperty(obj, key, {configurable, [tag]: val })
 
     let fun = (pluginKey, engineKey) =>
-      typeof(plugin[pluginKey]) === `function` &&
-      def(ngn, engineKey, (...args) => plugin[pluginKey](...args), `value`)
+      typeof(plugin[pluginKey]) === `function`
+        && def(ngn, engineKey, (...args) => plugin[pluginKey](...args), `value`)
 
     let get = (pluginKey, engineKey) =>
-      pluginKey in plugin &&
-      def(plugin, pluginKey, plugin[pluginKey], `value`, true) &&
-      def(ngn, engineKey, () => plugin[pluginKey], `get`)
+      pluginKey in plugin
+        && def(plugin, pluginKey, plugin[pluginKey], `value`, true)
+          && def(ngn, engineKey, () => plugin[pluginKey], `get`)
 
     for (let [engineKey, pluginKey] of this._api)
       (fun(pluginKey, engineKey) || get(pluginKey, engineKey))
