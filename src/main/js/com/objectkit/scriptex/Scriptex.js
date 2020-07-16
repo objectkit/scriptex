@@ -1,86 +1,131 @@
 import Scripter from "com/objectkit/scriptex/engine/Scripter"
 
-export default class Scriptex {
+class Scriptex {
 
-  /* @protected */
-  static getEngine_ () {
+  static get ENGINE() {
     return Scripter
   }
 
-  /* @protected */
-  static getFieldMap_ () {
+  static get API() {
     return new Map(
       [
-        ["NeedsTimingInfo", "needsTiming"]
-      , ["ResetParameterDefaults", "resetParameters"]
-      , ["PluginParameters", "parameters"]
+        [
+          "HandleMIDI",
+          "handleMIDI"
+        ],
+        [
+          "ProcessMIDI",
+          "handleProcess"
+        ],
+        [
+          "ParameterChanged",
+          "handleParameter"
+        ],
+        [
+          "Idle",
+          "handleIdle"
+        ],
+        [
+          "Reset",
+          "handleReset"
+        ],
+        [
+          "NeedsTimingInfo",
+          "needsTiming"
+        ],
+        [
+          "ResetParameterDefaults",
+          "resetParameters"
+        ],
+        [
+          "PluginParameters",
+          "parameters"
+        ]
       ]
     )
   }
 
-  /* @protected */
-  static getMethodMap_ () {
-    return new Map(
-      [
-        ["HandleMIDI", "handleMIDI"]
-      , ["ProcessMIDI", "handleProcess"]
-      , ["ParameterChanged", "handleParameter"]
-      , ["Idle", "handleIdle"]
-      , ["Reset", "handleReset"]
-      ]
-    )
+  static deploy(plugin, ...ctorArgs) {
+    let deployee = plugin instanceof Function ? new plugin : plugin
+    let deployer = new this(...ctorArgs)
+    return deployer.deploy(deployee)
   }
 
-  /*
-   * [constructor description]
-   * @param {Object} [engine=Scripter] [description]
-   * @param {Object} [fieldMap=Map<String,String>] [description]
-   * @param {Object} [methodMap=Map<String,String>] [description]
-   * @constructor
-   */
-  constructor(
-    engine = new.target.getEngine_(),
-    fieldMap = new.target.getFieldMap_(),
-    methodMap = new.target.getMethodMap_()
-  )
-  {
-    /* @protected @type {Object} */
-    this.engine_ = engine
-    /* @protected @type Map<String,String> */
-    this.fieldMap_ = fieldMap
-    /* @protected @type Map<String,String> */
-    this.methodMap_ = methodMap
+  constructor(engine = new.target.ENGINE, configurable = false, api = new.target.API) {
+    this._engine = engine
+    this._configurable = configurable
+    this._api = api
   }
 
-  /*
-   * [deploy description]
-   * @param  {Object} plugin [description]
-   * @param  {boolean} [customisable=false] [description]
-   * @return {Array<string>} [description]
-   */
-  deploy (plugin, customisable=false) {
-    /* @type Array<string> */
+  deploy(plugin) {
+    let ngn = plugin.engine = this._engine
+
     let api = []
-    /* @type Object */
-    let ngn = ( plugin.engine = this.engine_ )
-    /* define a property on an object */
-    let def = (target, key, val, attribute, configurable=customisable) =>
-      Reflect.defineProperty(target, key, { configurable, [ attribute ] : val } )
 
-    /* define field delegates */
-    for (let [engineKey, pluginKey] of this.fieldMap_)
-      pluginKey in plugin
-        && def(plugin, pluginKey, plugin[pluginKey], `value`, true)
-          && def(ngn, engineKey, () => plugin[pluginKey], `get`)
-            && api.push(engineKey)
+    let def = (obj, key, val, tag, configurable = this._configurable) =>
+      Reflect.defineProperty(obj, key, {configurable, [tag]: val })
 
-    /* define method delegates */
-    for (let [engineKey,pluginKey] of this.methodMap_)
-      typeof(plugin[pluginKey]) === `function`
-        && def(ngn, engineKey, (...args) => plugin[pluginKey](...args), `value`)
-          && api.push(engineKey)
+    let fun = (pluginKey, engineKey) =>
+      typeof(plugin[pluginKey]) === `function` &&
+      def(ngn, engineKey, (...args) => plugin[pluginKey](...args), `value`)
 
-    /* return the added engine property keys */
+    let get = (pluginKey, engineKey) =>
+      pluginKey in plugin &&
+      def(plugin, pluginKey, plugin[pluginKey], `value`, true) &&
+      def(ngn, engineKey, () => plugin[pluginKey], `get`)
+
+    for (let [engineKey, pluginKey] of this._api) {
+      (fun(pluginKey, engineKey) || get(pluginKey, engineKey)) && api.push(engineKey)
+    }
+
     return api
   }
 }
+
+export default Scriptex
+
+
+// class Plugin {
+//
+//   static get API () {
+//     return Scriptex.API
+//   }
+//
+//   static deploy (engine, configurable) {
+//     return new Scriptex(engine, configurable, this.API).deploy(new this())
+//   }
+//
+// }
+//
+// class DefaultPlugin extends Plugin {
+//
+//   get needsTiming () {
+//     return true
+//   }
+//
+//   get parameters () {
+//     return
+//   }
+//
+//   handleMIDI (midi) {
+//     switch(midi.status) {
+//       /* @todo */
+//     }
+//   }
+//
+//   handleParameter (index, value) {
+//     this[this.parameters[index].ID] = value
+//   }
+//
+//   dispatchMIDI (midi) {
+//     let beatPos = midi.beatPos || 0
+//     if (0 > beatPos) {
+//       this.system.SendMIDIEventAfterBeats(midi, beatPos *= -1)
+//     }
+//     else {
+//       midi.system.SendMIDIEventNow(midi)
+//     }
+//     return beatPos
+//   }
+//
+// }
