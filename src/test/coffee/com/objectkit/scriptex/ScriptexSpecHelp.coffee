@@ -33,8 +33,8 @@ ScriptexSpecHelp =
     handleIdle: ->
 
   newDeployment: (plugin=@newEmptyPlugin(), engine=@newMockEngine(), customisable=undefined) ->
-    deployer = new Scriptex(engine)
-    deployed = deployer.deploy(plugin, customisable)
+    deployer = new Scriptex(engine, customisable)
+    deployed = deployer.deploy(plugin)
     return deployed
 
   testScriptexEngine: () ->
