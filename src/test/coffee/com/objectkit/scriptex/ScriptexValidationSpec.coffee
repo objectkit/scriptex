@@ -19,7 +19,7 @@ describe "ScriptexValidationSpec", ->
       engine = new ScripterFixture()
 
       # assert deployment OK
-      expect(PluginFixture.deploy(engine)).members(@EXPECTED_KEYS)
+      expect(PluginFixture.deploy(undefined, undefined, engine)).members(@EXPECTED_KEYS)
 
       # configure the parameters with an UpdatePluginParameters emulation
       for parameter in engine.PluginParameters

@@ -7,42 +7,17 @@ class Scriptex {
   }
 
   static get API() {
-    return new Map(
-      [
-        [
-          "HandleMIDI",
-          "handleMIDI"
-        ],
-        [
-          "ProcessMIDI",
-          "handleProcess"
-        ],
-        [
-          "ParameterChanged",
-          "handleParameter"
-        ],
-        [
-          "Idle",
-          "handleIdle"
-        ],
-        [
-          "Reset",
-          "handleReset"
-        ],
-        [
-          "NeedsTimingInfo",
-          "needsTiming"
-        ],
-        [
-          "ResetParameterDefaults",
-          "resetParameters"
-        ],
-        [
-          "PluginParameters",
-          "parameters"
-        ]
-      ]
-    )
+    let api = [
+      [ "HandleMIDI", "handleMIDI" ],
+      [ "ProcessMIDI", "handleProcess" ],
+      [ "ParameterChanged",   "handleParameter" ],
+      [ "Idle", "handleIdle" ],
+      [ "Reset", "handleReset" ],
+      [ "NeedsTimingInfo", "needsTiming" ],
+      [ "ResetParameterDefaults", "resetParameters"  ],
+      [ "PluginParameters", "parameters"   ]
+    ]
+    return new Map(api)
   }
 
   static deploy(plugin, ...ctorArgs) {
@@ -51,10 +26,10 @@ class Scriptex {
     return deployer.deploy(deployee)
   }
 
-  constructor(engine = new.target.ENGINE, configurable = false, api = new.target.API) {
-    this._engine = engine
+  constructor(configurable = false, api = new.target.API, engine = new.target.ENGINE) {
     this._configurable = configurable
     this._api = api
+    this._engine = engine
   }
 
   deploy(plugin) {
@@ -74,58 +49,12 @@ class Scriptex {
       def(plugin, pluginKey, plugin[pluginKey], `value`, true) &&
       def(ngn, engineKey, () => plugin[pluginKey], `get`)
 
-    for (let [engineKey, pluginKey] of this._api) {
-      (fun(pluginKey, engineKey) || get(pluginKey, engineKey)) && api.push(engineKey)
-    }
+    for (let [engineKey, pluginKey] of this._api)
+      (fun(pluginKey, engineKey) || get(pluginKey, engineKey))
+        && api.push(engineKey)
 
     return api
   }
 }
 
 export default Scriptex
-
-
-// class Plugin {
-//
-//   static get API () {
-//     return Scriptex.API
-//   }
-//
-//   static deploy (engine, configurable) {
-//     return new Scriptex(engine, configurable, this.API).deploy(new this())
-//   }
-//
-// }
-//
-// class DefaultPlugin extends Plugin {
-//
-//   get needsTiming () {
-//     return true
-//   }
-//
-//   get parameters () {
-//     return
-//   }
-//
-//   handleMIDI (midi) {
-//     switch(midi.status) {
-//       /* @todo */
-//     }
-//   }
-//
-//   handleParameter (index, value) {
-//     this[this.parameters[index].ID] = value
-//   }
-//
-//   dispatchMIDI (midi) {
-//     let beatPos = midi.beatPos || 0
-//     if (0 > beatPos) {
-//       this.system.SendMIDIEventAfterBeats(midi, beatPos *= -1)
-//     }
-//     else {
-//       midi.system.SendMIDIEventNow(midi)
-//     }
-//     return beatPos
-//   }
-//
-// }

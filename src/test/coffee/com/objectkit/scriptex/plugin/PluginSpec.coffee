@@ -7,7 +7,8 @@
 
 describe "Plugin", ->
 
-  describe "static deploy([engine=Scripter],[customisable=false]) : Array<string>", ->
+  # describe "static deploy([engine=Scripter],[customisable=false]) : Array<string>", ->
+  describe "static deploy([configurable=false],[api=Plugin.API][engine=Scripter]) : Array<string>", ->
 
     beforeEach ->
       sinon.spy(Scriptex::, "deploy")
@@ -17,14 +18,16 @@ describe "Plugin", ->
 
     context "Given Plugin.deploy has instantiated and deployed a plugin", ->
 
-      getDeployedPlugin = ->
-        Scriptex::deploy.lastCall.args[0]
+
+      getDeployedPlugin = -> Scriptex::deploy.lastCall.args[0]
+
 
       context "When the engine argument was provided", ->
         specify "Then the plugin was deployed to that engine", ->
           engine = new ScripterFixture()
-          Plugin.deploy(engine)
+          Plugin.deploy(true,Plugin.API,engine)
           plugin = getDeployedPlugin()
+
           expect(plugin.engine).eql(engine)
           return
 
@@ -42,7 +45,7 @@ describe "Plugin", ->
       context "When the customisable argument was provided as false", ->
         specify "Then the properties deployed to engine are non-configurable", ->
           engine = new ScripterFixture()
-          keys = PluginFixture.deploy(engine, false)
+          keys = PluginFixture.deploy(false, PluginFixture.API, engine)
           for key in keys
             expect(engine)
               .ownPropertyDescriptor(key)
@@ -56,7 +59,7 @@ describe "Plugin", ->
       context "When the customisable argument was not provided", ->
         specify "Then the properties deployed to engine are non-configurable", ->
           engine = new ScripterFixture()
-          keys = PluginFixture.deploy(engine)
+          keys = PluginFixture.deploy(undefined, PluginFixture.API, engine)
           for engineKey in keys
             expect(engine)
               .ownPropertyDescriptor(engineKey)
@@ -70,7 +73,7 @@ describe "Plugin", ->
       context "When the customisable argument was provided as true", ->
         specify "Then the properties deployed to engine are configurable", ->
           engine = new ScripterFixture()
-          keys = PluginFixture.deploy(engine, true)
+          keys = PluginFixture.deploy(true, undefined, engine)
           for key in keys
             expect(engine)
               .ownPropertyDescriptor(key)
