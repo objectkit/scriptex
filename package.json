@@ -6,7 +6,8 @@
   "scripts": {
     "test": "mocha src/test/coffee/**/*Spec.coffee --file tool/mocha/env.coffee --require coffeescript/register",
     "build": "rollup -c tool/rollup/build.js",
-    "clean": "rm -rf build"
+    "clean": "rm -rf build",
+    "cycle": "npm run clean && npm run build && npm run test"
   },
   "author": "axel@objectkit.com",
   "license": "Apache-2.0",

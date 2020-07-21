@@ -1,0 +1,30 @@
+<script>
+
+  let final = (obj, key, val) =>
+    ( Reflect.defineProperty(obj, key, { value:val }), val )
+
+  class Product {
+    constructor () {
+      Product.COUNT += 1
+    }
+  }
+
+  Product.COUNT = 0
+
+  class Producer {
+    get product () {
+      return final(this, "product", new Product())
+    }
+  }
+
+
+  let producer = new Producer()
+  console.assert(Product.COUNT === 0)
+  let product = producer.product
+  console.assert(Product.COUNT === 1)
+  console.assert(producer.product instanceof Product)
+  console.assert(producer.product instanceof Product)
+  console.assert(Product.COUNT === 1)
+
+
+</script>

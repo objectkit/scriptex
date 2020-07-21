@@ -1,0 +1,33 @@
+<script>
+
+
+  class DataCell /*extends ViewModel*/ {
+    constructor (...data) {
+      this.data= data
+    }
+    /* @override */
+    toString () {
+      let string= ``
+      for (let datum in this.data) {
+        string +=
+      }
+
+      return `|` + this.data.join(`|`)
+    }
+  }
+
+  class DataTable {
+    newDataCell (...rest) {
+      let cell = new DataCell(...rest)
+      this.dataCells.push(cell)
+      return cell
+    }
+
+    toString () {
+      return this.join(`\n`)
+    }
+  }
+
+  console.info( String(new DataCell(1, 2, 3, 4)) )
+
+</script>

@@ -1,0 +1,91 @@
+<script>
+
+  let global = this;
+  if (null == global.Trace)
+    global.Trace = console.info
+
+
+  class DataTable {
+
+    constructor (...headers) {
+      this.rows = []
+      this.headers = headers
+    }
+
+    newRow (...cells) {
+      this.rows.push([...cells])
+      return this
+    }
+
+    toString () {
+      return this.serialise()
+    }
+
+    serialise (padding=24) {
+      let serialiseCell= (cell) => `| ${cell}`.padEnd(padding, ` `)
+      let serialiseRow = (row) => row.map(serialiseCell).join(` `)
+      let serialisable = [this.headers, ...this.rows]
+      return serialisable.map( serialiseRow ).join(`\n`)
+    }
+  }
+
+
+
+
+  class RT60Calculator {
+    calculateRT60 (bpm, meterNumerator, meterDenominator) {
+      let delays = this.calculateDelays(bpm)
+      let decays = this.calculateDecays(bpm, meterNumerator)
+      return { delays, decays }
+    }
+    calculateDelays (bpm) {
+      let noteDuration = 60000/bpm
+      let dataTable = new DataTable(`NOTE VALUE`, `NOTES`, `DOTTED`, `TRIPLET`)
+      dataTable
+        .newRow(`1 (ONE BAR)`, noteDuration *= 4, noteDuration * 1.5, noteDuration * 0.667)
+        .newRow(`1/2`, noteDuration /= 2, noteDuration * 1.5, noteDuration * 0.667)
+        .newRow(`1/4 (ONE BEAT)`, noteDuration /= 2, noteDuration * 1.5, noteDuration * 0.667)
+        .newRow(`1/8`, noteDuration /= 2, noteDuration * 1.5, noteDuration * 0.667)
+        .newRow(`1/16`, noteDuration /= 2, noteDuration * 1.5, noteDuration * 0.667)
+        .newRow(`1/32`, noteDuration /= 2, noteDuration * 1.5, noteDuration * 0.667)
+        .newRow(`1/64`, noteDuration /= 2, noteDuration * 1.5, noteDuration * 0.667)
+        .newRow(`1/128`, noteDuration /= 2, noteDuration * 1.5, noteDuration * 0.667)
+        .newRow(`1/256`, noteDuration /= 2, noteDuration * 1.5, noteDuration * 0.667)
+        .newRow(`1/512`, noteDuration /= 2, noteDuration * 1.5, noteDuration * 0.667)
+
+      return dataTable
+    }
+
+    calculateDecays (bpm, meterNumerator) {
+      return
+    }
+  }
+
+  try {
+    let bpm = 120
+    let noteDuration = 60000/bpm
+    let dataTable = new DataTable(`NOTE VALUE`, `NOTES`, `DOTTED`, `TRIPLET`)
+    dataTable.newRow(`1 (ONE BAR)`, noteDuration *= 4, noteDuration * 1.5, noteDuration * 0.667)
+    dataTable.newRow(`1 (ONE BAR)`, noteDuration *= 4, noteDuration * 1.5, noteDuration * 0.667)
+    dataTable.newRow(`1/2`, noteDuration /= 2, noteDuration * 1.5, noteDuration * 0.667)
+    dataTable.newRow(`1/4 (ONE BEAT)`, noteDuration /= 2, noteDuration * 1.5, noteDuration * 0.667)
+    dataTable.newRow(`1/8`, noteDuration /= 2, noteDuration * 1.5, noteDuration * 0.667)
+    dataTable.newRow(`1/16`, noteDuration /= 2, noteDuration * 1.5, noteDuration * 0.667)
+    dataTable.newRow(`1/32`, noteDuration /= 2, noteDuration * 1.5, noteDuration * 0.667)
+    dataTable.newRow(`1/64`, noteDuration /= 2, noteDuration * 1.5, noteDuration * 0.667)
+    dataTable.newRow(`1/128`, noteDuration /= 2, noteDuration * 1.5, noteDuration * 0.667)
+    dataTable.newRow(`1/256`, noteDuration /= 2, noteDuration * 1.5, noteDuration * 0.667)
+    dataTable.newRow(`1/512`, noteDuration /= 2, noteDuration * 1.5, noteDuration * 0.667)
+    Trace(`${dataTable}`)
+  }
+  catch (thrown) {
+    Trace(thrown)
+  }
+  finally {
+    Trace(`COMPLETE`)
+  }
+
+
+
+
+</script>

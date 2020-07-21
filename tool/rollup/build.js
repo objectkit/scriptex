@@ -1,7 +1,9 @@
 import pkg from "../../package.json"
 import includePaths from "rollup-plugin-includepaths"
 import multiEntry from "@rollup/plugin-multi-entry"
-import { terser } from "rollup-plugin-terser"
+/* disable terser during development due to BAD PERFORMANCE */
+// import { terser } from "rollup-plugin-terser"
+let terser = () => {}
 
 let buildRelease =
   {

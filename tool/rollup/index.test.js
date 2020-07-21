@@ -4,3 +4,5 @@ export {default as TimingInfoFixture} from "com/objectkit/scriptex/engine/Timing
 export {default as MIDIFixture} from "com/objectkit/scriptex/engine/MIDIFixture"
 export {default as PluginFixture} from "com/objectkit/scriptex/plugin/PluginFixture"
 export {default as APIKeyMap} from "com/objectkit/scriptex/APIKeyMap"
+export {default as DataTable} from "com/objectkit/scriptex/plugin/rt60/DataTable"
+export {default as RT60Calculator} from "com/objectkit/scriptex/plugin/rt60/RT60Calculator"
