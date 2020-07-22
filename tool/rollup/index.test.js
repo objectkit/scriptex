@@ -6,3 +6,4 @@ export {default as PluginFixture} from "com/objectkit/scriptex/plugin/PluginFixt
 export {default as APIKeyMap} from "com/objectkit/scriptex/APIKeyMap"
 export {default as DataTable} from "com/objectkit/scriptex/plugin/rt60/DataTable"
 export {default as RT60Calculator} from "com/objectkit/scriptex/plugin/rt60/RT60Calculator"
+export {default as RT60Plugin} from "com/objectkit/scriptex/plugin/rt60/RT60Plugin"

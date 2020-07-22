@@ -19,7 +19,7 @@ class DataTable {
   }
 
   addRow(row) {
-    return this.rows.push(row), this
+    return this.rows.push(row), this;
   }
 
   toString () {

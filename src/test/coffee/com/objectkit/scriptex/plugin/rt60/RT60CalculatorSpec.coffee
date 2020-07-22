@@ -5,6 +5,8 @@
 
 describe "RT60Calculator", ->
 
+  # TODO
+
   BEATS_PER_MINUTE  = 120
   METER_NUMERATOR   = 4
   METER_DENOMINATOR = 4
@@ -59,7 +61,7 @@ describe "RT60Calculator", ->
       calculated = calculator.calculateModulations(BEATS_PER_MINUTE, METER_NUMERATOR)
       console.info("#{calculated}")
       for modulation in calculated.rows
-        Help.validateModulation(modulation)
+        Help.validateModulation(modulation, BEATS_PER_MINUTE)
 
       return
 
