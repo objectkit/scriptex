@@ -12,7 +12,7 @@ let buildRelease =
       `src/main/js/**/*.js`
     ],
     output: {
-      file: `build/RELEASE-${pkg.version}/scriptex.js`,
+      file: `build/${pkg.name}/${pkg.version}/${pkg.name}.js`,
       format: "esm"
     },
     plugins: [
@@ -43,7 +43,7 @@ let buildTest = {
     `src/test/js/**/*.js`
   ],
   output: {
-    file: `build/RELEASE-${pkg.version}/scriptex-test.js`,
+    file: `build/${pkg.name}/${pkg.version}/${pkg.name}-test.js`,
     format: "cjs"
   },
   plugins: [
@@ -56,14 +56,16 @@ let buildTest = {
     multiEntry({
       exports: true
     }),
-    terser({
-      mangle: {
-        safari10: true
-      , properties: {
-          regex: /^_|_$/
+    terser(
+      {
+        mangle: {
+          safari10: true
+        , properties: {
+            regex: /^_|_$/
+          }
         }
       }
-    })
+    )
   ]
 }
 
