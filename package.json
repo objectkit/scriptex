@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha src/test/coffee/**/*Spec.coffee --file tool/mocha/env.coffee --require coffeescript/register",
-    "test:watch": "npm run build && npm run test -- -w",
+    "test:watch": "npm run build && npm run test -- -w --watch-files src/**/*.*",
     "build": "rollup -c tool/rollup/build.js",
     "clean": "rm -rf build",
     "cycle": "npm run clean && npm run build && npm run test",
