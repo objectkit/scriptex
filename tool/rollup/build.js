@@ -1,7 +1,8 @@
+/* @todo use environmental var to disable terser during development due to BAD PERFORMANCE */
+/* @todo DECIDE src directory and associated globs to src/main|test/js OR src/main|test */
 import pkg from "../../package.json"
 import includePaths from "rollup-plugin-includepaths"
 import multiEntry from "@rollup/plugin-multi-entry"
-/* disable terser during development due to BAD PERFORMANCE */
 // import { terser } from "rollup-plugin-terser"
 let terser = () => {}
 
@@ -12,7 +13,7 @@ let buildRelease =
       `src/main/js/**/*.js`
     ],
     output: {
-      file: `build/${pkg.name}/${pkg.version}/${pkg.name}.js`,
+      file: `${pkg.exports}`,
       format: "esm"
     },
     plugins: [
@@ -43,7 +44,8 @@ let buildTest = {
     `src/test/js/**/*.js`
   ],
   output: {
-    file: `build/${pkg.name}/${pkg.version}/${pkg.name}-test.js`,
+    // file: `build/${pkg.name}/${pkg.version}/${pkg.name}-test.js`,
+    file: `${pkg.exports}/../${pkg.name}-test.js`,
     format: "cjs"
   },
   plugins: [
