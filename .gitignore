@@ -1,11 +1,13 @@
 ### Dev ###
-# the common trashpile area used during development
+# noemic clusters
 .trash
-# the project build directory
-out
 
+# insights
+.todo*
 
-# Created by https://www.gitignore.io/api/node,linux,macos,windows
+# project artefacts directory
+out/
+
 # Edit at https://www.gitignore.io/?templates=node,linux,macos,windows
 
 ### Linux ###
