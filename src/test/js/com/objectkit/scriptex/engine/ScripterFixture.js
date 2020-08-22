@@ -59,19 +59,6 @@ export default class ScripterFixture {
           for (let [index, parameter] of parameters.entries()) {
             let key = parameter.name
             let val = this[DATA].get(key)
-            this.ParameterChanged(index, val)
-          }
-        }
-      }
-    }
-
-    /* TODO improve and harmonise
-    UpdatePluginParameters () {
-      if (this.PluginParameters instanceof Array) {
-        if (this.ParameterChanged instanceof Function) {
-          for (let [index, parameter] of this.PluginParameters.entries()) {
-            let key = parameter.name
-            let val = this[DATA].get(key)
             if (null == val) {
               val = (parameter.defaultValue || 0)
               this[DATA].set(key, val)
@@ -81,10 +68,6 @@ export default class ScripterFixture {
         }
       }
     }
-    */
-
-
-
 
     GetTimingInfo () {
       if (this.NeedsTimingInfo) {
@@ -92,7 +75,7 @@ export default class ScripterFixture {
       }
     }
 
-    Trace (any) {}
+    Trace (any) { }
 
     SendMIDIEventAtBeat (midi, beat) {}
 

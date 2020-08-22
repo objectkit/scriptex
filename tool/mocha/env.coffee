@@ -3,12 +3,12 @@ global.PACKAGE = require("../../package.json")
 # Fix path resolution for mocha require
 require("app-module-path").addPath(process.cwd())
 # Define path to module built for tests
-global.SCRIPTEX_TEST= "build/RELEASE-#{PACKAGE.version}/scriptex-test.js"
+global.SCRIPTEX_TEST= "#{PACKAGE.exports}/../#{PACKAGE.name}-test.js"
 # Export test framework to reduce need for require
 global.chai = require("chai")
 global.sinon = require("sinon")
 global.sinonChai = require("sinon-chai")
-global.uuid = require("uuid") # like a
+global.uuid = require("uuid").v4 # like a
 # Bind Sinon assertions to Chai expect and assert
 global.chai.use(global.sinonChai)
 # @see https://github.com/chaijs/chai/issues/86
