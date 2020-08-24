@@ -18,7 +18,6 @@ describe "DelayLinePlugin", ->
       @sandbox.spy(ScripterFixture::, "Trace")
       @sandbox.spy(ScripterFixture::, "GetTimingInfo")
       @sandbox.spy(Scriptex::, "deploy")
-      @sandbox.stub(Scriptex, "ENGINE").get( -> new ScripterFixture())
 
     teardownTest: ->
       @sandbox.restore()
@@ -33,8 +32,9 @@ describe "DelayLinePlugin", ->
       return ScripterFixture::Trace.getCalls().map((call) -> call.lastArg)
 
     newDelayLinePluginDeployment: ->
+
       # trigger an internal deployment
-      DelayLinePlugin.deploy()
+      DelayLinePlugin.deploy(new ScripterFixture())
 
       # retrieve call metadata concerning the deployment
       {

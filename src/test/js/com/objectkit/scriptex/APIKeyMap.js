@@ -18,22 +18,6 @@ export default class APIKeyMap extends Map {
           "onReset"],
         ["ResetParameterDefaults",
           "needsResets"]
-        // ["HandleMIDI",
-        //   "handleMIDI"],
-        // ["Idle",
-        //   "handleIdle"],
-        // ["NeedsTimingInfo",
-        //   "needsTiming"],
-        // ["ParameterChanged",
-        //   "handleParameter"],
-        // ["PluginParameters",
-        //   "parameters"],
-        // ["ProcessMIDI",
-        //   "handleProcess"],
-        // ["Reset",
-        //   "handleReset"],
-        // ["ResetParameterDefaults",
-        //   "resetParameters"]
       ]
     )
   }

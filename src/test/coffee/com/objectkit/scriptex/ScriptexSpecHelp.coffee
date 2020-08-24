@@ -21,14 +21,14 @@ ScriptexSpecHelp =
     onIdle: ->
 
   newDeployment: (plugin=@newEmptyPlugin(), engine=@newMockEngine(), customisable=undefined) ->
-    deployer = new Scriptex(customisable, undefined, engine)
+    deployer = new Scriptex(engine, undefined, customisable)
     deployed = deployer.deploy(plugin)
     return deployed
 
   testScriptexEngine: () ->
     plugin = {}
     engine = @newMockEngine()
-    scriptex = new Scriptex(undefined, undefined, engine)
+    scriptex = new Scriptex(engine)
     scriptex.deploy(plugin)
     expect(plugin).property("engine").eql(engine)
     return
@@ -42,7 +42,7 @@ ScriptexSpecHelp =
 
   testDeployedEngine: (engine) ->
     plugin = new Object()
-    scriptex = new Scriptex(undefined, undefined, engine)
+    scriptex = new Scriptex(engine)
     expect(plugin).not.to.have.property("engine")
     scriptex.deploy(plugin)
     expect(plugin).to.have.property("engine").eql(engine)

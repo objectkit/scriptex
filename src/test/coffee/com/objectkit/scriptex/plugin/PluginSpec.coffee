@@ -7,8 +7,7 @@
 
 describe "Plugin", ->
 
-  # describe "static deploy([engine=Scripter],[customisable=false]) : Array<string>", ->
-  describe "static deploy([configurable=false],[api=Plugin.API][engine=Scripter]) : Array<string>", ->
+  describe "static deploy([engine=Scripter],[customisable=false]) : Array<string>", ->
 
     beforeEach ->
       sinon.spy(Scriptex::, "deploy")
@@ -25,7 +24,7 @@ describe "Plugin", ->
       context "When the engine argument was provided", ->
         specify "Then the plugin was deployed to that engine", ->
           engine = new ScripterFixture()
-          Plugin.deploy(true,Plugin.API,engine)
+          Plugin.deploy(engine, true)
           plugin = getDeployedPlugin()
 
           expect(plugin.engine).eql(engine)
@@ -45,7 +44,7 @@ describe "Plugin", ->
       context "When the customisable argument was provided as false", ->
         specify "Then the properties deployed to engine are non-configurable", ->
           engine = new ScripterFixture()
-          keys = PluginFixture.deploy(false, PluginFixture.API, engine)
+          keys = PluginFixture.deploy(engine)
           for key in keys
             expect(engine)
               .ownPropertyDescriptor(key)
@@ -59,7 +58,7 @@ describe "Plugin", ->
       context "When the customisable argument was not provided", ->
         specify "Then the properties deployed to engine are non-configurable", ->
           engine = new ScripterFixture()
-          keys = PluginFixture.deploy(undefined, PluginFixture.API, engine)
+          keys = PluginFixture.deploy(engine)
           for engineKey in keys
             expect(engine)
               .ownPropertyDescriptor(engineKey)
@@ -73,7 +72,7 @@ describe "Plugin", ->
       context "When the customisable argument was provided as true", ->
         specify "Then the properties deployed to engine are configurable", ->
           engine = new ScripterFixture()
-          keys = PluginFixture.deploy(true, undefined, engine)
+          keys = PluginFixture.deploy(engine, true)
           for key in keys
             expect(engine)
               .ownPropertyDescriptor(key)
