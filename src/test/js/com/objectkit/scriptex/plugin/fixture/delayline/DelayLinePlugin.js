@@ -40,19 +40,19 @@ class DelayLinePlugin extends Plugin {
   }
 
   /* @alias Scripter.ParameterChanged */
-  handleParameter (key, val) {
+  onParameter (key, val) {
     this[this.parameters[key].ID] = val
   }
 
   /* @alias Scripter.Reset */
-  handleReset () {
+  onReset () {
     if (this.doAutomaticUpdates) {
       this.doUpdateDelayLines = true
     }
   }
 
   /* @alias Scripter.ProcessMIDI */
-  handleProcess () {
+  onProcess () {
     this.processDelayLines()
   }
 

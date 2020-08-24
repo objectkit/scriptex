@@ -1,20 +1,8 @@
-{ Scriptex, Scripter } = require(SCRIPTEX_TEST)
-
+{ Scriptex, Scripter, APIKeyMap } = require(SCRIPTEX_TEST)
 
 ScriptexSpecHelp =
 
-  MEMBERS: new Map(
-    [
-      ["NeedsTimingInfo", "needsTiming"]
-      ["ResetParameterDefaults", "resetParameters"]
-      ["PluginParameters", "parameters"]
-      ["HandleMIDI", "handleMIDI"]
-      ["ProcessMIDI", "handleProcess"]
-      ["ParameterChanged", "handleParameter"]
-      ["Reset", "handleReset"]
-      ["Idle", "handleIdle"]
-    ]
-  )
+  MEMBERS: new APIKeyMap()
 
   newMockEngine: ->
     Object.create(null)
@@ -25,12 +13,12 @@ ScriptexSpecHelp =
   newCompletePlugin: ->
     parameters: []
     needsTiming: true
-    resetParameters: true
-    handleMIDI: ->
-    handleProcess: ->
-    handleParameter: ->
-    handleReset: ->
-    handleIdle: ->
+    needsResets: true
+    onMIDI: ->
+    onProcess: ->
+    onParameter: ->
+    onReset: ->
+    onIdle: ->
 
   newDeployment: (plugin=@newEmptyPlugin(), engine=@newMockEngine(), customisable=undefined) ->
     deployer = new Scriptex(customisable, undefined, engine)

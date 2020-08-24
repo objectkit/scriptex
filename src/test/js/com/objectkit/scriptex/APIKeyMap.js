@@ -3,21 +3,37 @@ export default class APIKeyMap extends Map {
     super(
       [
         ["HandleMIDI",
-          "handleMIDI"],
+          "onMIDI"],
         ["Idle",
-          "handleIdle"],
+          "onIdle"],
         ["NeedsTimingInfo",
           "needsTiming"],
         ["ParameterChanged",
-          "handleParameter"],
+          "onParameter"],
         ["PluginParameters",
           "parameters"],
         ["ProcessMIDI",
-          "handleProcess"],
+          "onProcess"],
         ["Reset",
-          "handleReset"],
+          "onReset"],
         ["ResetParameterDefaults",
-          "resetParameters"]
+          "needsResets"]
+        // ["HandleMIDI",
+        //   "handleMIDI"],
+        // ["Idle",
+        //   "handleIdle"],
+        // ["NeedsTimingInfo",
+        //   "needsTiming"],
+        // ["ParameterChanged",
+        //   "handleParameter"],
+        // ["PluginParameters",
+        //   "parameters"],
+        // ["ProcessMIDI",
+        //   "handleProcess"],
+        // ["Reset",
+        //   "handleReset"],
+        // ["ResetParameterDefaults",
+        //   "resetParameters"]
       ]
     )
   }

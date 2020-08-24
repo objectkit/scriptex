@@ -70,7 +70,7 @@ describe "ScriptexValidationSpec", ->
         stub = null
 
         before ->
-          stub = Help.SANDBOX.stub(PluginFixture::, "resetParameters").get( -> no )
+          stub = Help.SANDBOX.stub(PluginFixture::, "needsResets").get( -> no )
 
         after ->
           stub.restore()

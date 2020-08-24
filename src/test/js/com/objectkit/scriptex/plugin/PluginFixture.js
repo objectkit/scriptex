@@ -6,7 +6,7 @@ export default class PluginFixture extends Plugin {
     return true
   }
 
-  get resetParameters () {
+  get needsResets () {
     return true
   }
 
@@ -82,7 +82,7 @@ export default class PluginFixture extends Plugin {
     }
   }
 
-  handleMIDI (midi) {
+  onMIDI (midi) {
     if (!(this.processing)) {
       return
     }
@@ -103,11 +103,11 @@ export default class PluginFixture extends Plugin {
     }
   }
 
-  handleParameter (index, data) {
+  onParameter (index, data) {
   	this[this.parameters[index].ID] = data
   }
 
-  handleReset () {
+  onReset () {
     this.engine.Trace("RESET")
   }
 
@@ -116,13 +116,13 @@ export default class PluginFixture extends Plugin {
     When ResetParameterDefaults is true and UpdatePluginParameters is called,
     Then all parameters are reset to their default values.
    */
-  handleIdle () {
-    if (!(this.resetParameters)){
+  onIdle () {
+    if (!(this.needsResets)){
       this.engine.UpdatePluginParameters()
     }
   }
 
-  handleProcess () {
+  onProcess () {
     if (this.needsTiming){
       this.hostState = this.engine.GetTimingInfo()
     }

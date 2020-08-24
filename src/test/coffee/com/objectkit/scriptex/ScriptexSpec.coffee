@@ -30,7 +30,7 @@ describe "Scriptex", ->
 
       context "When plugin#resetParameters is a field", ->
         specify "Then #engine.ResetParameterDefaults is that fields delegate", ->
-          Help.testDeployedField("ResetParameterDefaults", "resetParameters")
+          Help.testDeployedField("ResetParameterDefaults", "needsResets")
 
       context "When plugin#parameters is a field", ->
         specify "Then #engine.PluginParameters is that fields delegate", ->
@@ -38,23 +38,23 @@ describe "Scriptex", ->
 
       context "When plugin#handleMIDI is a method", ->
         specify "Then #engine.HandleMIDI is that methods delegate", ->
-          Help.testDeployedMethod("HandleMIDI", "handleMIDI")
+          Help.testDeployedMethod("HandleMIDI", "onMIDI")
 
       context "When plugin#handleProcess is a method", ->
         specify "Then #engine.ProcessMIDI is that methods delegate", ->
-          Help.testDeployedMethod("ProcessMIDI", "handleProcess")
+          Help.testDeployedMethod("ProcessMIDI", "onProcess")
 
       context "When plugin#handleParameter is a method", ->
         specify "Then #engine.ParameterChanged is that methods delegate", ->
-          Help.testDeployedMethod("ParameterChanged", "handleParameter")
+          Help.testDeployedMethod("ParameterChanged", "onParameter")
 
       context "When plugin#handleIdle is a method", ->
         specify "Then #engine.Idle is that methods delegate", ->
-          Help.testDeployedMethod("Idle", "handleIdle")
+          Help.testDeployedMethod("Idle", "onIdle")
 
       context "When plugin#handleReset is a method", ->
         specify "Then #engine.Reset is that methods delegate", ->
-          Help.testDeployedMethod("Reset", "handleReset")
+          Help.testDeployedMethod("Reset", "onReset")
 
       specify "Then plugin#engine is set to Scriptex#engine", ->
         Help.testDeployedEngine({})

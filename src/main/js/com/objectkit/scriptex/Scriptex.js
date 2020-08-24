@@ -7,7 +7,8 @@ class Scriptex {
   }
 
   static get API() {
-    let api = [
+        /*
+    return [
       [ "HandleMIDI", "handleMIDI" ],
       [ "ProcessMIDI", "handleProcess" ],
       [ "ParameterChanged",   "handleParameter" ],
@@ -17,18 +18,23 @@ class Scriptex {
       [ "ResetParameterDefaults", "resetParameters"  ],
       [ "PluginParameters", "parameters"   ]
     ]
-    return new Map(api)
+   */
+   return [
+     [ `NeedsTimingInfo`, `needsTiming` ]
+   , [ `ResetParameterDefaults`, `needsResets` ]
+   , [ `PluginParameters`, `parameters` ]
+   , [ `HandleMIDI`, `onMIDI` ]
+   , [ `ProcessMIDI`, `onProcess` ]
+   , [ `ParameterChanged`, `onParameter` ]
+   , [ `Idle`, `onIdle` ]
+   , [ `Reset`, `onReset` ]
+   ]
   }
 
-  static deploy(plugin, ...ctorArgs) {
-    let deployee = plugin instanceof Function ? new plugin : plugin
-    let deployer = new this(...ctorArgs)
-    return deployer.deploy(deployee)
-  }
-
+  // constructor (engine= Scripter, api = new.target.API, configurable = false) {
   constructor(configurable = false, api = new.target.API, engine = new.target.ENGINE) {
     this._configurable = configurable
-    this._api = api
+    this._api = new Map([...api])
     this._engine = engine
   }
 
