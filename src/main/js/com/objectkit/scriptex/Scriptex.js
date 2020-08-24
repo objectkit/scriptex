@@ -2,10 +2,18 @@ import Scripter from "com/objectkit/scriptex/engine/Scripter"
 
 class Scriptex {
 
+  /**
+   * [engine description]
+   * @type {Object}
+   */
   static get ENGINE() {
     return Scripter
   }
 
+  /**
+   * [API description]
+   * @type {Map<string, string>}
+   */
   static get API() {
    return [
       [ `NeedsTimingInfo`, `needsTiming` ]
@@ -19,12 +27,23 @@ class Scriptex {
     ]
   }
 
-  constructor (engine= Scripter, api = new.target.API, configurable = false) {
+  /**
+   * [constructor description]
+   * @param {Object}  [engine=Scripter]    [description]
+   * @param {Map}  [api=new.target.API] [description]
+   * @param {Boolean} [configurable=false] [description]
+   */
+  constructor (engine= new.target.ENGINE, api = new.target.API, configurable = false) {
     this._configurable = configurable
     this._api = new Map([...api])
     this._engine = engine
   }
 
+  /**
+   * [deploy description]
+   * @param  {Object} plugin [description]
+   * @return {Array<string>}        [description]
+   */
   deploy(plugin) {
 
     let api = []
