@@ -9,6 +9,7 @@
     "build": "npm run build:lib && npm run build:doc",
     "build:lib": "rollup -c tool/rollup/build.js",
     "build:doc": "jsdoc -c tool/jsdoc/config.json -d ${npm_package_exports}/../doc/",
+    "lint": "eslint -c tool/eslint/config.json src/main/js/**/*.js",
     "clean": "rm -rf out",
     "cycle": "npm run clean && npm run build && npm run test",
     "postinstall": "npm run cycle"
@@ -20,6 +21,7 @@
     "app-module-path": "2.2.0",
     "chai": "4.2.0",
     "coffeescript": "2.5.1",
+    "eslint": "7.7.0",
     "jsdoc": "3.6.5",
     "minami": "1.2.3",
     "mocha": "8.1.1",
