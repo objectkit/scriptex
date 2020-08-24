@@ -1,9 +1,12 @@
 ### Dev ###
 # noemic clusters
-.trash
+.void
 
 # insights
 .todo*
+
+# suchness
+.npmrc
 
 # project artefacts directory
 out/
