@@ -8,19 +8,18 @@ class Scriptex {
 
   static get API() {
    return [
-     [ `NeedsTimingInfo`, `needsTiming` ]
-   , [ `ResetParameterDefaults`, `needsResets` ]
-   , [ `PluginParameters`, `parameters` ]
-   , [ `HandleMIDI`, `onMIDI` ]
-   , [ `ProcessMIDI`, `onProcess` ]
-   , [ `ParameterChanged`, `onParameter` ]
-   , [ `Idle`, `onIdle` ]
-   , [ `Reset`, `onReset` ]
-   ]
+      [ `NeedsTimingInfo`, `needsTiming` ]
+    , [ `ResetParameterDefaults`, `needsResets` ]
+    , [ `PluginParameters`, `parameters` ]
+    , [ `ParameterChanged`, `onParameter` ]
+    , [ `ProcessMIDI`, `onProcess` ]
+    , [ `HandleMIDI`, `onMIDI` ]
+    , [ `Reset`, `onReset` ]
+    , [ `Idle`, `onIdle` ]
+    ]
   }
 
   constructor (engine= Scripter, api = new.target.API, configurable = false) {
-  // constructor(configurable = false, api = new.target.API, engine = new.target.ENGINE) {
     this._configurable = configurable
     this._api = new Map([...api])
     this._engine = engine
