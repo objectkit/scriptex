@@ -1,10 +1,10 @@
 /* @todo use environmental var to disable terser during development due to BAD PERFORMANCE */
-/* @todo DECIDE src directory and associated globs to src/main|test/js OR src/main|test */
 import pkg from "../../package.json"
 import includePaths from "rollup-plugin-includepaths"
 import multiEntry from "@rollup/plugin-multi-entry"
-// import { terser } from "rollup-plugin-terser"
-let terser = () => {}
+import { terser } from "rollup-plugin-terser"
+
+const MINIFY = !(process.env.npm_config_MINIFIER_OFF)
 
 let buildRelease =
   {
@@ -25,7 +25,7 @@ let buildRelease =
       multiEntry({
         exports: true
       }),
-      terser({
+      MINIFY && terser({
         mangle: {
           safari10: true
         , keep_classnames: true
@@ -44,7 +44,6 @@ let buildTest = {
     `src/test/js/**/*.js`
   ],
   output: {
-    // file: `build/${pkg.name}/${pkg.version}/${pkg.name}-test.js`,
     file: `${pkg.exports}/../${pkg.name}-test.js`,
     format: "cjs"
   },
@@ -58,7 +57,7 @@ let buildTest = {
     multiEntry({
       exports: true
     }),
-    terser(
+    MINIFY && terser(
       {
         mangle: {
           safari10: true
@@ -71,4 +70,7 @@ let buildTest = {
   ]
 }
 
-export default [buildRelease, buildTest]
+export default [
+  buildRelease
+, buildTest
+]
