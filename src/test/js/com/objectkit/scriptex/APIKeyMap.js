@@ -1,25 +1,8 @@
-export default class APIKeyMap extends Map {
+import Scriptex from "com/objectkit/scriptex/Scriptex"
+
+class APIKeyMap extends Map {
   constructor () {
-    super(
-      [
-        ["HandleMIDI",
-          "onMIDI"],
-        ["Idle",
-          "onIdle"],
-        ["NeedsTimingInfo",
-          "needsTiming"],
-        ["ParameterChanged",
-          "onParameter"],
-        ["PluginParameters",
-          "parameters"],
-        ["ProcessMIDI",
-          "onProcess"],
-        ["Reset",
-          "onReset"],
-        ["ResetParameterDefaults",
-          "needsResets"]
-      ]
-    )
+    super(Scriptex.API)
   }
 
   getScripterKeys () {
@@ -30,3 +13,5 @@ export default class APIKeyMap extends Map {
     return Array.from(this.values())
   }
 }
+
+export default APIKeyMap
