@@ -1,0 +1,8 @@
+{
+  "extension": [
+    ".coffee"
+  ],
+  "reporter": "text-summary",
+  "temp-dir": "tool/istanbuljs/temp",
+  "report-dir": "tool/istanbuljs/temp"
+}
