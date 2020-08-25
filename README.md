@@ -1,30 +1,52 @@
-- test scripts should be against the compiled library
-- uniform named modules style (named)
-- convert to module
-```
-{
-  "name": "com.objectkit.scriptex",
-  "version": "1.0.0-b1",
-  "description": "A micro library and standalone build tool for the Apple Scripter MIDI-FX plugin",
-  "main": "index.js",
-  "exports": "dist/com.objectkit.scriptex/1.0.0-b1/com.objectkit.scriptex.js"
-  "type": "module",
-  "engines": {
-    "node": ">= 13.0.0"
-  },
-  "config": {
+# Scriptex
+> A micro library for virtual Scripter MIDI-FX plugins.
 
-  },
+###### Input
+```js
+/* @file path/to/ScripterFacade.js */
+import { Plugin } from "com.objectkit.scriptex"
+
+class ScripterFacade extends Plugin {
+
+  /* @alias Scripter.ResetParameterDefaults */
+  get needsDefaults () { }
+
+  /* @alias Scripter.NeedsTimingInfo */
+  get needsTiming () { }  
+
+  /* @alias Scripter.PluginParameters */
+  get params () { }
+
+  /* @alias Scripter.HandleMIDI */
+  onMIDI (midi) { }
+
+  /* @alias Scripter.Idle */
+  onIdle () { }  
+
+  /* @alias Scripter.ParameterChanged */
+  onParam (key, val) { }
+
+  /* @alias Scripter.ProcessMIDI */
+  onProcess () { }
+
+  /* @alias Scripter.Reset */
+  onReset () { }
 }
+
+export default Facade
 ```
 
-## Scenarios
+```js
+/* @file main.js */
+import ScripterFacade from "path/to/ScripterFacade"
 
-### Test Scenarios
+/* launch the plugin */
+ScripterFacade.deploy().forEach(Scripter.Trace)
+```
 
-#### TimingInfo
-GOAL:
-Technician wants to test calculations using TimingInfo
+###### Output
+```js
+/* @file out/scripterfacade.min.js */
+const e=(0,eval)("this");class Scriptex{static get ENGINE(){return e}static get API(){return[["NeedsTimingInfo","needsTiming"],["ResetParameterDefaults","needsDefaults"],["PluginParameters","parameters"],["ParameterChanged","onParameter"],["ProcessMIDI","onProcess"],["HandleMIDI","onMIDI"],["Reset","onReset"],["Idle","onIdle"]]}constructor(e=new.target.ENGINE,t=new.target.API,s=!1){this.t=s,this.s=new Map([...t]),this.i=e}deploy(e){let t=[],s=e.engine=this.i,n=(e,t,s,n,r=this.t)=>Reflect.defineProperty(e,t,{configurable:r,[n]:s}),r=(t,r)=>"function"==typeof e[t]&&n(s,r,(...s)=>e[t](...s),"value"),a=(t,r)=>t in e&&n(e,t,e[t],"value",!0)&&n(s,r,()=>e[t],"get");for(let[i,c]of this.s)(r(c,i)||a(c,i))&&t.push(i);return t}}class Plugin{static get API(){return Scriptex.API}static deploy(e=Scriptex.ENGINE,t=!1,...s){let n=new this(...s);return new Scriptex(e,this.API,t).deploy(n)}}class ScripterFacade extends Plugin{get needsDefaults(){}get needsTiming(){}get params(){}onMIDI(e){}onIdle(){}onParam(e,t){}onProcess(){}onReset(){}};ScripterFacade.deploy().forEach(e.Trace)
 
-PROBLEM:
-Variation to the TimingInfo object state.
+```
