@@ -63,7 +63,7 @@ class Plugin {
    * @see Scriptex#deploy
    */
   static deploy (engine=Scriptex.ENGINE, configurable=false, ...ctorArgs) {
-    let deployee = Reflect.construct(this, ctorArgs)
+    let deployee = new this(...ctorArgs)
     let deployer = new Scriptex(engine, this.API, configurable)
     return deployer.deploy(deployee)
   }
