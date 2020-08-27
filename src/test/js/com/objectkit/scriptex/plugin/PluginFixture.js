@@ -6,11 +6,11 @@ export default class PluginFixture extends Plugin {
     return true
   }
 
-  get needsResets () {
+  get needsDefaults () {
     return true
   }
 
-  get parameters () {
+  get params () {
     let minVelocity = {
       ID: "minVelocity"
     , name: "Minimum Velocity"
@@ -82,7 +82,7 @@ export default class PluginFixture extends Plugin {
     }
   }
 
-  onMIDI (midi) {
+  onMidi (midi) {
     if (!(this.processing)) {
       return
     }
@@ -103,8 +103,8 @@ export default class PluginFixture extends Plugin {
     }
   }
 
-  onParameter (index, data) {
-  	this[this.parameters[index].ID] = data
+  onParam (index, data) {
+  	this[this.params[index].ID] = data
   }
 
   onReset () {
@@ -114,10 +114,10 @@ export default class PluginFixture extends Plugin {
   /*
     NOTE
     When ResetParameterDefaults is true and UpdatePluginParameters is called,
-    Then all parameters are reset to their default values.
+    Then all params are reset to their default values.
    */
   onIdle () {
-    if (!(this.needsResets)){
+    if (!(this.needsDefaults)){
       this.engine.UpdatePluginParameters()
     }
   }

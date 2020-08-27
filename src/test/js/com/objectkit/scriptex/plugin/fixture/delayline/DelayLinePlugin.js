@@ -12,7 +12,7 @@ class DelayLinePlugin extends Plugin {
   }
 
   /* @alias Scripter.PluginParameters */
-  get parameters () {
+  get params () {
     return [
       {
         ID: ``
@@ -40,8 +40,8 @@ class DelayLinePlugin extends Plugin {
   }
 
   /* @alias Scripter.ParameterChanged */
-  onParameter (key, val) {
-    this[this.parameters[key].ID] = val
+  onParam (key, val) {
+    this[this.params[key].ID] = val
   }
 
   /* @alias Scripter.Reset */

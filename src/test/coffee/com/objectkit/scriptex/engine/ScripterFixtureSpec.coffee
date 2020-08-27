@@ -15,7 +15,7 @@ describe "ScripterFixture", ->
 
     context "Given PluginParameters is an array of parameter objects", ->
       context "When GetParameter is passed a legitimate parameter name", ->
-        specify "Then the parameters view data is returned", ->
+        specify "Then the params view data is returned", ->
           scripter = new ScripterFixture()
           scripter.PluginParameters = [
             { name: "A" }
@@ -25,7 +25,7 @@ describe "ScripterFixture", ->
           return
 
       context "When GetParameter is passed a legitimate parameter index", ->
-        specify "Then the parameters view data is returned", ->
+        specify "Then the params view data is returned", ->
           scripter = new ScripterFixture()
           scripter.PluginParameters = [
             { name: "B" }

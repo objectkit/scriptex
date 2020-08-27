@@ -17,11 +17,11 @@ class Scriptex {
   static get API() {
    return [
       [ `NeedsTimingInfo`, `needsTiming` ]
-    , [ `ResetParameterDefaults`, `needsResets` ]
-    , [ `PluginParameters`, `parameters` ]
-    , [ `ParameterChanged`, `onParameter` ]
+    , [ `ResetParameterDefaults`, `needsDefaults` ]
+    , [ `PluginParameters`, `params` ]
+    , [ `ParameterChanged`, `onParam` ]
     , [ `ProcessMIDI`, `onProcess` ]
-    , [ `HandleMIDI`, `onMIDI` ]
+    , [ `HandleMIDI`, `onMidi` ]
     , [ `Reset`, `onReset` ]
     , [ `Idle`, `onIdle` ]
     ]

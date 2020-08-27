@@ -21,7 +21,7 @@ describe "ScriptexValidationSpec", ->
       # assert deployment OK
       expect(PluginFixture.deploy(engine)).members(@EXPECTED_KEYS)
 
-      # configure the parameters with an UpdatePluginParameters emulation
+      # configure the params with an UpdatePluginParameters emulation
       for parameter in engine.PluginParameters
         key = parameter.name
         val = parameter.defaultValue or 0
@@ -70,7 +70,7 @@ describe "ScriptexValidationSpec", ->
         stub = null
 
         before ->
-          stub = Help.SANDBOX.stub(PluginFixture::, "needsResets").get( -> no )
+          stub = Help.SANDBOX.stub(PluginFixture::, "needsDefaults").get( -> no )
 
         after ->
           stub.restore()

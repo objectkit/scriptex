@@ -38,7 +38,7 @@ class Plugin {
    *
    *    // @alias Scripter.HandleMIDI
    *    // as defined in Scriptex.API, available via super.API in example
-   *    onMIDI (midi) {
+   *    onMidi (midi) {
    *      midi.send()
    *    }
    *  }

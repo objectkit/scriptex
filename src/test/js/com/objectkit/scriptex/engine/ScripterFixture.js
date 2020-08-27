@@ -37,8 +37,8 @@ export default class ScripterFixture {
     }
 
     SetParameter (key, val) {
-      let parameters = this.PluginParameters
-      if (Array.isArray(parameters)) {
+      let params = this.PluginParameters
+      if (Array.isArray(params)) {
         let parameter = this[FIND](key)
         if (parameter) {
           this[DATA].set(parameter.name, +val)
@@ -54,9 +54,9 @@ export default class ScripterFixture {
 
     UpdatePluginParameters () {
       if (this.ParameterChanged) {
-        let parameters = this.PluginParameters
-        if (Array.isArray(parameters)) {
-          for (let [index, parameter] of parameters.entries()) {
+        let params = this.PluginParameters
+        if (Array.isArray(params)) {
+          for (let [index, parameter] of params.entries()) {
             let key = parameter.name
             let val = this[DATA].get(key)
             if (null == val) {
@@ -88,13 +88,13 @@ export default class ScripterFixture {
     /* private utilities */
 
     [FIND] (key) {
-      let parameters = this.PluginParameters
-      if (Array.isArray(parameters)) {
+      let params = this.PluginParameters
+      if (Array.isArray(params)) {
         if (Number.isFinite(key)) {
-          return parameters[key]
+          return params[key]
         }
         else {
-          return parameters.find( p => key === p.name )
+          return params.find( p => key === p.name )
         }
       }
     }

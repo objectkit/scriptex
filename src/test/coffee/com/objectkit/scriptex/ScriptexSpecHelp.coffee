@@ -11,12 +11,12 @@ ScriptexSpecHelp =
     Object.create(null)
 
   newCompletePlugin: ->
-    parameters: []
+    params: []
     needsTiming: true
-    needsResets: true
-    onMIDI: ->
+    needsDefaults: true
+    onMidi: ->
     onProcess: ->
-    onParameter: ->
+    onParam: ->
     onReset: ->
     onIdle: ->
 
