@@ -16,44 +16,44 @@ describe "Scriptex", ->
 
     context "Given Scriptex has deployed a plugin to #engine", ->
 
-      context "When customisable is set to false [default]", ->
-        specify "Then #engine properties cannot be deleted", ->
+      context "When Scriptex#configurable is set to false [default]", ->
+        specify "Then #engine properties are final", ->
           Help.testNonConfigurableDeployment()
 
-      context "When customisable is set to true", ->
+      context "When Scriptex#configurable is set to true", ->
         specify "Then #engine properties can be deleted", ->
           Help.testConfigurableDeployment()
 
       context "When plugin#needsTiming is a field", ->
-        specify "Then #engine.NeedsTimingInfo is that fields delegate", ->
+        specify "Then #engine.NeedsTimingInfo becomes its field delegate", ->
           Help.testDeployedField("NeedsTimingInfo", "needsTiming")
 
-      context "When plugin#resetParameters is a field", ->
-        specify "Then #engine.ResetParameterDefaults is that fields delegate", ->
+      context "When plugin#needsDefaults is a field", ->
+        specify "Then #engine.ResetParameterDefaults becomes its field delegate", ->
           Help.testDeployedField("ResetParameterDefaults", "needsDefaults")
 
       context "When plugin#params is a field", ->
-        specify "Then #engine.PluginParameters is that fields delegate", ->
+        specify "Then #engine.PluginParameters becomes its field delegate", ->
           Help.testDeployedField("PluginParameters", "params")
 
-      context "When plugin#handleMIDI is a method", ->
-        specify "Then #engine.HandleMIDI is that methods delegate", ->
+      context "When plugin#onMidi is a method", ->
+        specify "Then #engine.HandleMIDI becomes its method delegate", ->
           Help.testDeployedMethod("HandleMIDI", "onMidi")
 
-      context "When plugin#handleProcess is a method", ->
-        specify "Then #engine.ProcessMIDI is that methods delegate", ->
+      context "When plugin#onProcess is a method", ->
+        specify "Then #engine.ProcessMIDI becomes its method delegate", ->
           Help.testDeployedMethod("ProcessMIDI", "onProcess")
 
-      context "When plugin#handleParameter is a method", ->
-        specify "Then #engine.ParameterChanged is that methods delegate", ->
+      context "When plugin#onParam is a method", ->
+        specify "Then #engine.ParameterChanged becomes its method delegate", ->
           Help.testDeployedMethod("ParameterChanged", "onParam")
 
-      context "When plugin#handleIdle is a method", ->
-        specify "Then #engine.Idle is that methods delegate", ->
+      context "When plugin#onIdle is a method", ->
+        specify "Then #engine.Idle becomes its method delegate", ->
           Help.testDeployedMethod("Idle", "onIdle")
 
-      context "When plugin#handleReset is a method", ->
-        specify "Then #engine.Reset is that methods delegate", ->
+      context "When plugin#onReset is a method", ->
+        specify "Then #engine.Reset becomes its method delegate", ->
           Help.testDeployedMethod("Reset", "onReset")
 
       specify "Then plugin#engine is set to Scriptex#engine", ->

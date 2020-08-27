@@ -7,7 +7,7 @@
 
 describe "Plugin", ->
 
-  describe "static deploy([engine=Scripter],[customisable=false]) : Array<string>", ->
+  describe "static deploy([engine=Scripter],[configurable=false]) : Array<string>", ->
 
     beforeEach ->
       sinon.spy(Scriptex::, "deploy")
@@ -21,8 +21,8 @@ describe "Plugin", ->
       getDeployedPlugin = -> Scriptex::deploy.lastCall.args[0]
 
 
-      context "When the engine argument was provided", ->
-        specify "Then the plugin was deployed to that engine", ->
+      context "When engine is provided", ->
+        specify "Then plugin is deployed to that engine", ->
           engine = new ScripterFixture()
           Plugin.deploy(engine, true)
           plugin = getDeployedPlugin()
@@ -32,8 +32,8 @@ describe "Plugin", ->
 
         return
 
-      context "When the engine argument was not provided", ->
-        specify "Then the plugin was deployed to Scripter", ->
+      context "When engine is absent", ->
+        specify "Then the plugin is deployed to Scripter [default]", ->
           Plugin.deploy()
           plugin = getDeployedPlugin()
           expect(plugin.engine).eql(Scripter)
@@ -41,8 +41,8 @@ describe "Plugin", ->
 
         return
 
-      context "When the customisable argument was provided as false", ->
-        specify "Then the properties deployed to engine are non-configurable", ->
+      context "When configurable is false", ->
+        specify "Then #engine properties are non-configurable", ->
           engine = new ScripterFixture()
           keys = PluginFixture.deploy(engine)
           for key in keys
@@ -55,8 +55,8 @@ describe "Plugin", ->
 
         return
 
-      context "When the customisable argument was not provided", ->
-        specify "Then the properties deployed to engine are non-configurable", ->
+      context "When configurable is not supplied", ->
+        specify "Then #engine properties are non-configurable [default]", ->
           engine = new ScripterFixture()
           keys = PluginFixture.deploy(engine)
           for engineKey in keys
@@ -69,8 +69,8 @@ describe "Plugin", ->
 
         return
 
-      context "When the customisable argument was provided as true", ->
-        specify "Then the properties deployed to engine are configurable", ->
+      context "When configurable is true", ->
+        specify "Then #engine properties are configurable", ->
           engine = new ScripterFixture()
           keys = PluginFixture.deploy(engine, true)
           for key in keys

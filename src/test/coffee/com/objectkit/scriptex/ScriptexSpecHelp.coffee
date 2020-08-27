@@ -20,8 +20,8 @@ ScriptexSpecHelp =
     onReset: ->
     onIdle: ->
 
-  newDeployment: (plugin=@newEmptyPlugin(), engine=@newMockEngine(), customisable=undefined) ->
-    deployer = new Scriptex(engine, undefined, customisable)
+  newDeployment: (plugin=@newEmptyPlugin(), engine=@newMockEngine(), configurable=undefined) ->
+    deployer = new Scriptex(engine, undefined, configurable)
     deployed = deployer.deploy(plugin)
     return deployed
 
