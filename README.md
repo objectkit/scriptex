@@ -1,5 +1,5 @@
 # Scriptex
-> A micro library for virtual Scripter MIDI-FX plugins.
+> A micro library for Scripter MIDI-FX plugins.
 
 ###### Source
 ```js
@@ -18,7 +18,7 @@ class ScripterFacade extends Plugin {
   get params () { }
 
   /* @alias Scripter.HandleMIDI */
-  onMIDI (midi) { }
+  onMidi (midi) { }
 
   /* @alias Scripter.Idle */
   onIdle () { }  
