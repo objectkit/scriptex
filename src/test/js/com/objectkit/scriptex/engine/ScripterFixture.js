@@ -58,6 +58,9 @@ export default class ScripterFixture {
         if (Array.isArray(params)) {
           for (let [index, parameter] of params.entries()) {
             let key = parameter.name
+            if (null == key) {
+              throw new Error(`NoNameSet: ${JSON.stringify(parameter)}`)
+            }
             let val = this[DATA].get(key)
             if (null == val) {
               val = (parameter.defaultValue || 0)
