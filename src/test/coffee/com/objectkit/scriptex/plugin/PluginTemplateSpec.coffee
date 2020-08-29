@@ -5,7 +5,51 @@
   Scriptex
 } = require(SCRIPTEX_TEST)
 
-describe.only "PluginTemplate", ->
+describe "PluginTemplate", ->
+
+  # TODO add as classes
+  class Event
+    send: ->
+    sendAtBeat: ->
+    sendAfterBeats: ->
+    sendAfterMilliseconds: ->
+
+  ###
+
+    0     Event
+    80    TargetEvent
+    144   Note
+    128   NoteOff
+    144   NoteOn
+    160   PolyPressure
+    176   ControlChange
+    192   ProgramChange
+    208   ChannelPressure
+    224   PitchBend
+  ###
+
+  ###
+  onMidi
+  onNoteOn
+  onNoteOff
+  onNote
+  onControlChange
+  onParameterChange
+  onChannelPressure
+  onPolyPressure
+  onPitchbend
+  onTargetEvent
+  ###
+
+  class ChannelPressure extends Event
+  class PolyPressure extends Event
+  class ProgramChange extends Event
+  class ControlChange extends Event
+  class Pitchbend extends Event
+  class NoteOn extends Event
+  class NoteOff extends Event
+  class Note extends Event
+  class TargetEvent extends Event
 
   Help =
     sandbox: sinon.createSandbox()
@@ -19,13 +63,18 @@ describe.only "PluginTemplate", ->
     teardownEnv: ->
       @sandbox.verifyAndRestore()
 
-    newMIDIEvent: (beatPos)->
-      send: sinon.stub()
-      sendAtBeat: sinon.stub()
-      sendAfterBeats: sinon.stub()
-      sendAfterMilliseconds: sinon.stub()
-      beatPos: beatPos
+    newMidiEvent: (properties={}) ->
+      midiEvent =
+        send: sinon.stub()
+        sendAtBeat: sinon.stub()
+        sendAfterBeats: sinon.stub()
+        sendAfterMilliseconds: sinon.stub()
 
+      Object.assign(midiEvent, properties)
+      return midiEvent
+
+    deployPluginTemplate: ->
+      @deployPlugin(PluginTemplate)
 
     deployPlugin: (pluginClass, autoUpdate=true)->
 
@@ -134,68 +183,76 @@ describe.only "PluginTemplate", ->
         context "When the parameter at index has no ID property", ->
         context "When val equals an existing assignment", ->
 
-
   context "sendMIDI(midi):number", ->
     describe "Given midi.beatPos is a string", ->
       specify "Then Scripter.SendMIDIEventAfterMilliseconds is invoked", ->
-        timing = 500
-        midiEvent = Help.newMIDIEvent("#{timing}")
-
-        plugin = new PluginTemplate
-        beatPos = plugin.sendMidi(midiEvent)
+        beatPosNumber = 500
+        beatPosString = "#{beatPosNumber}"
+        midiEvent = Help.newMidiEvent( beatPos:beatPosString )
+        returned = new PluginTemplate().sendMidi(midiEvent)
+        expect(Number.isInteger(returned)).to.be.true
         expect(midiEvent.sendAfterMilliseconds).calledOnce
-        expect(timing).eql(beatPos)
+        expect(midiEvent.sendAfterMilliseconds).calledWith(beatPosNumber)
+        expect(beatPosNumber).eql(returned)
         return
 
-    describe "Given midi.beatPos is a number > 0", ->
-      specify "Then Scripter.SendMIDIEventAtBeat is invoked", ->
-        timing = 500
-        midiEvent = Help.newMIDIEvent(timing)
-        plugin = new PluginTemplate
-        beatPos = plugin.sendMidi(midiEvent)
-        expect(midiEvent.sendAtBeat).calledOnce
-        expect(timing).eql(beatPos)
-        return
 
-    describe "Given midi.beatPos is a number < 0", ->
+    describe "Given 0 > midi.beatPos", ->
       specify "Then Scripter.SendMIDIEventAfterBeats is invoked", ->
         timing = -500
-        midiEvent = Help.newMIDIEvent(timing)
+        midiEvent = Help.newMidiEvent(beatPos:timing)
         plugin = new PluginTemplate
         beatPos = plugin.sendMidi(midiEvent)
         expect(midiEvent.sendAfterBeats).calledOnce
         expect(timing * -1).eql(beatPos)
         return
 
-    describe "Given midi.beatPos is neither string nor number", ->
-      specify "Then Scripter.SendMIDIEventNow is invoked", ->
-        midiEvent = Help.newMIDIEvent(undefined)
-        expect(midiEvent.beatPos).is.undefined
-        plugin = new PluginTemplate
-        beatPos = plugin.sendMidi(midiEvent)
-        expect(midiEvent.send).calledOnce
-        expect(0).eql(beatPos)
+    describe "Given 0 <= midi.beatPos || !midi.beatPos", ->
+      specify "Then Scripter.SendMIDIEventAtBeat is invoked", ->
+
+        doSendMidi = (midi) ->
+          new PluginTemplate().sendMidi(midi)
+
+        returned1 = null
+        returned2 = null
+        beatPosNumber = 500
+        midiEvent = Help.newMidiEvent(beatPos:beatPosNumber)
+
+        expect(midiEvent).property("beatPos", beatPosNumber)
+
+        returned1 = doSendMidi(midiEvent)
+
+        expect(returned1).eql(beatPosNumber)
+        expect(midiEvent.sendAtBeat).calledOnce
+
+        midiEvent.beatPos = undefined
+
+        returned2 = doSendMidi(midiEvent)
+
+        expect(returned2).equal(0)
+        expect(midiEvent.sendAtBeat).calledTwice
+
         return
 
-  context "onMidi(event):number", ->
-    class Event
-      send: ->
-      sendAtBeat: ->
-      sendAfterBeats: ->
-      sendAfterMilliseconds: ->
+    ###
+    @deprecated
+    The latest library version uses sendMIDIAtBeat as last alternative
+    as beatPos equals 0 by default, even when NeedsTimingInfo is false
 
-    class ChannelPressure extends Event
-    class PolyPressure extends Event
-    class ProgramChange extends Event
-    class ControlChange extends Event
-    class Pitchbend extends Event
-    class NoteOn extends Event
-    class NoteOff extends Event
-    class Note extends Event
-    class TargetEvent extends Event
+    ###
+    # describe.skip "Given midi.beatPos is neither string nor number", ->
+    #   specify "Then Scripter.SendMIDIEventNow is invoked", ->
+    #     midiEvent = Help.newMidiEvent()
+    #     expect(midiEvent.beatPos).is.undefined
+    #     plugin = new PluginTemplate
+    #     beatPos = plugin.sendMidi(midiEvent)
+    #     expect(midiEvent.send).calledOnce
+    #     expect(0).eql(beatPos)
+    #     return
 
-    describe "When invoked", ->
-      specify "Then sendMidi is invoked", ->
+  context "#onMidi(event):number", ->
+    describe "Given any midi event", ->
+      specify "Then #sendMidi is invoked", ->
         plugin = new PluginTemplate()
         events = [
           new ChannelPressure
@@ -210,22 +267,56 @@ describe.only "PluginTemplate", ->
         ]
 
         for event in events
+          handlerName = "on#{event.constructor.name}"
+          expect(plugin).property(handlerName).not.called
           timing = plugin.onMidi(event)
-          console.info("timing= " + timing)
           expect(0).eql(timing)
+          expect(plugin).property(handlerName).calledOnce
+          expect(plugin.sendMidi).called
 
-      specify "And beatPos is returned", ->
+  context "PluginTemplate.deploy():Array<string>",->
+    describe "When PluginTemplate is deployed", ->
+      specify "Then Scripter.ParameterChanged delegates to PluginTemplate#onParam", ->
+        key = 0
+        val = 1
+        { plugin, engine, api } = Help.deployPluginTemplate()
+        plugin.params = [
+          ID: "a", name: "A", type: "checkbox", checked: 0
+        ]
+        expect(api).includes("ParameterChanged")
+        expect(plugin.onParam).not.called
 
-  ###
+        engine.ParameterChanged(key, val)
+        expect(plugin.onParam).calledWith(key, val)
+        expect(plugin).property("a", val)
 
-  onMidi
-  onNoteOn
-  onNoteOff
-  onNote
-  onControlChange
-  onParameterChange
-  onChannelPressure
-  onPolyPressure
-  onPitchbend
-  onTargetEvent
-  ###
+        engine.ParameterChanged(key, val + 1)
+        expect(plugin.onParam).calledWith(key, val + 1)
+        expect(plugin).property("a", val + 1)
+
+        return
+
+      specify "Then Scripter.HandleMIDI delegates to PluginTemplate#onMidi", ->
+        midi1 = new NoteOn()
+        midi2 = new NoteOff()
+        midi3 = new ControlChange()
+        { plugin, engine, api } = Help.deployPluginTemplate()
+        plugin.params = [
+          { ID: "b", name: "B", type: "lin", defaultValue: 63, minValue: 1, maxValue: 127}
+        ]
+        expect(engine).property("HandleMIDI").instanceOf(Function)
+        engine.HandleMIDI(midi1)
+        expect(plugin.onMidi).calledOnce
+        expect(plugin.onMidi).calledWith(midi1)
+        engine.HandleMIDI(midi2)
+        expect(plugin.onMidi).calledTwice
+        expect(plugin.onMidi).calledWith(midi2)
+        engine.HandleMIDI(midi3)
+        expect(plugin.onMidi).calledThrice
+        expect(plugin.onMidi).calledWith(midi3)
+
+        return
+
+      return
+
+    return
