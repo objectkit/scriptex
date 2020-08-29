@@ -7,17 +7,34 @@ const finalise = (target, key, val) =>
 /** @class */
 class PluginTemplate extends Plugin {
 
-  /*
+  /**
    * NOTICE
-   * - needsTiming
-   * - needsDefaults
-   * - params
    *
-   * must be implemented by subclasses either by
-   * defining getters or by setting standard properties
-   * by override onInit
+   * config properties must be implemented by subclasses,
+   * either by defining getters or by setting standard
+   * properties by override onInit
+   *
+   *  @exammple
+   *  get needsTiming () {
+   *    return true
+   *  }
+   *
+   *  get needsDefaults () {
+   *    return false
+   *  }
+   *
+   *  get params () {
+   *    return [ { type: text, name: this.constructor.name }]
+   *  }
+   *
    */
 
+  /**
+   * [engine description]
+   * @see #onInit()
+   * @param  {Object} engine
+   * @return {void}
+   */
   set engine (engine) {
     finalise(this, `engine`, engine)
     this.onInit()
@@ -48,7 +65,7 @@ class PluginTemplate extends Plugin {
    * @abstract
    * @return {void}
    */
-  onInit () { ; }
+  onInit () {}
 
   /**
    * [onParam description]
@@ -154,7 +171,23 @@ class PluginTemplate extends Plugin {
   }
 
   /**
-   * [sendMIDI description]
+   * This is a general purpose implementation suitable for
+   * prototyping and lightweight applications. A more
+   * effective plugin implementation will use Scripters
+   * MIDI Send methods directly rather than on the midi
+   * object itself.
+   *
+   * Subclasses can add metadata to sent midi events if
+   * so wished
+   * @example
+   *  class Analyser extends PluginTemplate {
+   *    sendMidi(midi) {
+   *      let beatPos = super.sendMidi(midi)
+   *      midi.SENT = Date.now()
+   *      return beatPos   
+   *  }
+   *
+   *
    * @lends Scripter.SendMIDIEventNow
    * @lends Scripter.SendMIDIEventAtBeat
    * @lends Scripter.SendMIDIEventAfterBeats
@@ -162,33 +195,20 @@ class PluginTemplate extends Plugin {
    * @param {Event} midi
    * @return {number}
    */
-  sendMidi (midi) {
-    let beatPos = midi.beatPos
-    switch(typeof(beatPos)) {
-      case `number`: {
-        0 > beatPos
-          ? midi.sendAfterBeats(beatPos *= -1)
-          : midi.sendAtBeat(beatPos)
-        break
-      }
-      case `string`: {
-        /* cast to number */
-        beatPos = +beatPos
-        if (Number.isFinite(beatPos)) {
-          midi.sendAfterMilliseconds(beatPos)
-        }
-        else {
+   sendMidi (midi) {
+     let beatPos = midi.beatPos || 0
+     if (`string` === typeof beatPos) {
+       midi.sendAfterMilliseconds(beatPos = +beatPos)
+     }
+     else if (0 > beatPos) {
+       midi.sendAfterBeats(beatPos *= -1)
+     }
+     else {
+       midi.sendAtBeat(beatPos)
+     }
+     return beatPos
+   }
 
-        }
-        /* pass through */
-      }
-      default: {
-        beatPos = 0
-        midi.send()
-      }
-    }
-    return beatPos
-  }
 }
 
 export default PluginTemplate
