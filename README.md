@@ -1,10 +1,9 @@
 # Scriptex
 > A micro library for Scripter MIDI-FX plugins.
 
-###### Example
+### Example
 ```js
-/* location: Scripter Code Editor */
-/* minified scriptex library >here<... */
+/* context: Scripter Code Editor with minified scriptex library here */
 
 class PitchModifier extends PluginTemplate {
 
@@ -49,31 +48,14 @@ PitchModifier.deploy()
   .forEach(Trace)
 
 ```
-###### Output
-```bash
-***Creating a new MIDI engine with script***
 
-Evaluating MIDI-processing script...
-Script evaluated successfully!
-
-NeedsTimingInfo
-PluginParameters
-ParameterChanged
-HandleMIDI
-```
-
-### Compatability
-Logic Pro X 10.4.5 (TBC)
-
-### How to use
-
-#### Code Editor
+### Using The Beta
+Create a Scripter preset template:
 - Add a Scripter MIDI-FX plugin to an instrument strip
 - Press `Open Script in Editor` to open `Code Editor`
-- Paste the contents of "com.objectkit.scriptex-global.js" into `Code Editor`
-- Save the empty preset as "Scriptex 1.0.0"
+- Paste the contents of [com.objectkit.scriptex-global.js](https://github.com/objectkit/scriptex/releases/latest) into `Code Editor`
+- Save the new preset as "Scriptex 1.0.0-b3"
 
-#### IDE
-- Download the package
-  `npm i -d com.objectkit.scriptex`
-- Incorporate module into your projects build tool to build and test scripts.
+### Compatibility
+- Logic Pro X 10.4.5+ (?)
+- MainStage (?)
