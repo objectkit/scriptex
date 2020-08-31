@@ -1,8 +1,8 @@
 {
   "name": "com.objectkit.scriptex",
-  "version": "1.0.0-b2",
+  "version": "1.0.0-b3",
   "description": "A micro library and standalone build tool for the Apple Scripter MIDI-FX plugin",
-  "exports": "out/com.objectkit.scriptex/1.0.0-b1/com.objectkit.scriptex.js",
+  "exports": "out/com.objectkit.scriptex/1.0.0-b3/com.objectkit.scriptex.js",
   "scripts": {
     "test": "npm run test/coverage",
     "test/watch": "npm run test/specs -- -w --watch-files src/**/*.*",
