@@ -4,7 +4,7 @@ import Scriptex from "com/objectkit/scriptex/Scriptex"
 class Plugin {
 
   /**
-   * The API that the Plugin will conform to.
+   * The Scripter/Scriptex API that the Plugin will conform to.
    * The default API is Scriptex.API.
    * Subclasses can return a list of their own bindings for custom integrations
    * @example
@@ -44,23 +44,24 @@ class Plugin {
    *  }
    *
    *  Trace(CustomPlugin.deploy()) // [ParameterChanged, ResetParameterDefaults, PluginParameters]
+   * 
    * @type {Map<string, string>}
-   * @see Scriptex.API
+   * @see [Scriptex.API]{@link Scriptex.API}
    */
   static get API () {
     return Scriptex.API
   }
 
   /**
-   * [deploy description]
-   * Instantiate and integrate a plugin with Scripter in one go.
-   * @param  {Object}  [engine=Scripter] [description]
-   * @param  {Boolean} [configurable=false]     [description]
-   * @param  {...*}  ctorArgs
+   * Instantiate and integrate a new plugin with the Scripter environment.
+   *
+   * @param  {Object}  [engine=Scripter]
+   * @param  {Boolean} [configurable=false]
+   * @param  {...*}  [ctorArgs=[]]
    *  Any arguments to pass to Plugin subclass constructors.
    * @return {Array<string>}
    *  An enumeration of the Scripter integrations
-   * @see Scriptex#deploy
+   * @see [Scriptex]{@link Scriptex#deploy}
    */
   static deploy (engine=Scriptex.ENGINE, configurable=false, ...ctorArgs) {
     let deployee = new this(...ctorArgs)

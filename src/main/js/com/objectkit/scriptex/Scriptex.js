@@ -3,15 +3,31 @@ import Scripter from "com/objectkit/scriptex/engine/Scripter"
 class Scriptex {
 
   /**
-   * [engine description]
+   * A reference to Scripter.
+   *
+   * NOTE: Spying/stubbing this property is useful for IDE centered plugin test cycles.
+   *
    * @type {Object}
+   * @see [Scripter]{@link Scripter}
    */
   static get ENGINE() {
     return Scripter
   }
 
   /**
-   * [API description]
+   * The default Scripter/Scriptex integration API.
+   *
+   * | Scripter               | Scriptex      |
+   * |------------------------|---------------|
+   * | PluginParameters       | params        |
+   * | NeedsTimingInfo        | needsTiming   |
+   * | ResetParameterDefaults | needsDefaults |
+   * | ParameterChanged       | onParam       |
+   * | ProcessMIDI            | onProcess     |
+   * | HandleMIDI             | onMidi        |
+   * | Reset                  | onReset       |
+   * | Idle                   | onIdle        |
+   *
    * @type {Map<string, string>}
    */
   static get API() {
@@ -28,10 +44,14 @@ class Scriptex {
   }
 
   /**
-   * [constructor description]
-   * @param {Object}  [engine=Scripter]    [description]
-   * @param {Map}  [api=new.target.API] [description]
-   * @param {Boolean} [configurable=false] [description]
+   * Create a new Scripter instance.
+   *
+   * @param {Object}  [engine=Scripter] The integration environment to use.
+   * @param {Map}  [api=new.target.API] The plugin integration API to use.
+   * @param {Boolean} [configurable=false] Define integration properties as configurable or not.
+   * @see [Scriptex.API]{@link Scriptex.API}
+   * @see [Scriptex.ENGINE]{@link Scriptex.ENGINE}
+   * @see [Object.defineProperty]{@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty#Description}
    */
   constructor (engine= new.target.ENGINE, api = new.target.API, configurable = false) {
     this._configurable = configurable
@@ -41,8 +61,8 @@ class Scriptex {
 
   /**
    * [deploy description]
-   * @param  {Object} plugin [description]
-   * @return {Array<string>}        [description]
+   * @param  {Object} plugin The plugin instance to deploy.
+   * @return {Array<string>} An enumeration of the Scripter integration properties.
    */
   deploy(plugin) {
 
