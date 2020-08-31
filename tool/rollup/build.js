@@ -65,6 +65,7 @@ let buildTest = {
             regex: /^_|_$/
           }
         }
+      , keep_classnames: true
       }
     )
   ]
