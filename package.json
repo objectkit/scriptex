@@ -13,7 +13,7 @@
     "build/doc": "jsdoc -c tool/jsdoc/config.json -d ${npm_package_exports}/../doc/",
     "build/clean": "rm -rf out",
     "test/lint": "eslint -c tool/eslint/config.json src/main/js/**/*.js",
-    "postinstall": "npm run build && npm run test"
+    "postinstall": "npm run test"
   },
   "author": "axel@objectkit.com",
   "license": "Apache-2.0",
