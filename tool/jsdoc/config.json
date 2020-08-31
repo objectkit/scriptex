@@ -13,9 +13,12 @@
   ],
   "templates": {
     "cleverLinks": false,
-    "monospaceLinks": true,
+    "monospaceLinks": false,
     "useLongnameInNav": false,
-    "showInheritedInNav": true
+    "showInheritedInNav": true,
+    "default": {
+      "outputSourceFiles": true
+    }
   },
   "opts": {
     "encoding": "utf8",
