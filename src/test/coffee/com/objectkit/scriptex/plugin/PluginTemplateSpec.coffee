@@ -130,9 +130,9 @@ describe "PluginTemplate", ->
   context "#engine", ->
 
     context "When #engine is not set", ->
-      specify "Then accessing #engine throws \"EngineMissing\" ", ->
+      specify "Then accessing #engine throws \"EngineAccessFault\" ", ->
         plugin = new PluginTemplate()
-        expect(-> plugin.engine).to.throw("EngineMissing")
+        expect(-> plugin.engine).to.throw("EngineAccessFault")
         return
 
     context "When #engine is set", ->
@@ -164,9 +164,9 @@ describe "PluginTemplate", ->
   context "#midi", ->
 
     context "When #engine is not set", ->
-      specify "Then accessing #midi throws \"EngineMissing\"", ->
+      specify "Then accessing #midi throws \"EngineAccessFault\"", ->
         plugin = new PluginTemplate()
-        expect( -> plugin.midi).to.throw("EngineMissing")
+        expect( -> plugin.midi).to.throw("EngineAccessFault")
         return
 
       return
