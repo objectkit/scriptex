@@ -26,6 +26,8 @@ NOTICE: Note and NoteOn do indeed have the same status code in the Scripter impl
 describe "PluginTemplate", ->
 
   # TODO add as classes
+
+  # onEvent
   class Event
     status: 0
     send: ->
@@ -33,35 +35,39 @@ describe "PluginTemplate", ->
     sendAfterBeats: ->
     sendAfterMilliseconds: ->
 
-
-  ###
-  onMidi
-  onNoteOn
-  onNoteOff
-  onNote
-  onControlChange
-  onParameterChange
-  onChannelPressure
-  onPolyPressure
-  onPitchBend
-  onTargetEvent
-  ###
-
+  # onChannelPressure
   class ChannelPressure extends Event
     status: 208
+
+  # onPolyPressure
   class PolyPressure extends Event
     status: 160
+
+  # onProgramChange
   class ProgramChange extends Event
     status: 192
+
+  # onControlChange
   class ControlChange extends Event
     status: 176
+
+  # onPitchBend
   class PitchBend extends Event
     status: 224
+
+  # onNote
   class Note extends Event
     status: 144
+
+  # onNoteOnf
   class NoteOn extends Note
+
+  # onNoteOff
   class NoteOff extends Note
+    # @override
     status: 128
+
+  # onTargetEvent
   class TargetEvent extends Event
     status: 80
 
@@ -121,7 +127,6 @@ describe "PluginTemplate", ->
   afterEach ->
     Help.teardownEnv()
 
-
   context "#engine", ->
 
     context "When #engine is not set", ->
@@ -135,7 +140,7 @@ describe "PluginTemplate", ->
       expectedDescriptor =
         value: mockEngine
         writable: false
-        enumerable: false
+        enumerable: true
         configurable: false
 
       specify "Then #engine is redefined as a data property ", ->
