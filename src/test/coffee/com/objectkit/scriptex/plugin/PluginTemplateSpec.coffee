@@ -3,10 +3,19 @@
   PluginTemplate
   ScripterFixture
   Scriptex
+  Event
+  TargetEvent
+  Note
+  NoteOff
+  NoteOn
+  PolyPressure
+  ControlChange
+  ProgramChange
+  ChannelPressure
+  PitchBend
 } = require(SCRIPTEX_TEST)
 
-###
-MIDI status to MIDI event class association
+### MIDI status to MIDI event class association
 
   0     Event
   80    TargetEvent
@@ -20,56 +29,11 @@ MIDI status to MIDI event class association
   224   PitchBend
 
 
-NOTICE: Note and NoteOn do indeed have the same status code in the Scripter implementation
+NOTE:
+Note and NoteOn do indeed have the same status code in the Scripter implementation
 ###
 
 describe "PluginTemplate", ->
-
-  # TODO add as classes
-
-  # onEvent
-  class Event
-    status: 0
-    send: ->
-    sendAtBeat: ->
-    sendAfterBeats: ->
-    sendAfterMilliseconds: ->
-
-  # onChannelPressure
-  class ChannelPressure extends Event
-    status: 208
-
-  # onPolyPressure
-  class PolyPressure extends Event
-    status: 160
-
-  # onProgramChange
-  class ProgramChange extends Event
-    status: 192
-
-  # onControlChange
-  class ControlChange extends Event
-    status: 176
-
-  # onPitchBend
-  class PitchBend extends Event
-    status: 224
-
-  # onNote
-  class Note extends Event
-    status: 144
-
-  # onNoteOnf
-  class NoteOn extends Note
-
-  # onNoteOff
-  class NoteOff extends Note
-    # @override
-    status: 128
-
-  # onTargetEvent
-  class TargetEvent extends Event
-    status: 80
 
   Help =
     sandbox: sinon.createSandbox()
@@ -97,7 +61,6 @@ describe "PluginTemplate", ->
       @deployPlugin(PluginTemplate)
 
     deployPlugin: (pluginClass, autoUpdate=true)->
-
       # trigger an internal deployment
       pluginClass.deploy(new ScripterFixture())
 
@@ -135,6 +98,8 @@ describe "PluginTemplate", ->
         expect(-> plugin.engine).to.throw("EngineAccessFault")
         return
 
+      return
+
     context "When #engine is set", ->
       mockEngine = Object.create(null)
       expectedDescriptor =
@@ -150,6 +115,7 @@ describe "PluginTemplate", ->
         plugin.engine = mockEngine
         expect(plugin.onInit).calledOnce
         expect(plugin).to.have.ownPropertyDescriptor("engine", expectedDescriptor)
+
         return
 
       specify "And #onInit is self-invoked", ->
@@ -157,6 +123,7 @@ describe "PluginTemplate", ->
         expect(plugin.onInit).not.called
         plugin.engine = mockEngine
         expect(plugin.onInit).calledOnce
+        
         return
 
       return
