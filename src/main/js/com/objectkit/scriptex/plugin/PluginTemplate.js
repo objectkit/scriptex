@@ -1,113 +1,97 @@
-/* @todo use of @lends is blocking jsdoc render documentation */
 import Plugin from "com/objectkit/scriptex/plugin/Plugin"
 
 const finalise = (target, key, val) =>
-  Reflect.defineProperty(target, key, { value: val })
-
-/*
-  0     Event
-  80    TargetEvent
-  128   NoteOff
-  144   Note
-  144   NoteOn
-  160   PolyPressure
-  176   ControlChange
-  192   ProgramChange
-  208   ChannelPressure
-  224   PitchBend
-*/
-/** @deprecated */
-const MIDI_STATUS_TYPE = new Map
-(
-  [
-    [ 0, `Event` ]
-  , [ 80, `TargetEvent` ]
-  , [ 128, `NoteOff` ]
-  , [ 144, `NoteOn` ]
-  , [ 144, `Note` ]
-  , [ 160, `PolyPressure` ]
-  , [ 176, `ControlChange` ]
-  , [ 192, `ProgramChange` ]
-  , [ 208, `ChannelPressure` ]
-  , [ 224, `PitchBend` ]
-  ]
-)
+  Reflect.defineProperty(target, key, { value: val, configurable: false, enumerable: true })
 
 /**
- * @class PluginTemplate
+ * @hideconstructor
+ * @class
+ * @classdesc
  *
- * This is a general purpose implementation suitable for
- * prototyping and lightweight MIDI applications.
+ * PluginTemplate is an strongly general purpose implementation suitable for
+ * prototyping lightweight MIDI applications.
  *
- * config properties must be implemented by subclasses,
- * either by defining getters or by setting standard
- * properties by override onInit
+ * @example
+ *   class Demonstrator extends PluginTemplate {
+ *     // define Scipter.NeedsTimingInfo
+ *     get needsTiming () {
+ *        return true
+ *     }
  *
- *  @exammple
- *  get needsTiming () {
- *    return true
- *  }
+ *     // define Scripter.ResetParameterDefaults
+ *     get needsDefaults () {
+ *        return true
+ *     }
  *
- *  get needsDefaults () {
- *    return false
- *  }
+ *     // define Scripter.PluginParameters
+ *     get params () {
+ *       return [
+ *         {
+ *           ID: "noteOffset"
+ *         , type: "menu"
+ *         , name: "Note Offset"
+ *         , defaultValue: 0
+ *         , valueStrings: [
+ *              "1/4", "1/8", "1/16", "1/32"
+ *           ]
+ *         }
+ *       ]
+ *     }
  *
- *  get params () {
- *    return [ { type: text, name: this.constructor.name }]
- *  }
+ *     // exploit "ModelView" functionality by intercepting property changes
+ *     set noteOffset (noteOffset) {
+ *       this.beatsDelay = 1 / (noteOffset.splice("/").pop())
+ *       // exploit the Scripter.MIDI object
+ *       this.midi.allNotesOff()
+ *     }
  *
+ *     // exploit MIDI event filtering
+ *     onNote (noteOnOrOff) {
+ *       // easily modify events with parameter values
+ *       noteOnOrOff.beatPos = this.beatsDelay
+ *       // exploit the functionality of #sendMidi
+ *       return this.sendMidi(noteOnOrOff)
+ *     }
+ *   }
+ *
+ *   // Easily deploy the plugin in the Scripter environment
+ *   Demonstrator.deploy()
+ *     .forEach(Trace) // [ HandleMIDI, PluginParameters, NeedsTimingInfo, ResetParameterDefaults ]
+ *
+ * @see [Plugin]{@link Plugin}
+ * @see [Scriptex]{@link Scriptex}
+ * @see [Scripter]{@link Scripter}
+ * @see [onMIdi]{@link PluginTemplate#onMidi}
+ * @see [onParam]{@link PluginTemplate#onParam}
+ * @see [midi]{@link PluginTemplate#midi}
+ * @see [deploy]{@link Plugin.deploy}
  */
 class PluginTemplate extends Plugin {
 
   /**
-   * The plugin has been given access to the engine that will meld into it as reciprocated
-   * part whole of the Scripter system, giving the perfect moment for the plugin to embody
-   * its final configuration ny initialising itself for the last time should it wish to.
+   * A plugin reference to the Scripter object as set during {@link Scriptex#deploy}.
    *
    * @type {Object}
-   * @see {@link PluginTemplate#onInit}
-   * @see {@link Scripter}
+   * @see [onInit]{@link PluginTemplate#onInit}
+   * @see [Scripter]{@link Scripter}
+   * @see [Plugin.deploy]{@link Plugin.deploy}
+   * @throws {"EngineAccessFault"}
    */
   set engine (engine) {
     finalise(this, `engine`, engine)
     this.onInit()
   }
 
-  /**
-   * [engine description]
-   * @type {Object}
-   * @throws "EngineMissing" when accessed without being set
-   */
   get engine () {
-    // @todo rename `EngineAccessFault`
-    throw new ReferenceError(`EngineMissing`)
+    throw new ReferenceError(`EngineAccessFault`)
   }
 
   /**
-   * A local reference to the Scripter.MIDI object.
-   * Once accessed, this extended API is available
+   * A plugin reference to the Scripter.MIDI object.
    *
    * @example
-   *  // e.g. URL POINTING TO SCRIPTER EQUIVALENT STANDARD
-   *  this.midi.noteNumber(pitchName)
-   * @example
-   *  // e.g. URL POINTING TO SCRIPTER EQUIVALENT STANDARD
-   *  this.midi.noteName(pitchNumber)
-   * @example
-   *  // e.g. URL POINTING TO SCRIPTER EQUIVALENT STANDARD
-   *  this.midi.ccName(controllerNumber)
-   * @example
-   *  // e.g.Ensure that all present midi events immediately cease
-   *  this.midi.allNotesOff()
-   * @example
-   *  // “Normalizes a value to the safe range of MIDI status bytes (128–239"
-   *  this.midi.normalizeStatus(midiStatusBytes)
-   * @example
-   *  // “Normalizes a value to the safe range of MIDI channels (1–16).”
-   *  this.midi.normalizeChannel(limitedValue)
-   * @exammple
-   *  // “Normalizes a value to the safe range of MIDI data bytes (0–127)”
-   *  this.midi.normalizeData(val)
+   *  // within method scope:
+   *  this.midi.noteName(midiEvent.pitch)
    *
    * @NOTE Accessing before init throws "EngineAccessFault"
    *
@@ -120,19 +104,54 @@ class PluginTemplate extends Plugin {
   }
 
   /**
-   * A convenience method to initialise plugin variables.
-   * Define setters for Scripter properties if no method scoped instantiateion logic is required.
+   * A JIT convenience method to initialise the plugin prior to Scripter integration.
+   *
+   * @example
+   *  class InitiPlugin extends PluginTemplate {
+   *    onInit() {
+   *      this.needsTiming = true
+   *      this.needsDefaults = false
+   *      this.params = [
+   *        { type: "text", name: this.constructor.name }
+   *      ]
+   *    }
+   *  }
    *
    * @abstract
    * @return {void}
+   * @see [engine]{@link PluginTemplate#engine}
    */
   onInit () {}
 
   /**
-   * Manage Scripter.ParameterChanged events.
+   * Manage Scripter.ParameterChanged events by treating the plugin instance as a
+   * virtual "ViewModel".
    *
-   * @param  {number} key
-   * @param  {number} val
+   * Given that ui parameter data has changed
+   *   When the ui parameter has an ID
+   *     Then plugin[ID] is assigned that ui parameter data
+   *
+   * This provides the interesting opportunity to intercept changes to UI by defining setters
+   * @example
+   *   class MidiStop extends PluginTemplate {
+   *     get params () {
+   *       return [
+   *       , {
+   *           ID: "doStopMidiNotes"
+   *         , type: "momentary"
+   *         , name: "MIDI Stop"
+   *         }
+   *       ]
+   *     }
+   *
+   *     // intercept the button press
+   *     set doStopMidiNotes (pressed) {
+   *       this.midi.allNotesStop()
+   *     }
+   *   }
+   *
+   * @param  {number} key - a parameter index
+   * @param  {number} val - a parameter value
    * @return {number}
    * @see [ParameterChanged]{@link Scripter}
    */
@@ -159,10 +178,11 @@ class PluginTemplate extends Plugin {
   }
 
   /**
-   * [delegateMidi description]
+   * Delegate a midi event to its dedicated method handler.
    *
-   * @param  {Event} midi
-   * @return {number}
+   *
+   * @param  {Event} midi Any supported Scripter midi event.
+   * @return {number} The beatPos returned by {@link PluginTemplate#sendMidi}
    * @see [onNoteOn]{@link PluginTemplate#onNoteOn}
    * @see [onNoteOff]{@link PluginTemplate#onNoteOff}
    * @see [onChannelPressure]{@link PluginTemplate#onChannelPressure}
@@ -172,7 +192,6 @@ class PluginTemplate extends Plugin {
    * @see [onPitchBend]{@link PluginTemplate#onPitchBend}
    * @see [onTargetEvent]{@link PluginTemplate#onTargetEvent}
    */
-   /** @protected */
    delegateMidi (midi) {
      switch (midi.status) {
        case  80: return this.onTargetEvent(midi)
@@ -186,25 +205,13 @@ class PluginTemplate extends Plugin {
        default: return this.onEvent(midi)
      }
    }
-  // delegateMidi (midi) {
-  //   // let midiType = MIDI_STATUS_MAP.get(midi.status)
-  //   // let methodKey = `on${midiType}`
-  //   // return this[methodKey](midi)
-  //   let midiType = MIDI_STATUS_TYPE.get(midi.status)
-  //   if (null == midiType)
-  //     throw new ReferenceError(`MidiTypeNotFound: status=${midi.status}`)
-  //   let delegateKey = "on" + midiType
-  //   if (null == this[delegateKey])
-  //     throw new ReferenceError(`MidiDelegateNotFound: ${delegateKey}`)
-  //   return this["on" + midiType](midi)
-  // }
-
 
   /**
-   * Manage custom events or standard Event events.
+   * Manage decorated Events objects.
    *
    * @param  {Event} midi
-   * @return {numnber}
+   * @return {number}
+   * @see [sendMidi]{@link PluginTemplate#sendMidi}
    */
   onEvent (midi) {
     return this.sendMidi(midi)
@@ -309,23 +316,36 @@ class PluginTemplate extends Plugin {
     return this.sendMidi(midi)
   }
 
+
   /**
-   * Send a MIDI event using any one of the four available MIDI send methodss.
+   * Send a MIDI event using any one of the four available Scripter MIDI send methods.
    *
-   * This general purpose solution imposes a small ruleset.
-   * When beatPos is a string
-   * - Then beatPos is cast to number and sendAfterMilliseconds is chosen
-   * When beatPos is a negative number
-   * - Then beatPos is inverted and SendMIDIEventAfterBeats
-   * When if beatPos is a positive integer or null,
-   * - Then SendMIDIeventNow
+   * This general purpose solution imposes a small ruleset:
+   *
+   * <ul>
+   *   <li>When beatPos is a string</li>
+   *   <ul>
+   *     <li>Then beatPos is cast to number and sendAfterMilliseconds is invoked</li>
+   *   </ul>
+   *   <li>When beatPos is a negative number</li>
+   *   <ul>
+   *     <li>Then beatPos is inverted and SendMIDIEventAfterBeats is invoked</li>
+   *   </ul>
+   *   <li>When beatPos is a positive integer</li>
+   *   <ul>
+   *     <li>Then SendMIDIEventAtBeat is invoked</li>
+   *   </ul>
+   *   <li>When neatPos is empty</li>
+   *   <ul>
+   *     <li>Then SendMIDIEventNow is invoked</li>
+   *   </ul>
+   * </ul>
    *
    * @see [Scripter.SendMIDIEventNow]{@link Scripter}
    * @see [Scripter.SendMIDIEventAtBeat]{@link Scripter}
    * @see [Scripter.SendMIDIEventAfterBeats]{@link Scripter}
    * @see [Scripter.SendMIDIEventAfterMilliseconds]{@link Scripter}
-   * @see [Event]{@link Scripter}
-   * @param {Event} midi
+   * @param {Event} midi - A Scripter MIDI event.
    * @return {number}
    */
    sendMidi (midi) {
@@ -352,48 +372,6 @@ class PluginTemplate extends Plugin {
      }
      return beatPos
    }
-
-   // v1. midi event is called directly
-   // sendMidi (midi) {
-   //   let beatPos = midi.beatPos || 0
-   //   if (`string` === typeof beatPos) {
-   //     // this.engine.SendMIDIEventAfterMilliseconds(midi, beatPos = +beatPos)
-   //     midi.sendAfterMilliseconds(beatPos = +beatPos)
-   //   }
-   //   else if (0 > beatPos) {
-   //     // this.engine.SendMIDIEventAfterBeats(midi, beatPos *= -1)
-   //     midi.sendAfterBeats(beatPos *= -1)
-   //   }
-   //   else {
-   //     // this.engine.SendMIDIEventAtBeat(midi, beatPos)
-   //     midi.sendAtBeat(beatPos)
-   //   }
-   //   return beatPos
-   // }
-
-   /* @todo when beatPos is null, use SendMIDIEventNow for !needsTiming compatability */
-   // v2. Scripter methodname is contextually looked up and executed
-   // sendMidi (midi) {
-   //   let methodKey
-   //   let beatPos = midi.beatPos
-   //   if (`string` === typeof beatPos) {
-   //     beatPos = +beatPos
-   //     methodKey = "SendMIDIEventAfterMilliseconds"
-   //   }
-   //   else if (0 > beatPos) {
-   //     beatPos *= -1
-   //     methodKey = "SendMIDIEventAfterBeats"
-   //   }
-   //   else if (!beatPos){
-   //     Trace("NeedsTimignInfo = " + this.needsTiming)
-   //     methodKey = "SendMIDIEventNow"
-   //   }
-   //   else {
-   //     methodKey = "SendMIDIEventAtBeat"
-   //   }
-   //   this.engine[methodKey](midi, beatPos)
-   //   return beatPos
-   // }
 }
 
 export default PluginTemplate
