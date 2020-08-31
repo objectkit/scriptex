@@ -4,6 +4,10 @@ class Event {
     return 0
   }
 
+  constructor (object={}) {
+    Object.assign(this, object)
+  }
+
   get status () {
     return this.constructor.STATUS
   }
