@@ -1,72 +1,79 @@
 # Scriptex
 > A micro library for Scripter MIDI-FX plugins.
 
-###### Source
+###### Example
 ```js
-/* @file path/to/ScripterFacade.js */
-import { Plugin } from "com.objectkit.scriptex"
+/* location: Scripter Code Editor */
+/* minified scriptex library >here<... */
 
-class ScripterFacade extends Plugin {
+class PitchModifier extends PluginTemplate {
 
-  /* @alias Scripter.ResetParameterDefaults */
-  get needsDefaults () { }
+  /* Scripter.NeedsTimingInfo */
+  get needsTiming () {
+    return true
+  }
 
-  /* @alias Scripter.NeedsTimingInfo */
-  get needsTiming () { }  
+  /* Scripter.PluginParameters */
+  get params () {
+    return [
+      {
+        ID: `semitones`
+      , type: `lin`
+      , name: `Semitones`
+      , minValue: -12
+      , maxValue: 12
+      , defaultValue: 0
+      , numberOfSteps: 24
+      }
+    ]
+  }
 
-  /* @alias Scripter.PluginParameters */
-  get params () { }
+  /* intercept changes to the "Semitones" parameter */
+  set semitones (semitones) {
+    if (semitones !== this._semitones) {
+      this.midi.allNotesOff()
+      this._semitones = semitones
+    }
+  }
 
-  /* @alias Scripter.HandleMIDI */
-  onMidi (midi) { }
-
-  /* @alias Scripter.Idle */
-  onIdle () { }  
-
-  /* @alias Scripter.ParameterChanged */
-  onParam (key, val) { }
-
-  /* @alias Scripter.ProcessMIDI */
-  onProcess () { }
-
-  /* @alias Scripter.Reset */
-  onReset () { }
+  /* exclusively manage NoteOn and NoteOff events */
+  /** @override */
+  onNote (noteOnOrOff) {
+    noteOnOrOff.pitch += this._semitones
+    return super.onNote(noteOnOrOff)
+  }
 }
 
-export default Facade
-```
+/* Deploy the plugin and trace details of the linked configuration to console */
+PitchModifier.deploy()
+  .forEach(Trace)
 
-```js
-/* @file main.js */
-import ScripterFacade from "path/to/ScripterFacade"
-import { Scripter } from "com.objectkit.scriptex"
-
-/* launch the plugin */
-ScripterFacade.deploy()
-  /* and trace the returned list of Scripter deployment keys */
-  .forEach(Scripter.Trace)
 ```
-<!-- @TODO insert generated output rather than (close) simulation of a build file -->
-###### Build
-```js
-/* @file out/scripterfacade.min.js */
-const e=(0,eval)("this");class Scriptex{static get ENGINE(){return e}static get API(){return[["NeedsTimingInfo","needsTiming"],["ResetParameterDefaults","needsDefaults"],["PluginParameters","parameters"],["ParameterChanged","onParameter"],["ProcessMIDI","onProcess"],["HandleMIDI","onMIDI"],["Reset","onReset"],["Idle","onIdle"]]}constructor(e=new.target.ENGINE,t=new.target.API,s=!1){this.t=s,this.s=new Map([...t]),this.i=e}deploy(e){let t=[],s=e.engine=this.i,n=(e,t,s,n,r=this.t)=>Reflect.defineProperty(e,t,{configurable:r,[n]:s}),r=(t,r)=>"function"==typeof e[t]&&n(s,r,(...s)=>e[t](...s),"value"),a=(t,r)=>t in e&&n(e,t,e[t],"value",!0)&&n(s,r,()=>e[t],"get");for(let[i,c]of this.s)(r(c,i)||a(c,i))&&t.push(i);return t}}class Plugin{static get API(){return Scriptex.API}static deploy(e=Scriptex.ENGINE,t=!1,...s){let n=new this(...s);return new Scriptex(e,this.API,t).deploy(n)}}class ScripterFacade extends Plugin{get needsDefaults(){}get needsTiming(){}get params(){}onMIDI(e){}onIdle(){}onParam(e,t){}onProcess(){}onReset(){}};ScripterFacade.deploy().forEach(e.Trace)
-```
-
-###### Script Editor Output
-```
+###### Output
+```bash
 ***Creating a new MIDI engine with script***
 
 Evaluating MIDI-processing script...
 Script evaluated successfully!
 
 NeedsTimingInfo
-ResetParameterDefaults
 PluginParameters
-ProcessMIDI
-HandleMIDI
 ParameterChanged
-Reset
-Idle
->
+HandleMIDI
 ```
+
+### Compatability
+Logic Pro X 10.4.5 (TBC)
+
+### How to use
+
+#### Code Editor
+- Add a Scripter MIDI-FX plugin to an instrument strip
+- Press `Open Script in Editor` to open `Code Editor`
+- Paste the contents of "com.objectkit.scriptex-global.js" into `Code Editor`
+- Save the empty preset as "Scriptex 1.0.0"
+
+#### IDE
+- Download the package
+  `npm i -d com.objectkit.scriptex`
+- Incorporate module into your projects build tool to build and test scripts.
