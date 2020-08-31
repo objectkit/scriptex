@@ -5,28 +5,34 @@
   Scriptex
 } = require(SCRIPTEX_TEST)
 
+###
+MIDI status to MIDI event class association
+
+  0     Event
+  80    TargetEvent
+  144   Note
+  128   NoteOff
+  144   NoteOn
+  160   PolyPressure
+  176   ControlChange
+  192   ProgramChange
+  208   ChannelPressure
+  224   PitchBend
+
+
+NOTICE: Note and NoteOn do indeed have the same status code in the Scripter implementation
+###
+
 describe "PluginTemplate", ->
 
   # TODO add as classes
   class Event
+    status: 0
     send: ->
     sendAtBeat: ->
     sendAfterBeats: ->
     sendAfterMilliseconds: ->
 
-  ###
-
-    0     Event
-    80    TargetEvent
-    144   Note
-    128   NoteOff
-    144   NoteOn
-    160   PolyPressure
-    176   ControlChange
-    192   ProgramChange
-    208   ChannelPressure
-    224   PitchBend
-  ###
 
   ###
   onMidi
@@ -37,19 +43,27 @@ describe "PluginTemplate", ->
   onParameterChange
   onChannelPressure
   onPolyPressure
-  onPitchbend
+  onPitchBend
   onTargetEvent
   ###
 
   class ChannelPressure extends Event
+    status: 208
   class PolyPressure extends Event
+    status: 160
   class ProgramChange extends Event
+    status: 192
   class ControlChange extends Event
-  class Pitchbend extends Event
-  class NoteOn extends Event
-  class NoteOff extends Event
+    status: 176
+  class PitchBend extends Event
+    status: 224
   class Note extends Event
+    status: 144
+  class NoteOn extends Note
+  class NoteOff extends Note
+    status: 128
   class TargetEvent extends Event
+    status: 80
 
   Help =
     sandbox: sinon.createSandbox()
@@ -150,6 +164,8 @@ describe "PluginTemplate", ->
         expect( -> plugin.midi).to.throw("EngineMissing")
         return
 
+      return
+
     context "When #engine is set", ->
       specify "Then #midi accesses Scripter.MIDI", ->
         scripter = new ScripterFixture()
@@ -180,6 +196,7 @@ describe "PluginTemplate", ->
             expect(plugin).property(ID)
 
           return
+
         context "When the parameter at index has no ID property", ->
         context "When val equals an existing assignment", ->
 
@@ -196,8 +213,9 @@ describe "PluginTemplate", ->
         expect(beatPosNumber).eql(returned)
         return
 
+      return
 
-    describe "Given 0 > midi.beatPos", ->
+    describe "Given midi.beatPos is a negative number", ->
       specify "Then Scripter.SendMIDIEventAfterBeats is invoked", ->
         timing = -500
         midiEvent = Help.newMidiEvent(beatPos:timing)
@@ -207,7 +225,20 @@ describe "PluginTemplate", ->
         expect(timing * -1).eql(beatPos)
         return
 
-    describe "Given 0 <= midi.beatPos || !midi.beatPos", ->
+      return
+
+    describe "Given midi.beatPos is empty", ->
+      specify "Then Scripter.SendMIDIEventNow is invoked", ->
+        midiEvent = Help.newMidiEvent()
+        expect(midiEvent.beatPos).to.be.undefined
+        returned = new PluginTemplate().sendMidi(midiEvent)
+        expect(midiEvent.send).calledOnce
+        expect(returned).equal(0)
+        return
+
+      return
+
+    describe "Given midi.beatPos is a positive number", ->
       specify "Then Scripter.SendMIDIEventAtBeat is invoked", ->
 
         doSendMidi = (midi) ->
@@ -225,30 +256,11 @@ describe "PluginTemplate", ->
         expect(returned1).eql(beatPosNumber)
         expect(midiEvent.sendAtBeat).calledOnce
 
-        midiEvent.beatPos = undefined
-
-        returned2 = doSendMidi(midiEvent)
-
-        expect(returned2).equal(0)
-        expect(midiEvent.sendAtBeat).calledTwice
-
         return
 
-    ###
-    @deprecated
-    The latest library version uses sendMIDIAtBeat as last alternative
-    as beatPos equals 0 by default, even when NeedsTimingInfo is false
+      return
 
-    ###
-    # describe.skip "Given midi.beatPos is neither string nor number", ->
-    #   specify "Then Scripter.SendMIDIEventNow is invoked", ->
-    #     midiEvent = Help.newMidiEvent()
-    #     expect(midiEvent.beatPos).is.undefined
-    #     plugin = new PluginTemplate
-    #     beatPos = plugin.sendMidi(midiEvent)
-    #     expect(midiEvent.send).calledOnce
-    #     expect(0).eql(beatPos)
-    #     return
+    return
 
   context "#onMidi(event):number", ->
     describe "Given any midi event", ->
@@ -259,8 +271,8 @@ describe "PluginTemplate", ->
           new PolyPressure
           new ProgramChange
           new ControlChange
-          new Pitchbend
-          new Note
+          new PitchBend
+          # new Note # ommitted due to duplicate status code replicated by NoteOn
           new NoteOn
           new NoteOff
           new TargetEvent
@@ -273,6 +285,12 @@ describe "PluginTemplate", ->
           expect(0).eql(timing)
           expect(plugin).property(handlerName).calledOnce
           expect(plugin.sendMidi).called
+
+        return
+
+      return
+
+    return
 
   context "PluginTemplate.deploy():Array<string>",->
     describe "When PluginTemplate is deployed", ->
