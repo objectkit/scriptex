@@ -7,7 +7,7 @@
 
 describe "Processor", ->
 
-  describe "static deploy([engine=Scripter],[configurable=false]) : Array<string>", ->
+  describe "static deploy([system=Scripter],[configurable=false]) : Array<string>", ->
 
     beforeEach ->
       sinon.spy(Scriptex::, "deploy")
@@ -21,32 +21,32 @@ describe "Processor", ->
       getDeployedPlugin = -> Scriptex::deploy.lastCall.args[0]
 
 
-      context "When engine is provided", ->
-        specify "Then plugin is deployed to that engine", ->
-          engine = new ScripterFixture()
-          Processor.deploy(engine, true)
+      context "When system is provided", ->
+        specify "Then plugin is deployed to that system", ->
+          system = new ScripterFixture()
+          Processor.deploy(system, true)
           plugin = getDeployedPlugin()
 
-          expect(plugin.engine).eql(engine)
+          expect(plugin.system).eql(system)
           return
 
         return
 
-      context "When engine is absent", ->
+      context "When system is absent", ->
         specify "Then the plugin is deployed to Scripter [default]", ->
           Processor.deploy()
           plugin = getDeployedPlugin()
-          expect(plugin.engine).eql(Scripter)
+          expect(plugin.system).eql(Scripter)
           return
 
         return
 
       context "When configurable is false", ->
-        specify "Then #engine properties are non-configurable", ->
-          engine = new ScripterFixture()
-          keys = PluginFixture.deploy(engine)
+        specify "Then #system properties are non-configurable", ->
+          system = new ScripterFixture()
+          keys = PluginFixture.deploy(system)
           for key in keys
-            expect(engine)
+            expect(system)
               .ownPropertyDescriptor(key)
                 .to.have.property("configurable")
                   .eql(false)
@@ -56,11 +56,11 @@ describe "Processor", ->
         return
 
       context "When configurable is not supplied", ->
-        specify "Then #engine properties are non-configurable [default]", ->
-          engine = new ScripterFixture()
-          keys = PluginFixture.deploy(engine)
+        specify "Then #system properties are non-configurable [default]", ->
+          system = new ScripterFixture()
+          keys = PluginFixture.deploy(system)
           for engineKey in keys
-            expect(engine)
+            expect(system)
               .ownPropertyDescriptor(engineKey)
                 .to.have.property("configurable")
                   .eql(false)
@@ -70,11 +70,11 @@ describe "Processor", ->
         return
 
       context "When configurable is true", ->
-        specify "Then #engine properties are configurable", ->
-          engine = new ScripterFixture()
-          keys = PluginFixture.deploy(engine, true)
+        specify "Then #system properties are configurable", ->
+          system = new ScripterFixture()
+          keys = PluginFixture.deploy(system, true)
           for key in keys
-            expect(engine)
+            expect(system)
               .ownPropertyDescriptor(key)
                 .to.have.property("configurable")
                   .eql(true)

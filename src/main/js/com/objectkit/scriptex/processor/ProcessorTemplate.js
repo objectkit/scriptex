@@ -77,12 +77,12 @@ class ProcessorTemplate extends Processor {
    * @see [Processor.deploy]{@link Processor.deploy}
    * @throws {"EngineAccessFault"}
    */
-  set engine (engine) {
-    finalise(this, `engine`, engine)
+  set system (system) {
+    finalise(this, `system`, system)
     this.onInit()
   }
 
-  get engine () {
+  get system () {
     throw new ReferenceError(`EngineAccessFault`)
   }
 
@@ -99,7 +99,7 @@ class ProcessorTemplate extends Processor {
    * @type {Object}
    */
   get midi () {
-    finalise(this, `midi`, this.engine.MIDI)
+    finalise(this, `midi`, this.system.MIDI)
     return this.midi
   }
 
@@ -119,7 +119,7 @@ class ProcessorTemplate extends Processor {
    *
    * @abstract
    * @return {void}
-   * @see [engine]{@link ProcessorTemplate#engine}
+   * @see [system]{@link ProcessorTemplate#system}
    */
   onInit () {}
 

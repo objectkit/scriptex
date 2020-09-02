@@ -3,8 +3,8 @@ const PRECISION = 10**2
 
 class DelayLineRenderer {
 
-  constructor (engine, padding=PADDING, precision=PRECISION) {
-    this.engine = engine
+  constructor (system, padding=PADDING, precision=PRECISION) {
+    this.system = system
     this.padding = padding
     this.precision = precision
   }
@@ -18,7 +18,7 @@ class DelayLineRenderer {
       `| ${formatData(row)}`.padEnd(padding, ` `)
     for (let delayLineRow of delayLinesTable) {
       let formattedRow = delayLineRow.map(formatRow).join(``)
-      this.engine.Trace(formattedRow)
+      this.system.Trace(formattedRow)
       renderedText += `\n${formattedRow}`
     }
     return renderedText

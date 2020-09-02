@@ -1,4 +1,4 @@
-import Scripter from "com/objectkit/scriptex/engine/Scripter"
+import Scripter from "com/objectkit/scriptex/system/Scripter"
 
 class Scriptex {
 
@@ -10,7 +10,7 @@ class Scriptex {
    * @type {Object}
    * @see [Scripter]{@link Scripter}
    */
-  static get ENGINE() {
+  static get SYSTEM() {
     return Scripter
   }
 
@@ -46,17 +46,17 @@ class Scriptex {
   /**
    * Create a new Scripter instance.
    *
-   * @param {Object}  [engine=Scripter] The integration environment to use.
+   * @param {Object}  [system=Scripter] The integration environment to use.
    * @param {Map}  [api=new.target.API] The plugin integration API to use.
    * @param {Boolean} [configurable=false] Define integration properties as configurable or not.
    * @see [Scriptex.API]{@link Scriptex.API}
-   * @see [Scriptex.ENGINE]{@link Scriptex.ENGINE}
+   * @see [Scriptex.SYSTEM]{@link Scriptex.SYSTEM}
    * @see [Object.defineProperty]{@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty#Description}
    */
-  constructor (engine= new.target.ENGINE, api = new.target.API, configurable = false) {
+  constructor (system= new.target.SYSTEM, api = new.target.API, configurable = false) {
     this._configurable = configurable
     this._api = new Map([...api])
-    this._engine = engine
+    this._engine = system
   }
 
   /**
@@ -68,7 +68,7 @@ class Scriptex {
 
     let api = []
 
-    let ngn = plugin.engine = this._engine
+    let ngn = plugin.system = this._engine
 
     let def = (obj, key, val, tag, configurable = this._configurable) =>
       Reflect.defineProperty(obj, key, {configurable, [tag]: val })

@@ -33,10 +33,10 @@ class DelayLinePlugin extends Processor {
     ]
   }
 
-  set engine (engine) {
-    this.renderer = new DelayLineRenderer(engine)
+  set system (system) {
+    this.renderer = new DelayLineRenderer(system)
     this.calculator = new DelayLineCalculator()
-    Reflect.defineProperty(this, "engine", {value: engine})
+    Reflect.defineProperty(this, "system", {value: system})
   }
 
   /* @alias Scripter.ParameterChanged */
@@ -59,7 +59,7 @@ class DelayLinePlugin extends Processor {
   processDelayLines () {
     let updated = this.doUpdateDelayLines
     if (updated) {
-      let { tempo, meterNumerator, meterDenominator } = this.engine.GetTimingInfo()
+      let { tempo, meterNumerator, meterDenominator } = this.system.GetTimingInfo()
       let delayLines = this.calculator.calculateDelayLines(tempo, meterNumerator, meterDenominator);
       this.renderer.renderDelayLines(delayLines);
       this.doUpdateDelayLines = false

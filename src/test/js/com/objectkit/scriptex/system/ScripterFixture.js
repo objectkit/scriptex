@@ -1,5 +1,5 @@
-import MIDIFixture from "com/objectkit/scriptex/engine/MIDIFixture"
-import TimingInfoFixture from "com/objectkit/scriptex/engine/TimingInfoFixture"
+import MIDIFixture from "com/objectkit/scriptex/system/MIDIFixture"
+import TimingInfoFixture from "com/objectkit/scriptex/system/TimingInfoFixture"
 
 const FIND = Symbol.for(`ScripterFixture/FIND`)
 const DATA = Symbol.for(`ScripterFixture/DATA`)

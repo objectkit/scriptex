@@ -20,32 +20,32 @@ ScriptexSpecHelp =
     onReset: ->
     onIdle: ->
 
-  newDeployment: (plugin=@newEmptyPlugin(), engine=@newMockEngine(), configurable=undefined) ->
-    deployer = new Scriptex(engine, undefined, configurable)
+  newDeployment: (plugin=@newEmptyPlugin(), system=@newMockEngine(), configurable=undefined) ->
+    deployer = new Scriptex(system, undefined, configurable)
     deployed = deployer.deploy(plugin)
     return deployed
 
   testScriptexEngine: () ->
     plugin = {}
-    engine = @newMockEngine()
-    scriptex = new Scriptex(engine)
+    system = @newMockEngine()
+    scriptex = new Scriptex(system)
     scriptex.deploy(plugin)
-    expect(plugin).property("engine").eql(engine)
+    expect(plugin).property("system").eql(system)
     return
 
   testDefaultScriptexEngine: ->
     plugin = {}
     scriptex = new Scriptex()
     scriptex.deploy(plugin)
-    expect(plugin).property("engine").eql(Scripter)
+    expect(plugin).property("system").eql(Scripter)
     return
 
-  testDeployedEngine: (engine) ->
+  testDeployedEngine: (system) ->
     plugin = new Object()
-    scriptex = new Scriptex(engine)
-    expect(plugin).not.to.have.property("engine")
+    scriptex = new Scriptex(system)
+    expect(plugin).not.to.have.property("system")
     scriptex.deploy(plugin)
-    expect(plugin).to.have.property("engine").eql(engine)
+    expect(plugin).to.have.property("system").eql(system)
     return
 
   testDeployedMethod: (engineKey, pluginKey) ->
@@ -119,7 +119,7 @@ ScriptexSpecHelp =
     mockEngine = @newMockEngine()
     engineKeys = @newDeployment(mockPlugin, mockEngine, CONFIGURABLE=true)
 
-    # all properties added to engine
+    # all properties added to system
     expect(Reflect.ownKeys(mockEngine)).eql(engineKeys)
 
     for engineKey in engineKeys
@@ -128,7 +128,7 @@ ScriptexSpecHelp =
       deleted = Reflect.deleteProperty(mockEngine, engineKey)
       expect(deleted).to.be.true
 
-    # all properties deleted from engine
+    # all properties deleted from system
     expect(Reflect.ownKeys(mockEngine)).eql([])
     return
 
@@ -138,7 +138,7 @@ ScriptexSpecHelp =
     mockEngine = @newMockEngine()
     engineKeys = @newDeployment(mockPlugin, mockEngine, CONFIGURABLE=false)
 
-    # all properties added to engine
+    # all properties added to system
     expect(Reflect.ownKeys(mockEngine)).eql(engineKeys)
 
     for engineKey in engineKeys
@@ -147,7 +147,7 @@ ScriptexSpecHelp =
       deleted = Reflect.deleteProperty(mockEngine, engineKey)
       expect(deleted).to.be.false
 
-    # all properties still accessible on engine
+    # all properties still accessible on system
     expect(Reflect.ownKeys(mockEngine)).eql(engineKeys)
     return
 

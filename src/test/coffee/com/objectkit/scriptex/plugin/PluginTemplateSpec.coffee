@@ -39,7 +39,7 @@ describe "ProcessorTemplate", ->
     sandbox: sinon.createSandbox()
 
     setupEnv: ->
-      # @sandbox.stub(Scriptex, "ENGINE").get( -> new ScripterFixture)
+      # @sandbox.stub(Scriptex, "SYSTEM").get( -> new ScripterFixture)
       @sandbox.spy(Scriptex::, "deploy")
       @sandbox.spy(ProcessorTemplate::)
       @sandbox.spy(ScripterFixture::)
@@ -70,18 +70,18 @@ describe "ProcessorTemplate", ->
       , lastArg:plugin
       } = Scriptex::deploy.lastCall
 
-      engine = plugin.engine
+      system = plugin.system
 
       # balance the test
       expect(api).instanceof(Array)
       expect(plugin).instanceof(Processor)
-      expect(engine).instanceof(ScripterFixture)
+      expect(system).instanceof(ScripterFixture)
 
       # emulated system call at time of script evaluation, thus deployment
-      engine.UpdatePluginParameters()
+      system.UpdatePluginParameters()
 
       # return metadata as an object
-      return { api, plugin, engine }
+      return { api, plugin, system }
 
 
   beforeEach ->
@@ -90,17 +90,17 @@ describe "ProcessorTemplate", ->
   afterEach ->
     Help.teardownEnv()
 
-  context "#engine", ->
+  context "#system", ->
 
-    context "When #engine is not set", ->
-      specify "Then accessing #engine throws \"EngineAccessFault\" ", ->
+    context "When #system is not set", ->
+      specify "Then accessing #system throws \"EngineAccessFault\" ", ->
         plugin = new ProcessorTemplate()
-        expect(-> plugin.engine).to.throw("EngineAccessFault")
+        expect(-> plugin.system).to.throw("EngineAccessFault")
         return
 
       return
 
-    context "When #engine is set", ->
+    context "When #system is set", ->
       mockEngine = Object.create(null)
       expectedDescriptor =
         value: mockEngine
@@ -108,20 +108,20 @@ describe "ProcessorTemplate", ->
         enumerable: true
         configurable: false
 
-      specify "Then #engine is redefined as a data property ", ->
+      specify "Then #system is redefined as a data property ", ->
         plugin = new ProcessorTemplate()
         expect(plugin.onInit).not.called
-        expect(plugin).not.to.have.ownPropertyDescriptor("engine", expectedDescriptor)
-        plugin.engine = mockEngine
+        expect(plugin).not.to.have.ownPropertyDescriptor("system", expectedDescriptor)
+        plugin.system = mockEngine
         expect(plugin.onInit).calledOnce
-        expect(plugin).to.have.ownPropertyDescriptor("engine", expectedDescriptor)
+        expect(plugin).to.have.ownPropertyDescriptor("system", expectedDescriptor)
 
         return
 
       specify "And #onInit is self-invoked", ->
         plugin = new ProcessorTemplate()
         expect(plugin.onInit).not.called
-        plugin.engine = mockEngine
+        plugin.system = mockEngine
         expect(plugin.onInit).calledOnce
         
         return
@@ -130,7 +130,7 @@ describe "ProcessorTemplate", ->
 
   context "#midi", ->
 
-    context "When #engine is not set", ->
+    context "When #system is not set", ->
       specify "Then accessing #midi throws \"EngineAccessFault\"", ->
         plugin = new ProcessorTemplate()
         expect( -> plugin.midi).to.throw("EngineAccessFault")
@@ -138,11 +138,11 @@ describe "ProcessorTemplate", ->
 
       return
 
-    context "When #engine is set", ->
+    context "When #system is set", ->
       specify "Then #midi accesses Scripter.MIDI", ->
         scripter = new ScripterFixture()
         plugin = new ProcessorTemplate()
-        plugin.engine = scripter
+        plugin.system = scripter
         expect(plugin.midi).eql(scripter.MIDI)
         return
 
@@ -269,18 +269,18 @@ describe "ProcessorTemplate", ->
       specify "Then Scripter.ParameterChanged delegates to ProcessorTemplate#onParam", ->
         key = 0
         val = 1
-        { plugin, engine, api } = Help.deployPluginTemplate()
+        { plugin, system, api } = Help.deployPluginTemplate()
         plugin.params = [
           ID: "a", name: "A", type: "checkbox", checked: 0
         ]
         expect(api).includes("ParameterChanged")
         expect(plugin.onParam).not.called
 
-        engine.ParameterChanged(key, val)
+        system.ParameterChanged(key, val)
         expect(plugin.onParam).calledWith(key, val)
         expect(plugin).property("a", val)
 
-        engine.ParameterChanged(key, val + 1)
+        system.ParameterChanged(key, val + 1)
         expect(plugin.onParam).calledWith(key, val + 1)
         expect(plugin).property("a", val + 1)
 
@@ -290,18 +290,18 @@ describe "ProcessorTemplate", ->
         midi1 = new NoteOn()
         midi2 = new NoteOff()
         midi3 = new ControlChange()
-        { plugin, engine, api } = Help.deployPluginTemplate()
+        { plugin, system, api } = Help.deployPluginTemplate()
         plugin.params = [
           { ID: "b", name: "B", type: "lin", defaultValue: 63, minValue: 1, maxValue: 127}
         ]
-        expect(engine).property("HandleMIDI").instanceOf(Function)
-        engine.HandleMIDI(midi1)
+        expect(system).property("HandleMIDI").instanceOf(Function)
+        system.HandleMIDI(midi1)
         expect(plugin.onMidi).calledOnce
         expect(plugin.onMidi).calledWith(midi1)
-        engine.HandleMIDI(midi2)
+        system.HandleMIDI(midi2)
         expect(plugin.onMidi).calledTwice
         expect(plugin.onMidi).calledWith(midi2)
-        engine.HandleMIDI(midi3)
+        system.HandleMIDI(midi3)
         expect(plugin.onMidi).calledThrice
         expect(plugin.onMidi).calledWith(midi3)
 
