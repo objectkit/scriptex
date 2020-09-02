@@ -1,7 +1,7 @@
 { Processor
   Scriptex
   Scripter
-  PluginFixture
+  ProcessorFixture
   ScripterFixture
 } = require(SCRIPTEX_TEST)
 
@@ -44,7 +44,7 @@ describe "Processor", ->
       context "When configurable is false", ->
         specify "Then #system properties are non-configurable", ->
           system = new ScripterFixture()
-          keys = PluginFixture.deploy(system)
+          keys = ProcessorFixture.deploy(system)
           for key in keys
             expect(system)
               .ownPropertyDescriptor(key)
@@ -58,7 +58,7 @@ describe "Processor", ->
       context "When configurable is not supplied", ->
         specify "Then #system properties are non-configurable [default]", ->
           system = new ScripterFixture()
-          keys = PluginFixture.deploy(system)
+          keys = ProcessorFixture.deploy(system)
           for engineKey in keys
             expect(system)
               .ownPropertyDescriptor(engineKey)
@@ -72,7 +72,7 @@ describe "Processor", ->
       context "When configurable is true", ->
         specify "Then #system properties are configurable", ->
           system = new ScripterFixture()
-          keys = PluginFixture.deploy(system, true)
+          keys = ProcessorFixture.deploy(system, true)
           for key in keys
             expect(system)
               .ownPropertyDescriptor(key)

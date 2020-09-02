@@ -1,5 +1,5 @@
 {
-  PluginFixture
+  ProcessorFixture
   ScripterFixture
   APIKeyMap
 } = require(SCRIPTEX_TEST)
@@ -19,7 +19,7 @@ describe "ScriptexValidationSpec", ->
       system = new ScripterFixture()
 
       # assert deployment OK
-      expect(PluginFixture.deploy(system)).members(@EXPECTED_KEYS)
+      expect(ProcessorFixture.deploy(system)).members(@EXPECTED_KEYS)
 
       # configure the params with an UpdatePluginParameters emulation
       for parameter in system.PluginParameters
@@ -36,13 +36,13 @@ describe "ScriptexValidationSpec", ->
 
   beforeEach ->
     Help.SANDBOX.spy(ScripterFixture::)
-    Help.SANDBOX.spy(PluginFixture::)
+    Help.SANDBOX.spy(ProcessorFixture::)
     # spy on the property needsTiming
 
   afterEach ->
     Help.SANDBOX.restore()
 
-  context "Given PluginFixture has been deployed", ->
+  context "Given ProcessorFixture has been deployed", ->
 
     describe "When Reset is invoked", ->
       specify "Then Trace is invoked with the message 'RESET'", ->
@@ -70,7 +70,7 @@ describe "ScriptexValidationSpec", ->
         stub = null
 
         before ->
-          stub = Help.SANDBOX.stub(PluginFixture::, "needsDefaults").get( -> no )
+          stub = Help.SANDBOX.stub(ProcessorFixture::, "needsDefaults").get( -> no )
 
         after ->
           stub.restore()
