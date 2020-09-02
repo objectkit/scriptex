@@ -110,20 +110,20 @@ describe "ProcessorTemplate", ->
 
       specify "Then #system is redefined as a data property ", ->
         plugin = new ProcessorTemplate()
-        expect(plugin.onInit).not.called
+        expect(plugin.initProcessor).not.called
         expect(plugin).not.to.have.ownPropertyDescriptor("system", expectedDescriptor)
         plugin.system = mockEngine
-        expect(plugin.onInit).calledOnce
+        expect(plugin.initProcessor).calledOnce
         expect(plugin).to.have.ownPropertyDescriptor("system", expectedDescriptor)
 
         return
 
-      specify "And #onInit is self-invoked", ->
+      specify "And #initProcessor is self-invoked", ->
         plugin = new ProcessorTemplate()
-        expect(plugin.onInit).not.called
+        expect(plugin.initProcessor).not.called
         plugin.system = mockEngine
-        expect(plugin.onInit).calledOnce
-        
+        expect(plugin.initProcessor).calledOnce
+
         return
 
       return

@@ -44,7 +44,7 @@ class Processor {
    *  }
    *
    *  Trace(CustomPlugin.deploy()) // [ParameterChanged, ResetParameterDefaults, PluginParameters]
-   * 
+   *
    * @type {Map<string, string>}
    * @see [Scriptex.API]{@link Scriptex.API}
    */

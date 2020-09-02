@@ -72,14 +72,14 @@ class ProcessorTemplate extends Processor {
    * A plugin reference to the Scripter object as set during {@link Scriptex#deploy}.
    *
    * @type {Object}
-   * @see [onInit]{@link ProcessorTemplate#onInit}
+   * @see [initProcessor]{@link ProcessorTemplate#initProcessor}
    * @see [Scripter]{@link Scripter}
    * @see [Processor.deploy]{@link Processor.deploy}
    * @throws {"EngineAccessFault"}
    */
   set system (system) {
     finalise(this, `system`, system)
-    this.onInit()
+    this.initProcessor()
   }
 
   get system () {
@@ -108,7 +108,7 @@ class ProcessorTemplate extends Processor {
    *
    * @example
    *  class InitiPlugin extends ProcessorTemplate {
-   *    onInit() {
+   *    initProcessor() {
    *      this.needsTiming = true
    *      this.needsDefaults = false
    *      this.params = [
@@ -121,7 +121,7 @@ class ProcessorTemplate extends Processor {
    * @return {void}
    * @see [system]{@link ProcessorTemplate#system}
    */
-  onInit () {}
+  initProcessor () {}
 
   /**
    * Manage Scripter.ParameterChanged events by treating the plugin instance as a
