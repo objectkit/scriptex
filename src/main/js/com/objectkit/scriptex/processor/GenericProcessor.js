@@ -8,11 +8,11 @@ const finalise = (target, key, val) =>
  * @class
  * @classdesc
  *
- * ProcessorTemplate is an strongly general purpose implementation suitable for
+ * GenericProcessor is an strongly general purpose implementation suitable for
  * prototyping lightweight MIDI applications.
  *
  * @example
- *   class Demonstrator extends ProcessorTemplate {
+ *   class Demonstrator extends GenericProcessor {
  *     // define Scipter.NeedsTimingInfo
  *     get needsTiming () {
  *        return true
@@ -61,18 +61,18 @@ const finalise = (target, key, val) =>
  * @see [Processor]{@link Processor}
  * @see [Scriptex]{@link Scriptex}
  * @see [Scripter]{@link Scripter}
- * @see [onMIdi]{@link ProcessorTemplate#onMidi}
- * @see [onParam]{@link ProcessorTemplate#onParam}
- * @see [midi]{@link ProcessorTemplate#midi}
+ * @see [onMIdi]{@link GenericProcessor#onMidi}
+ * @see [onParam]{@link GenericProcessor#onParam}
+ * @see [midi]{@link GenericProcessor#midi}
  * @see [deploy]{@link Processor.deploy}
  */
-class ProcessorTemplate extends Processor {
+class GenericProcessor extends Processor {
 
   /**
    * A plugin reference to the Scripter object as set during {@link Scriptex#deploy}.
    *
    * @type {Object}
-   * @see [initProcessor]{@link ProcessorTemplate#initProcessor}
+   * @see [initProcessor]{@link GenericProcessor#initProcessor}
    * @see [Scripter]{@link Scripter}
    * @see [Processor.deploy]{@link Processor.deploy}
    * @throws {"EngineAccessFault"}
@@ -107,7 +107,7 @@ class ProcessorTemplate extends Processor {
    * A JIT convenience method to initialise the plugin prior to Scripter integration.
    *
    * @example
-   *  class InitiPlugin extends ProcessorTemplate {
+   *  class InitiPlugin extends GenericProcessor {
    *    initProcessor() {
    *      this.needsTiming = true
    *      this.needsDefaults = false
@@ -119,7 +119,7 @@ class ProcessorTemplate extends Processor {
    *
    * @abstract
    * @return {void}
-   * @see [system]{@link ProcessorTemplate#system}
+   * @see [system]{@link GenericProcessor#system}
    */
   initProcessor () {}
 
@@ -133,7 +133,7 @@ class ProcessorTemplate extends Processor {
    *
    * This provides the interesting opportunity to intercept changes to UI by defining setters
    * @example
-   *   class MidiStop extends ProcessorTemplate {
+   *   class MidiStop extends GenericProcessor {
    *     get params () {
    *       return [
    *       , {
@@ -171,7 +171,7 @@ class ProcessorTemplate extends Processor {
    *
    * @param  {Event} midi
    * @return {number}
-   * @see [delegateMidi]{@link ProcessorTemplate#delegateMidi}
+   * @see [delegateMidi]{@link GenericProcessor#delegateMidi}
    */
   onMidi (midi) {
     return this.delegateMidi(midi)
@@ -182,15 +182,15 @@ class ProcessorTemplate extends Processor {
    *
    *
    * @param  {Event} midi Any supported Scripter midi event.
-   * @return {number} The beatPos returned by {@link ProcessorTemplate#sendMidi}
-   * @see [onNoteOn]{@link ProcessorTemplate#onNoteOn}
-   * @see [onNoteOff]{@link ProcessorTemplate#onNoteOff}
-   * @see [onChannelPressure]{@link ProcessorTemplate#onChannelPressure}
-   * @see [onPolyPressure]{@link ProcessorTemplate#onPolyPressure}
-   * @see [onProgramChange]{@link ProcessorTemplate#onProgramChange}
-   * @see [onControlChange]{@link ProcessorTemplate#onControlChange}
-   * @see [onPitchBend]{@link ProcessorTemplate#onPitchBend}
-   * @see [onTargetEvent]{@link ProcessorTemplate#onTargetEvent}
+   * @return {number} The beatPos returned by {@link GenericProcessor#sendMidi}
+   * @see [onNoteOn]{@link GenericProcessor#onNoteOn}
+   * @see [onNoteOff]{@link GenericProcessor#onNoteOff}
+   * @see [onChannelPressure]{@link GenericProcessor#onChannelPressure}
+   * @see [onPolyPressure]{@link GenericProcessor#onPolyPressure}
+   * @see [onProgramChange]{@link GenericProcessor#onProgramChange}
+   * @see [onControlChange]{@link GenericProcessor#onControlChange}
+   * @see [onPitchBend]{@link GenericProcessor#onPitchBend}
+   * @see [onTargetEvent]{@link GenericProcessor#onTargetEvent}
    */
    delegateMidi (midi) {
      switch (midi.status) {
@@ -211,7 +211,7 @@ class ProcessorTemplate extends Processor {
    *
    * @param  {Event} midi
    * @return {number}
-   * @see [sendMidi]{@link ProcessorTemplate#sendMidi}
+   * @see [sendMidi]{@link GenericProcessor#sendMidi}
    */
   onEvent (midi) {
     return this.sendMidi(midi)
@@ -222,7 +222,7 @@ class ProcessorTemplate extends Processor {
    *
    * @param  {NoteOn} noteOn
    * @return {number}
-   * @see [sendMidi]{@link ProcessorTemplate#sendMidi}
+   * @see [sendMidi]{@link GenericProcessor#sendMidi}
    */
   onNoteOn (noteOn) {
     return this.onNote(noteOn)
@@ -233,7 +233,7 @@ class ProcessorTemplate extends Processor {
    *
    * @param  {NoteOff} noteOff
    * @return {number}
-   * @see [sendMidi]{@link ProcessorTemplate#sendMidi}
+   * @see [sendMidi]{@link GenericProcessor#sendMidi}
    */
   onNoteOff (noteOff) {
     return this.onNote(noteOff)
@@ -244,7 +244,7 @@ class ProcessorTemplate extends Processor {
    *
    * @param  {Note} noteOnOrOFf
    * @return {number}
-   * @see [sendMidi]{@link ProcessorTemplate#sendMidi}
+   * @see [sendMidi]{@link GenericProcessor#sendMidi}
    */
   onNote (noteOnOrOff) {
     return this.sendMidi(noteOnOrOff)
@@ -255,7 +255,7 @@ class ProcessorTemplate extends Processor {
    *
    * @param  {ProgramChange} midi
    * @return {number}
-   * @see [sendMidi]{@link ProcessorTemplate#sendMidi}
+   * @see [sendMidi]{@link GenericProcessor#sendMidi}
    */
   onProgramChange (midi) {
     return this.sendMidi(midi)
@@ -266,7 +266,7 @@ class ProcessorTemplate extends Processor {
    *
    * @param  {ControlChange} midi
    * @return {number}
-   * @see [sendMidi]{@link ProcessorTemplate#sendMidi}
+   * @see [sendMidi]{@link GenericProcessor#sendMidi}
    */
   onControlChange (midi) {
     return this.sendMidi(midi)
@@ -277,7 +277,7 @@ class ProcessorTemplate extends Processor {
    *
    * @param  {PolyPressure} midi
    * @return {number}
-   * @see [sendMidi]{@link ProcessorTemplate#sendMidi}
+   * @see [sendMidi]{@link GenericProcessor#sendMidi}
    */
   onPolyPressure (midi) {
     return this.sendMidi(midi)
@@ -288,7 +288,7 @@ class ProcessorTemplate extends Processor {
    *
    * @param  {ChannelPressure} midi
    * @return {number}
-   * @see [sendMidi]{@link ProcessorTemplate#sendMidi}
+   * @see [sendMidi]{@link GenericProcessor#sendMidi}
    */
   onChannelPressure (midi) {
     return this.sendMidi(midi)
@@ -299,7 +299,7 @@ class ProcessorTemplate extends Processor {
    *
    * @param  {Pitchbend} midi
    * @return {number}
-   * @see [sendMidi]{@link ProcessorTemplate#sendMidi}
+   * @see [sendMidi]{@link GenericProcessor#sendMidi}
    */
   onPitchBend (midi) {
     return this.sendMidi(midi)
@@ -310,7 +310,7 @@ class ProcessorTemplate extends Processor {
    *
    * @param  {TargetEvent} midi
    * @return {number}
-   * @see [sendMidi]{@link ProcessorTemplate#sendMidi}
+   * @see [sendMidi]{@link GenericProcessor#sendMidi}
    */
   onTargetEvent (midi) {
     return this.sendMidi(midi)
@@ -374,4 +374,4 @@ class ProcessorTemplate extends Processor {
    }
 }
 
-export default ProcessorTemplate
+export default GenericProcessor

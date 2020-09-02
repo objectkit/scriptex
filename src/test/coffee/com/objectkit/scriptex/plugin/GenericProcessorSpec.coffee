@@ -1,6 +1,6 @@
 {
   Processor
-  ProcessorTemplate
+  GenericProcessor
   ScripterFixture
   Scriptex
   Event
@@ -33,7 +33,7 @@ NOTE:
 Note and NoteOn do indeed have the same status code in the Scripter implementation
 ###
 
-describe "ProcessorTemplate", ->
+describe "GenericProcessor", ->
 
   Help =
     sandbox: sinon.createSandbox()
@@ -41,7 +41,7 @@ describe "ProcessorTemplate", ->
     setupEnv: ->
       # @sandbox.stub(Scriptex, "SYSTEM").get( -> new ScripterFixture)
       @sandbox.spy(Scriptex::, "deploy")
-      @sandbox.spy(ProcessorTemplate::)
+      @sandbox.spy(GenericProcessor::)
       @sandbox.spy(ScripterFixture::)
 
     teardownEnv: ->
@@ -58,7 +58,7 @@ describe "ProcessorTemplate", ->
       return midiEvent
 
     deployPluginTemplate: ->
-      @deployPlugin(ProcessorTemplate)
+      @deployPlugin(GenericProcessor)
 
     deployPlugin: (pluginClass, autoUpdate=true)->
       # trigger an internal deployment
@@ -94,7 +94,7 @@ describe "ProcessorTemplate", ->
 
     context "When #system is not set", ->
       specify "Then accessing #system throws \"EngineAccessFault\" ", ->
-        plugin = new ProcessorTemplate()
+        plugin = new GenericProcessor()
         expect(-> plugin.system).to.throw("EngineAccessFault")
         return
 
@@ -109,7 +109,7 @@ describe "ProcessorTemplate", ->
         configurable: false
 
       specify "Then #system is redefined as a data property ", ->
-        plugin = new ProcessorTemplate()
+        plugin = new GenericProcessor()
         expect(plugin.initProcessor).not.called
         expect(plugin).not.to.have.ownPropertyDescriptor("system", expectedDescriptor)
         plugin.system = mockEngine
@@ -119,7 +119,7 @@ describe "ProcessorTemplate", ->
         return
 
       specify "And #initProcessor is self-invoked", ->
-        plugin = new ProcessorTemplate()
+        plugin = new GenericProcessor()
         expect(plugin.initProcessor).not.called
         plugin.system = mockEngine
         expect(plugin.initProcessor).calledOnce
@@ -132,7 +132,7 @@ describe "ProcessorTemplate", ->
 
     context "When #system is not set", ->
       specify "Then accessing #midi throws \"EngineAccessFault\"", ->
-        plugin = new ProcessorTemplate()
+        plugin = new GenericProcessor()
         expect( -> plugin.midi).to.throw("EngineAccessFault")
         return
 
@@ -141,7 +141,7 @@ describe "ProcessorTemplate", ->
     context "When #system is set", ->
       specify "Then #midi accesses Scripter.MIDI", ->
         scripter = new ScripterFixture()
-        plugin = new ProcessorTemplate()
+        plugin = new GenericProcessor()
         plugin.system = scripter
         expect(plugin.midi).eql(scripter.MIDI)
         return
@@ -154,7 +154,7 @@ describe "ProcessorTemplate", ->
     context "Given key is a valid parameter index,", ->
       context "And the parameter at index has an \"ID\" property,", ->
         specify "Then ID is treated as a plugin property name and val is assignment to it.", ->
-          plugin = new ProcessorTemplate()
+          plugin = new GenericProcessor()
           # mock the parameters
           plugin.params = [
             { ID: "mockIdA", name: "A", defaultValue: 0 }
@@ -178,7 +178,7 @@ describe "ProcessorTemplate", ->
         beatPosNumber = 500
         beatPosString = "#{beatPosNumber}"
         midiEvent = Help.newMidiEvent( beatPos:beatPosString )
-        returned = new ProcessorTemplate().sendMidi(midiEvent)
+        returned = new GenericProcessor().sendMidi(midiEvent)
         expect(Number.isInteger(returned)).to.be.true
         expect(midiEvent.sendAfterMilliseconds).calledOnce
         expect(midiEvent.sendAfterMilliseconds).calledWith(beatPosNumber)
@@ -191,7 +191,7 @@ describe "ProcessorTemplate", ->
       specify "Then Scripter.SendMIDIEventAfterBeats is invoked", ->
         timing = -500
         midiEvent = Help.newMidiEvent(beatPos:timing)
-        plugin = new ProcessorTemplate
+        plugin = new GenericProcessor
         beatPos = plugin.sendMidi(midiEvent)
         expect(midiEvent.sendAfterBeats).calledOnce
         expect(timing * -1).eql(beatPos)
@@ -203,7 +203,7 @@ describe "ProcessorTemplate", ->
       specify "Then Scripter.SendMIDIEventNow is invoked", ->
         midiEvent = Help.newMidiEvent()
         expect(midiEvent.beatPos).to.be.undefined
-        returned = new ProcessorTemplate().sendMidi(midiEvent)
+        returned = new GenericProcessor().sendMidi(midiEvent)
         expect(midiEvent.send).calledOnce
         expect(returned).equal(0)
         return
@@ -214,7 +214,7 @@ describe "ProcessorTemplate", ->
       specify "Then Scripter.SendMIDIEventAtBeat is invoked", ->
 
         doSendMidi = (midi) ->
-          new ProcessorTemplate().sendMidi(midi)
+          new GenericProcessor().sendMidi(midi)
 
         returned1 = null
         returned2 = null
@@ -237,7 +237,7 @@ describe "ProcessorTemplate", ->
   context "#onMidi(event):number", ->
     describe "Given any midi event", ->
       specify "Then #sendMidi is invoked", ->
-        plugin = new ProcessorTemplate()
+        plugin = new GenericProcessor()
         events = [
           new ChannelPressure
           new PolyPressure
@@ -264,9 +264,9 @@ describe "ProcessorTemplate", ->
 
     return
 
-  context "ProcessorTemplate.deploy():Array<string>",->
-    describe "When ProcessorTemplate is deployed", ->
-      specify "Then Scripter.ParameterChanged delegates to ProcessorTemplate#onParam", ->
+  context "GenericProcessor.deploy():Array<string>",->
+    describe "When GenericProcessor is deployed", ->
+      specify "Then Scripter.ParameterChanged delegates to GenericProcessor#onParam", ->
         key = 0
         val = 1
         { plugin, system, api } = Help.deployPluginTemplate()
@@ -286,7 +286,7 @@ describe "ProcessorTemplate", ->
 
         return
 
-      specify "Then Scripter.HandleMIDI delegates to ProcessorTemplate#onMidi", ->
+      specify "Then Scripter.HandleMIDI delegates to GenericProcessor#onMidi", ->
         midi1 = new NoteOn()
         midi2 = new NoteOff()
         midi3 = new ControlChange()

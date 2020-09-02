@@ -1,11 +1,11 @@
 # Scriptex
-> A micro library for Scripter MIDI-FX plugins.
+> A micro library for Scripter MIDI-FX processors.
 
 ### Example
 ```js
 /* context: Scripter Code Editor with minified scriptex library here */
 
-class PitchModifier extends ProcessorTemplate {
+class PitchModifier extends GenericProcessor {
 
   /* Scripter.NeedsTimingInfo */
   get needsTiming () {
