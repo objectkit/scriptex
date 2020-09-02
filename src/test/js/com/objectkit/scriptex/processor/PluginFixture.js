@@ -1,6 +1,6 @@
-import Plugin from "com/objectkit/scriptex/plugin/Plugin"
+import Processor from "com/objectkit/scriptex/processor/Processor"
 
-export default class PluginFixture extends Plugin {
+export default class PluginFixture extends Processor {
 
   get needsTiming () {
     return true

@@ -1,10 +1,10 @@
-import Plugin from "com/objectkit/scriptex/plugin/Plugin"
+import Processor from "com/objectkit/scriptex/processor/Processor"
 import DelayLineCalculator
-  from "com/objectkit/scriptex/plugin/fixture/delayline/DelayLineCalculator"
+  from "com/objectkit/scriptex/processor/fixture/delayline/DelayLineCalculator"
 import DelayLineRenderer
-  from "com/objectkit/scriptex/plugin/fixture/delayline/DelayLineRenderer"
+  from "com/objectkit/scriptex/processor/fixture/delayline/DelayLineRenderer"
 
-class DelayLinePlugin extends Plugin {
+class DelayLinePlugin extends Processor {
 
   /* @alas Scripter.NeedsTimingInfo */
   get needsTiming () {

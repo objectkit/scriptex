@@ -1,11 +1,11 @@
-{ Plugin
+{ Processor
   Scriptex
   Scripter
   PluginFixture
   ScripterFixture
 } = require(SCRIPTEX_TEST)
 
-describe "Plugin", ->
+describe "Processor", ->
 
   describe "static deploy([engine=Scripter],[configurable=false]) : Array<string>", ->
 
@@ -15,7 +15,7 @@ describe "Plugin", ->
     afterEach ->
       Scriptex::deploy.restore()
 
-    context "Given Plugin.deploy has instantiated and deployed a plugin", ->
+    context "Given Processor.deploy has instantiated and deployed a plugin", ->
 
 
       getDeployedPlugin = -> Scriptex::deploy.lastCall.args[0]
@@ -24,7 +24,7 @@ describe "Plugin", ->
       context "When engine is provided", ->
         specify "Then plugin is deployed to that engine", ->
           engine = new ScripterFixture()
-          Plugin.deploy(engine, true)
+          Processor.deploy(engine, true)
           plugin = getDeployedPlugin()
 
           expect(plugin.engine).eql(engine)
@@ -34,7 +34,7 @@ describe "Plugin", ->
 
       context "When engine is absent", ->
         specify "Then the plugin is deployed to Scripter [default]", ->
-          Plugin.deploy()
+          Processor.deploy()
           plugin = getDeployedPlugin()
           expect(plugin.engine).eql(Scripter)
           return

@@ -1,14 +1,14 @@
 import Scriptex from "com/objectkit/scriptex/Scriptex"
 
 /** @class */
-class Plugin {
+class Processor {
 
   /**
-   * The Scripter/Scriptex API that the Plugin will conform to.
+   * The Scripter/Scriptex API that the Processor will conform to.
    * The default API is Scriptex.API.
    * Subclasses can return a list of their own bindings for custom integrations
    * @example
-   *  class CustomPlugin extends Plugin {
+   *  class CustomPlugin extends Processor {
    *    // @override
    *    static get API () {
    *      return [
@@ -58,7 +58,7 @@ class Plugin {
    * @param  {Object}  [engine=Scripter]
    * @param  {Boolean} [configurable=false]
    * @param  {...*}  [ctorArgs=[]]
-   *  Any arguments to pass to Plugin subclass constructors.
+   *  Any arguments to pass to Processor subclass constructors.
    * @return {Array<string>}
    *  An enumeration of the Scripter integrations
    * @see [Scriptex]{@link Scriptex#deploy}
@@ -70,4 +70,4 @@ class Plugin {
   }
 }
 
-export default Plugin
+export default Processor

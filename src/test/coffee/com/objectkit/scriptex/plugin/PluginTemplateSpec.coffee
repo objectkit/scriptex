@@ -1,6 +1,6 @@
 {
-  Plugin
-  PluginTemplate
+  Processor
+  ProcessorTemplate
   ScripterFixture
   Scriptex
   Event
@@ -33,7 +33,7 @@ NOTE:
 Note and NoteOn do indeed have the same status code in the Scripter implementation
 ###
 
-describe "PluginTemplate", ->
+describe "ProcessorTemplate", ->
 
   Help =
     sandbox: sinon.createSandbox()
@@ -41,7 +41,7 @@ describe "PluginTemplate", ->
     setupEnv: ->
       # @sandbox.stub(Scriptex, "ENGINE").get( -> new ScripterFixture)
       @sandbox.spy(Scriptex::, "deploy")
-      @sandbox.spy(PluginTemplate::)
+      @sandbox.spy(ProcessorTemplate::)
       @sandbox.spy(ScripterFixture::)
 
     teardownEnv: ->
@@ -58,7 +58,7 @@ describe "PluginTemplate", ->
       return midiEvent
 
     deployPluginTemplate: ->
-      @deployPlugin(PluginTemplate)
+      @deployPlugin(ProcessorTemplate)
 
     deployPlugin: (pluginClass, autoUpdate=true)->
       # trigger an internal deployment
@@ -74,7 +74,7 @@ describe "PluginTemplate", ->
 
       # balance the test
       expect(api).instanceof(Array)
-      expect(plugin).instanceof(Plugin)
+      expect(plugin).instanceof(Processor)
       expect(engine).instanceof(ScripterFixture)
 
       # emulated system call at time of script evaluation, thus deployment
@@ -94,7 +94,7 @@ describe "PluginTemplate", ->
 
     context "When #engine is not set", ->
       specify "Then accessing #engine throws \"EngineAccessFault\" ", ->
-        plugin = new PluginTemplate()
+        plugin = new ProcessorTemplate()
         expect(-> plugin.engine).to.throw("EngineAccessFault")
         return
 
@@ -109,7 +109,7 @@ describe "PluginTemplate", ->
         configurable: false
 
       specify "Then #engine is redefined as a data property ", ->
-        plugin = new PluginTemplate()
+        plugin = new ProcessorTemplate()
         expect(plugin.onInit).not.called
         expect(plugin).not.to.have.ownPropertyDescriptor("engine", expectedDescriptor)
         plugin.engine = mockEngine
@@ -119,7 +119,7 @@ describe "PluginTemplate", ->
         return
 
       specify "And #onInit is self-invoked", ->
-        plugin = new PluginTemplate()
+        plugin = new ProcessorTemplate()
         expect(plugin.onInit).not.called
         plugin.engine = mockEngine
         expect(plugin.onInit).calledOnce
@@ -132,7 +132,7 @@ describe "PluginTemplate", ->
 
     context "When #engine is not set", ->
       specify "Then accessing #midi throws \"EngineAccessFault\"", ->
-        plugin = new PluginTemplate()
+        plugin = new ProcessorTemplate()
         expect( -> plugin.midi).to.throw("EngineAccessFault")
         return
 
@@ -141,7 +141,7 @@ describe "PluginTemplate", ->
     context "When #engine is set", ->
       specify "Then #midi accesses Scripter.MIDI", ->
         scripter = new ScripterFixture()
-        plugin = new PluginTemplate()
+        plugin = new ProcessorTemplate()
         plugin.engine = scripter
         expect(plugin.midi).eql(scripter.MIDI)
         return
@@ -154,7 +154,7 @@ describe "PluginTemplate", ->
     context "Given key is a valid parameter index,", ->
       context "And the parameter at index has an \"ID\" property,", ->
         specify "Then ID is treated as a plugin property name and val is assignment to it.", ->
-          plugin = new PluginTemplate()
+          plugin = new ProcessorTemplate()
           # mock the parameters
           plugin.params = [
             { ID: "mockIdA", name: "A", defaultValue: 0 }
@@ -178,7 +178,7 @@ describe "PluginTemplate", ->
         beatPosNumber = 500
         beatPosString = "#{beatPosNumber}"
         midiEvent = Help.newMidiEvent( beatPos:beatPosString )
-        returned = new PluginTemplate().sendMidi(midiEvent)
+        returned = new ProcessorTemplate().sendMidi(midiEvent)
         expect(Number.isInteger(returned)).to.be.true
         expect(midiEvent.sendAfterMilliseconds).calledOnce
         expect(midiEvent.sendAfterMilliseconds).calledWith(beatPosNumber)
@@ -191,7 +191,7 @@ describe "PluginTemplate", ->
       specify "Then Scripter.SendMIDIEventAfterBeats is invoked", ->
         timing = -500
         midiEvent = Help.newMidiEvent(beatPos:timing)
-        plugin = new PluginTemplate
+        plugin = new ProcessorTemplate
         beatPos = plugin.sendMidi(midiEvent)
         expect(midiEvent.sendAfterBeats).calledOnce
         expect(timing * -1).eql(beatPos)
@@ -203,7 +203,7 @@ describe "PluginTemplate", ->
       specify "Then Scripter.SendMIDIEventNow is invoked", ->
         midiEvent = Help.newMidiEvent()
         expect(midiEvent.beatPos).to.be.undefined
-        returned = new PluginTemplate().sendMidi(midiEvent)
+        returned = new ProcessorTemplate().sendMidi(midiEvent)
         expect(midiEvent.send).calledOnce
         expect(returned).equal(0)
         return
@@ -214,7 +214,7 @@ describe "PluginTemplate", ->
       specify "Then Scripter.SendMIDIEventAtBeat is invoked", ->
 
         doSendMidi = (midi) ->
-          new PluginTemplate().sendMidi(midi)
+          new ProcessorTemplate().sendMidi(midi)
 
         returned1 = null
         returned2 = null
@@ -237,7 +237,7 @@ describe "PluginTemplate", ->
   context "#onMidi(event):number", ->
     describe "Given any midi event", ->
       specify "Then #sendMidi is invoked", ->
-        plugin = new PluginTemplate()
+        plugin = new ProcessorTemplate()
         events = [
           new ChannelPressure
           new PolyPressure
@@ -264,9 +264,9 @@ describe "PluginTemplate", ->
 
     return
 
-  context "PluginTemplate.deploy():Array<string>",->
-    describe "When PluginTemplate is deployed", ->
-      specify "Then Scripter.ParameterChanged delegates to PluginTemplate#onParam", ->
+  context "ProcessorTemplate.deploy():Array<string>",->
+    describe "When ProcessorTemplate is deployed", ->
+      specify "Then Scripter.ParameterChanged delegates to ProcessorTemplate#onParam", ->
         key = 0
         val = 1
         { plugin, engine, api } = Help.deployPluginTemplate()
@@ -286,7 +286,7 @@ describe "PluginTemplate", ->
 
         return
 
-      specify "Then Scripter.HandleMIDI delegates to PluginTemplate#onMidi", ->
+      specify "Then Scripter.HandleMIDI delegates to ProcessorTemplate#onMidi", ->
         midi1 = new NoteOn()
         midi2 = new NoteOff()
         midi3 = new ControlChange()

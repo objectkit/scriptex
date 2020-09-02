@@ -4,7 +4,7 @@
   DelayLineRenderer
   ScripterFixture
   Scriptex
-  Plugin
+  Processor
 } = require(SCRIPTEX_TEST)
 
 
@@ -46,7 +46,7 @@ describe "DelayLinePlugin", ->
 
       # balance the test
       expect(api).instanceof(Array)
-      expect(plugin).instanceof(Plugin)
+      expect(plugin).instanceof(Processor)
       expect(engine).instanceof(ScripterFixture)
 
       # emulated system call at time of script evaluation, thus deployment

@@ -5,7 +5,7 @@
 ```js
 /* context: Scripter Code Editor with minified scriptex library here */
 
-class PitchModifier extends PluginTemplate {
+class PitchModifier extends ProcessorTemplate {
 
   /* Scripter.NeedsTimingInfo */
   get needsTiming () {

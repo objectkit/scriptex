@@ -1,4 +1,4 @@
-import Plugin from "com/objectkit/scriptex/plugin/Plugin"
+import Processor from "com/objectkit/scriptex/processor/Processor"
 
 const finalise = (target, key, val) =>
   Reflect.defineProperty(target, key, { value: val, configurable: false, enumerable: true })
@@ -8,11 +8,11 @@ const finalise = (target, key, val) =>
  * @class
  * @classdesc
  *
- * PluginTemplate is an strongly general purpose implementation suitable for
+ * ProcessorTemplate is an strongly general purpose implementation suitable for
  * prototyping lightweight MIDI applications.
  *
  * @example
- *   class Demonstrator extends PluginTemplate {
+ *   class Demonstrator extends ProcessorTemplate {
  *     // define Scipter.NeedsTimingInfo
  *     get needsTiming () {
  *        return true
@@ -58,23 +58,23 @@ const finalise = (target, key, val) =>
  *   Demonstrator.deploy()
  *     .forEach(Trace) // [ HandleMIDI, PluginParameters, NeedsTimingInfo, ResetParameterDefaults ]
  *
- * @see [Plugin]{@link Plugin}
+ * @see [Processor]{@link Processor}
  * @see [Scriptex]{@link Scriptex}
  * @see [Scripter]{@link Scripter}
- * @see [onMIdi]{@link PluginTemplate#onMidi}
- * @see [onParam]{@link PluginTemplate#onParam}
- * @see [midi]{@link PluginTemplate#midi}
- * @see [deploy]{@link Plugin.deploy}
+ * @see [onMIdi]{@link ProcessorTemplate#onMidi}
+ * @see [onParam]{@link ProcessorTemplate#onParam}
+ * @see [midi]{@link ProcessorTemplate#midi}
+ * @see [deploy]{@link Processor.deploy}
  */
-class PluginTemplate extends Plugin {
+class ProcessorTemplate extends Processor {
 
   /**
    * A plugin reference to the Scripter object as set during {@link Scriptex#deploy}.
    *
    * @type {Object}
-   * @see [onInit]{@link PluginTemplate#onInit}
+   * @see [onInit]{@link ProcessorTemplate#onInit}
    * @see [Scripter]{@link Scripter}
-   * @see [Plugin.deploy]{@link Plugin.deploy}
+   * @see [Processor.deploy]{@link Processor.deploy}
    * @throws {"EngineAccessFault"}
    */
   set engine (engine) {
@@ -107,7 +107,7 @@ class PluginTemplate extends Plugin {
    * A JIT convenience method to initialise the plugin prior to Scripter integration.
    *
    * @example
-   *  class InitiPlugin extends PluginTemplate {
+   *  class InitiPlugin extends ProcessorTemplate {
    *    onInit() {
    *      this.needsTiming = true
    *      this.needsDefaults = false
@@ -119,7 +119,7 @@ class PluginTemplate extends Plugin {
    *
    * @abstract
    * @return {void}
-   * @see [engine]{@link PluginTemplate#engine}
+   * @see [engine]{@link ProcessorTemplate#engine}
    */
   onInit () {}
 
@@ -133,7 +133,7 @@ class PluginTemplate extends Plugin {
    *
    * This provides the interesting opportunity to intercept changes to UI by defining setters
    * @example
-   *   class MidiStop extends PluginTemplate {
+   *   class MidiStop extends ProcessorTemplate {
    *     get params () {
    *       return [
    *       , {
@@ -171,7 +171,7 @@ class PluginTemplate extends Plugin {
    *
    * @param  {Event} midi
    * @return {number}
-   * @see [delegateMidi]{@link PluginTemplate#delegateMidi}
+   * @see [delegateMidi]{@link ProcessorTemplate#delegateMidi}
    */
   onMidi (midi) {
     return this.delegateMidi(midi)
@@ -182,15 +182,15 @@ class PluginTemplate extends Plugin {
    *
    *
    * @param  {Event} midi Any supported Scripter midi event.
-   * @return {number} The beatPos returned by {@link PluginTemplate#sendMidi}
-   * @see [onNoteOn]{@link PluginTemplate#onNoteOn}
-   * @see [onNoteOff]{@link PluginTemplate#onNoteOff}
-   * @see [onChannelPressure]{@link PluginTemplate#onChannelPressure}
-   * @see [onPolyPressure]{@link PluginTemplate#onPolyPressure}
-   * @see [onProgramChange]{@link PluginTemplate#onProgramChange}
-   * @see [onControlChange]{@link PluginTemplate#onControlChange}
-   * @see [onPitchBend]{@link PluginTemplate#onPitchBend}
-   * @see [onTargetEvent]{@link PluginTemplate#onTargetEvent}
+   * @return {number} The beatPos returned by {@link ProcessorTemplate#sendMidi}
+   * @see [onNoteOn]{@link ProcessorTemplate#onNoteOn}
+   * @see [onNoteOff]{@link ProcessorTemplate#onNoteOff}
+   * @see [onChannelPressure]{@link ProcessorTemplate#onChannelPressure}
+   * @see [onPolyPressure]{@link ProcessorTemplate#onPolyPressure}
+   * @see [onProgramChange]{@link ProcessorTemplate#onProgramChange}
+   * @see [onControlChange]{@link ProcessorTemplate#onControlChange}
+   * @see [onPitchBend]{@link ProcessorTemplate#onPitchBend}
+   * @see [onTargetEvent]{@link ProcessorTemplate#onTargetEvent}
    */
    delegateMidi (midi) {
      switch (midi.status) {
@@ -211,7 +211,7 @@ class PluginTemplate extends Plugin {
    *
    * @param  {Event} midi
    * @return {number}
-   * @see [sendMidi]{@link PluginTemplate#sendMidi}
+   * @see [sendMidi]{@link ProcessorTemplate#sendMidi}
    */
   onEvent (midi) {
     return this.sendMidi(midi)
@@ -222,7 +222,7 @@ class PluginTemplate extends Plugin {
    *
    * @param  {NoteOn} noteOn
    * @return {number}
-   * @see [sendMidi]{@link PluginTemplate#sendMidi}
+   * @see [sendMidi]{@link ProcessorTemplate#sendMidi}
    */
   onNoteOn (noteOn) {
     return this.onNote(noteOn)
@@ -233,7 +233,7 @@ class PluginTemplate extends Plugin {
    *
    * @param  {NoteOff} noteOff
    * @return {number}
-   * @see [sendMidi]{@link PluginTemplate#sendMidi}
+   * @see [sendMidi]{@link ProcessorTemplate#sendMidi}
    */
   onNoteOff (noteOff) {
     return this.onNote(noteOff)
@@ -244,7 +244,7 @@ class PluginTemplate extends Plugin {
    *
    * @param  {Note} noteOnOrOFf
    * @return {number}
-   * @see [sendMidi]{@link PluginTemplate#sendMidi}
+   * @see [sendMidi]{@link ProcessorTemplate#sendMidi}
    */
   onNote (noteOnOrOff) {
     return this.sendMidi(noteOnOrOff)
@@ -255,7 +255,7 @@ class PluginTemplate extends Plugin {
    *
    * @param  {ProgramChange} midi
    * @return {number}
-   * @see [sendMidi]{@link PluginTemplate#sendMidi}
+   * @see [sendMidi]{@link ProcessorTemplate#sendMidi}
    */
   onProgramChange (midi) {
     return this.sendMidi(midi)
@@ -266,7 +266,7 @@ class PluginTemplate extends Plugin {
    *
    * @param  {ControlChange} midi
    * @return {number}
-   * @see [sendMidi]{@link PluginTemplate#sendMidi}
+   * @see [sendMidi]{@link ProcessorTemplate#sendMidi}
    */
   onControlChange (midi) {
     return this.sendMidi(midi)
@@ -277,7 +277,7 @@ class PluginTemplate extends Plugin {
    *
    * @param  {PolyPressure} midi
    * @return {number}
-   * @see [sendMidi]{@link PluginTemplate#sendMidi}
+   * @see [sendMidi]{@link ProcessorTemplate#sendMidi}
    */
   onPolyPressure (midi) {
     return this.sendMidi(midi)
@@ -288,7 +288,7 @@ class PluginTemplate extends Plugin {
    *
    * @param  {ChannelPressure} midi
    * @return {number}
-   * @see [sendMidi]{@link PluginTemplate#sendMidi}
+   * @see [sendMidi]{@link ProcessorTemplate#sendMidi}
    */
   onChannelPressure (midi) {
     return this.sendMidi(midi)
@@ -299,7 +299,7 @@ class PluginTemplate extends Plugin {
    *
    * @param  {Pitchbend} midi
    * @return {number}
-   * @see [sendMidi]{@link PluginTemplate#sendMidi}
+   * @see [sendMidi]{@link ProcessorTemplate#sendMidi}
    */
   onPitchBend (midi) {
     return this.sendMidi(midi)
@@ -310,7 +310,7 @@ class PluginTemplate extends Plugin {
    *
    * @param  {TargetEvent} midi
    * @return {number}
-   * @see [sendMidi]{@link PluginTemplate#sendMidi}
+   * @see [sendMidi]{@link ProcessorTemplate#sendMidi}
    */
   onTargetEvent (midi) {
     return this.sendMidi(midi)
@@ -374,4 +374,4 @@ class PluginTemplate extends Plugin {
    }
 }
 
-export default PluginTemplate
+export default ProcessorTemplate
