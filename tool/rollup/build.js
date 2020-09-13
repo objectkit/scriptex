@@ -16,6 +16,7 @@ let buildRelease =
       file: `${pkg.exports}`,
       format: "esm"
     },
+    cache: true,
     plugins: [
       includePaths({
         paths: [
@@ -47,6 +48,7 @@ let buildTest = {
     file: `${pkg.exports}/../${pkg.name}-test.js`,
     format: "cjs"
   },
+  cache: true,
   plugins: [
     includePaths({
       paths: [
