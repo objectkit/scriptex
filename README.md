@@ -1,5 +1,5 @@
 # Scriptex
-> A micro library for Scripter MIDI-FX plugins.
+> A micro library for making Scripter MIDI-FX processors.
 
 ### Example
 ```js

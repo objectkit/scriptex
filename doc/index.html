@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Home - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Classes</li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Plugin.html">Plugin</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Plugin.html#.deploy">deploy</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="PluginTemplate.html">PluginTemplate</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PluginTemplate.html#delegateMidi">delegateMidi</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PluginTemplate.html#onChannelPressure">onChannelPressure</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PluginTemplate.html#onControlChange">onControlChange</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PluginTemplate.html#onEvent">onEvent</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PluginTemplate.html#onInit">onInit</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PluginTemplate.html#onMidi">onMidi</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PluginTemplate.html#onNote">onNote</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PluginTemplate.html#onNoteOff">onNoteOff</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PluginTemplate.html#onNoteOn">onNoteOn</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PluginTemplate.html#onParam">onParam</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PluginTemplate.html#onPitchBend">onPitchBend</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PluginTemplate.html#onPolyPressure">onPolyPressure</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PluginTemplate.html#onProgramChange">onProgramChange</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PluginTemplate.html#onTargetEvent">onTargetEvent</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PluginTemplate.html#sendMidi">sendMidi</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Scriptex.html">Scriptex</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Scriptex.html#deploy">deploy</a></span></li><li class="nav-heading"><a href="global.html">Globals</a></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#Scripter">Scripter</a></span></li>
+</nav>
+
+<div id="main">
+    
+
+    
+
+
+
+    
+
+
+
+
+
+
+
+
+
+    
+
+
+    <section class="readme">
+        <article><h1>Scriptex</h1>
+<blockquote>
+<p>A micro library for making Scripter MIDI-FX processors.</p>
+</blockquote>
+<h3>Example</h3>
+<pre class="prettyprint source lang-js"><code>/* context: Scripter Code Editor with minified scriptex library here */
+
+class PitchModifier extends PluginTemplate {
+
+  /* Scripter.NeedsTimingInfo */
+  get needsTiming () {
+    return true
+  }
+
+  /* Scripter.PluginParameters */
+  get params () {
+    return [
+      {
+        ID: `semitones`
+      , type: `lin`
+      , name: `Semitones`
+      , minValue: -12
+      , maxValue: 12
+      , defaultValue: 0
+      , numberOfSteps: 24
+      }
+    ]
+  }
+
+  /* intercept changes to the &quot;Semitones&quot; parameter */
+  set semitones (semitones) {
+    if (semitones !== this._semitones) {
+      this.midi.allNotesOff()
+      this._semitones = semitones
+    }
+  }
+
+  /* exclusively manage NoteOn and NoteOff events */
+  /** @override */
+  onNote (noteOnOrOff) {
+    noteOnOrOff.pitch += this._semitones
+    return super.onNote(noteOnOrOff)
+  }
+}
+
+/* Deploy the plugin and trace details of the linked configuration to console */
+PitchModifier.deploy()
+  .forEach(Trace)
+
+</code></pre>
+<h3>Using The Beta</h3>
+<p>Create a Scripter preset template:</p>
+<ul>
+<li>Add a Scripter MIDI-FX plugin to an instrument strip</li>
+<li>Press <code>Open Script in Editor</code> to open <code>Code Editor</code></li>
+<li>Paste the contents of <a href="https://github.com/objectkit/scriptex/releases/latest">com.objectkit.scriptex-global.js</a> into <code>Code Editor</code></li>
+<li>Save the new preset as &quot;Scriptex 1.0.0-b3&quot;</li>
+</ul>
+<h3>Compatibility</h3>
+<ul>
+<li>Logic Pro X 10.4.5+ (?)</li>
+<li>MainStage (?)</li>
+</ul></article>
+    </section>
+
+
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.5</a> on Sun Sep 13 2020 16:48:59 GMT+0100 (Irish Standard Time) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
