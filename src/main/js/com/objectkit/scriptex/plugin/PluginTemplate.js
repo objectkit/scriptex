@@ -9,12 +9,12 @@ const finalise = (target, key, val) =>
  * @class
  * @classdesc
  *
- * PluginTemplate is an strongly general purpose implementation suitable for
+ * PluginTemplate is a strongly general purpose implementation suitable for
  * prototyping lightweight MIDI applications.
  *
  * @example
  *   class Demonstrator extends PluginTemplate {
- *     // define Scipter.NeedsTimingInfo
+ *     // define Scripter.NeedsTimingInfo
  *     get needsTiming () {
  *        return true
  *     }
@@ -62,7 +62,7 @@ const finalise = (target, key, val) =>
  * @see [Plugin]{@link Plugin}
  * @see [Scriptex]{@link Scriptex}
  * @see [Scripter]{@link Scripter}
- * @see [onMIdi]{@link PluginTemplate#onMidi}
+ * @see [onMidi]{@link PluginTemplate#onMidi}
  * @see [onParam]{@link PluginTemplate#onParam}
  * @see [midi]{@link PluginTemplate#midi}
  * @see [deploy]{@link Plugin.deploy}
