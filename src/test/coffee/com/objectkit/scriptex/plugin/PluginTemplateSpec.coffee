@@ -123,7 +123,7 @@ describe "PluginTemplate", ->
         expect(plugin.onInit).not.called
         plugin.engine = mockEngine
         expect(plugin.onInit).calledOnce
-        
+
         return
 
       return
@@ -235,6 +235,71 @@ describe "PluginTemplate", ->
     return
 
   context "#onMidi(event):number", ->
+
+    describe "Given a NoteOn instance", ->
+      specify "Then onNoteOn is invoked", ->
+        midiEvent = new NoteOn()
+        fixture = new PluginTemplate()
+        fixture.onMidi(midiEvent)
+        expect(fixture.onNoteOn).calledOnce
+
+    describe "Given a NoteOff instance", ->
+      specify "Then onNoteOff is invoked", ->
+        midiEvent = new NoteOff()
+        fixture = new PluginTemplate()
+        fixture.onMidi(midiEvent)
+        expect(fixture.onNoteOff).calledOnce
+
+    describe "Given a ControlChange instance", ->
+      specify "Then onControlChange is invoked", ->
+        midiEvent = new ControlChange()
+        fixture = new PluginTemplate()
+        fixture.onMidi(midiEvent)
+        expect(fixture.onControlChange).calledOnce
+
+    describe "Given a ProgramChange instance", ->
+      specify "Then onProgramChange is invoked", ->
+        midiEvent = new ProgramChange()
+        fixture = new PluginTemplate()
+        fixture.onMidi(midiEvent)
+        expect(fixture.onProgramChange).calledOnce
+
+    describe "Given a ChannelPressure instance", ->
+      specify "Then onChannelPressure is invoked", ->
+        midiEvent = new ChannelPressure()
+        fixture = new PluginTemplate()
+        fixture.onMidi(midiEvent)
+        expect(fixture.onChannelPressure).calledOnce
+
+    describe "Given a PolyPressure instance", ->
+      specify "Then onPolyPressure is invoked", ->
+        midiEvent = new PolyPressure()
+        fixture = new PluginTemplate()
+        fixture.onMidi(midiEvent)
+        expect(fixture.onPolyPressure).calledOnce
+
+    describe "Given a PitchBend instance", ->
+      specify "Then onPitchBend is invoked", ->
+        midiEvent = new PitchBend()
+        fixture = new PluginTemplate()
+        fixture.onMidi(midiEvent)
+        expect(fixture.onPitchBend).calledOnce
+
+    describe "Given a TargetEvent instance", ->
+      specify "Then onTargetEvent is invoked", ->
+        midiEvent = new TargetEvent()
+        fixture = new PluginTemplate()
+        fixture.onMidi(midiEvent)
+        expect(fixture.onTargetEvent).calledOnce
+
+    describe "Given a Event instance", ->
+      specify "Then onEvent is invoked", ->
+        midiEvent = new Event()
+        fixture = new PluginTemplate()
+        fixture.onMidi(midiEvent)
+        expect(fixture.onEvent).calledOnce
+
+
     describe "Given any midi event", ->
       specify "Then #sendMidi is invoked", ->
         plugin = new PluginTemplate()

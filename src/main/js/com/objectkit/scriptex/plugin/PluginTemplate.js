@@ -1,4 +1,5 @@
 import Plugin from "com/objectkit/scriptex/plugin/Plugin"
+import EventNames from "com/objectkit/scriptex/util/midi/EventNames"
 
 const finalise = (target, key, val) =>
   Reflect.defineProperty(target, key, { value: val, configurable: false, enumerable: true })
@@ -104,10 +105,22 @@ class PluginTemplate extends Plugin {
   }
 
   /**
+   * [eventNames description]
+   * @see [EventNames]{@link EventNames}
+   * @type {EventNames}
+   */
+  get eventNames () {
+    finalise(this, `eventNames`, new EventNames)
+    return this.eventNames
+  }
+
+  /**
+   * @todo rename to initPlugin
+   * @todo move impl to Plugin class
    * A JIT convenience method to initialise the plugin prior to Scripter integration.
    *
    * @example
-   *  class InitiPlugin extends PluginTemplate {
+   *  class InitPlugin extends PluginTemplate {
    *    onInit() {
    *      this.needsTiming = true
    *      this.needsDefaults = false
@@ -191,19 +204,22 @@ class PluginTemplate extends Plugin {
    * @see [onControlChange]{@link PluginTemplate#onControlChange}
    * @see [onPitchBend]{@link PluginTemplate#onPitchBend}
    * @see [onTargetEvent]{@link PluginTemplate#onTargetEvent}
+   * @see {@link PluginTemplate#eventNames}
    */
    delegateMidi (midi) {
-     switch (midi.status) {
-       case  80: return this.onTargetEvent(midi)
-       case 144: return this.onNoteOn(midi)
-       case 128: return this.onNoteOff(midi)
-       case 160: return this.onPolyPressure(midi)
-       case 176: return this.onControlChange(midi)
-       case 192: return this.onProgramChange(midi)
-       case 208: return this.onChannelPressure(midi)
-       case 224: return this.onPitchBend(midi)
-       default: return this.onEvent(midi)
-     }
+     // switch (midi.status) {
+     //   case  80: return this.onTargetEvent(midi)
+     //   case 144: return this.onNoteOn(midi)
+     //   case 128: return this.onNoteOff(midi)
+     //   case 160: return this.onPolyPressure(midi)
+     //   case 176: return this.onControlChange(midi)
+     //   case 192: return this.onProgramChange(midi)
+     //   case 208: return this.onChannelPressure(midi)
+     //   case 224: return this.onPitchBend(midi)
+     //   default: return this.onEvent(midi)
+     // }
+     let delegateKey = "on" + this.eventNames.get(midi.status)
+     return this[delegateKey](midi)
    }
 
   /**
