@@ -11,7 +11,7 @@
   PitchBend
 } = require(SCRIPTEX_TEST)
 
-describe.only "GenericPlugin", ->
+describe "GenericPlugin", ->
 
   Help =
 
