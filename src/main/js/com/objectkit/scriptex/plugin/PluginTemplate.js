@@ -193,7 +193,6 @@ class PluginTemplate extends Plugin {
   /**
    * Delegate a midi event to its dedicated method handler.
    *
-   *
    * @param  {Event} midi Any supported Scripter midi event.
    * @return {number} The beatPos returned by {@link PluginTemplate#sendMidi}
    * @see [onNoteOn]{@link PluginTemplate#onNoteOn}
@@ -207,17 +206,6 @@ class PluginTemplate extends Plugin {
    * @see {@link PluginTemplate#eventNames}
    */
    delegateMidi (midi) {
-     // switch (midi.status) {
-     //   case  80: return this.onTargetEvent(midi)
-     //   case 144: return this.onNoteOn(midi)
-     //   case 128: return this.onNoteOff(midi)
-     //   case 160: return this.onPolyPressure(midi)
-     //   case 176: return this.onControlChange(midi)
-     //   case 192: return this.onProgramChange(midi)
-     //   case 208: return this.onChannelPressure(midi)
-     //   case 224: return this.onPitchBend(midi)
-     //   default: return this.onEvent(midi)
-     // }
      let delegateKey = "on" + this.eventNames.get(midi.status)
      return this[delegateKey](midi)
    }

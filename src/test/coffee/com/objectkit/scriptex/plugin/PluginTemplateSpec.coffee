@@ -243,12 +243,38 @@ describe "PluginTemplate", ->
         fixture.onMidi(midiEvent)
         expect(fixture.onNoteOn).calledOnce
 
+      specify "Then onNote is invoked", ->
+        midiEvent = new NoteOn()
+        fixture = new PluginTemplate()
+        fixture.onMidi(midiEvent)
+        expect(fixture.onNote).calledOnce
+
     describe "Given a NoteOff instance", ->
       specify "Then onNoteOff is invoked", ->
         midiEvent = new NoteOff()
         fixture = new PluginTemplate()
         fixture.onMidi(midiEvent)
         expect(fixture.onNoteOff).calledOnce
+
+      specify "Then onNote is invoked", ->
+        midiEvent = new NoteOn()
+        fixture = new PluginTemplate()
+        fixture.onMidi(midiEvent)
+        expect(fixture.onNote).calledOnce
+
+    describe "Given onNote is invoked", ->
+      specify "Then sendMidi is invoked", ->
+        noteOn = new NoteOn()
+        noteOff = new NoteOff()
+        fixture = new PluginTemplate()
+
+        fixture.onMidi(noteOn)
+        expect(fixture.onNote).calledOnce
+        expect(fixture.sendMidi).calledOnce
+
+        fixture.onMidi(noteOff)
+        expect(fixture.onNote).calledTwice
+        expect(fixture.sendMidi).calledTwice       
 
     describe "Given a ControlChange instance", ->
       specify "Then onControlChange is invoked", ->
