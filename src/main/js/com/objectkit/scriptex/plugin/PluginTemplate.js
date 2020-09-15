@@ -105,13 +105,52 @@ class PluginTemplate extends Plugin {
   }
 
   /**
-   * [eventNames description]
+   * A data map that allows you to use a midi status number as a key
+   * to lookup the corresponding midi events name.
+   *
    * @see [EventNames]{@link EventNames}
    * @type {EventNames}
    */
   get eventNames () {
     finalise(this, `eventNames`, new EventNames)
     return this.eventNames
+  }
+
+  /**
+   * The viewModel object on which to store parameter value changes.
+   * The default implementation uses the plugin instance itself
+   * as the view model. This in turn provides the advantage of
+   * using property interceptors to trigger actions
+   *
+   * Subclasses can override this to put custom viewModel objects in place.
+   * @example
+   * class MidiStop extends PluginTemplate {
+   *   get params () {
+   *     return [
+   *       {
+   *         ID: "stopMidi"
+   *       , type: "momentary"
+   *       , name: "Stop MIDI"
+   *       }
+   *     ]
+   *   }
+   *
+   *   // when the _Stop MIDI_ button is pressed
+   *   // onParam updates the viewModel
+   *   // as the viewModel is the plugin
+   *   // then implementing a setter with the same ID
+   *   // suffices as the implementation of a
+   *   // property interceptor
+   *   set stopMidi (val) {
+   *     this.midi.allNotesOff()
+   *   }
+   * }
+   *
+   * @type {Object}
+   * @see [updateViewModel]{@link PluginTemplate#updateViewModel}
+   */
+  get viewModel () {
+    return this
   }
 
   /**
@@ -136,50 +175,25 @@ class PluginTemplate extends Plugin {
   initPlugin () {}
 
   /**
-   * Manage Scripter.ParameterChanged events by treating the plugin instance as a
-   * virtual "ViewModel".
+   * Manage Scripter.ParameterChanged events by updating the plugins viewModel
    *
    * Given that ui parameter data has changed
    *   When the ui parameter has an ID
    *     Then plugin[ID] is assigned that ui parameter data
    *
-   * This provides the interesting opportunity to intercept changes to UI by defining setters
-   * @example
-   *   class MidiStop extends PluginTemplate {
-   *     get params () {
-   *       return [
-   *       , {
-   *           ID: "doStopMidiNotes"
-   *         , type: "momentary"
-   *         , name: "MIDI Stop"
-   *         }
-   *       ]
-   *     }
-   *
-   *     // intercept the button press
-   *     set doStopMidiNotes (pressed) {
-   *       this.midi.allNotesStop()
-   *     }
-   *   }
-   *
-   * @param  {number} key - a parameter index
-   * @param  {number} val - a parameter value
-   * @return {number}
+   * @param  {number} key The index of a parameter
+   * @param  {number} val The reported data of a parameter
+   * @return {void}
    * @see [ParameterChanged]{@link Scripter}
+   * @see [updateViewModel]{@link PluginTemplate#updateViewModel}
    */
   onParam (key, val) {
-    /**
-     * @todo diff implementation
-     * @example
-     *   key = this.params[key].ID
-     *    && this[key] !== val
-     *      && this[key] = val
-     */
-    return this[this.params[key].ID] = val
+    this.updateViewModel(this.params[key].ID, val)
   }
 
   /**
-   * Manage Scripter.HandleMIDI events.
+   * Manage Scripter.HandleMIDI events by delegating events to dedicated
+   * midi handling methods.
    *
    * @param  {Event} midi
    * @return {number}
@@ -203,10 +217,37 @@ class PluginTemplate extends Plugin {
    * @see [onPitchBend]{@link PluginTemplate#onPitchBend}
    * @see [onTargetEvent]{@link PluginTemplate#onTargetEvent}
    * @see {@link PluginTemplate#eventNames}
+   * @see [getEventName]{@link PluginTemplate#getEventName}
    */
    delegateMidi (midi) {
-     let delegateKey = "on" + this.eventNames.get(midi.status)
+     let delegateKey = "on" + this.getEventName(midi)
      return this[delegateKey](midi)
+   }
+
+   /**
+    * Get a midi events name.
+    * @param  {Event} event A Scripter MIDI event.
+    * @return {string}      The events name
+    * @throws "EventNameNotFound"
+    * @see [eventNames]{@link PluginTemplate#eventNames}
+    */
+   getEventName (event) {
+     return this.eventNames.get(event.status)
+   }
+
+   /**
+    * Update the PluginTemplates viewModel
+    * @param  {string} key A parameter ID
+    * @param  {number} val Parameter data
+    * @return {boolean}    An indication of whether the nodel was updated or not
+    * @see [viewModel]{@link PluginTemplate#viewModel}
+    */
+   updateViewModel (key, val) {
+     let didUpdate = (null != key)
+     if (didUpdate) {
+       this.viewModel[key] = val
+     }
+     return didUpdate
    }
 
   /**
