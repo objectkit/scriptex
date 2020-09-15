@@ -356,7 +356,7 @@ class PluginTemplate extends Plugin {
      /* When beatPos is intentionally set to a string... */
      if (`string` === typeof beatPos) {
        /* Then cast to number and treat it as a millisecond delay */
-       midi.sendAfterMilliseconds(beatPos = +beatPos)
+       midi.sendAfterMilliseconds(beatPos = Math.abs(beatPos))
      }
      /* When beatPos is intentionally set to a negative number */
      else if (0 > beatPos) {
