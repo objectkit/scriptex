@@ -73,14 +73,14 @@ class PluginTemplate extends Plugin {
    * A plugin reference to the Scripter object as set during {@link Scriptex#deploy}.
    *
    * @type {Object}
-   * @see [onInit]{@link PluginTemplate#onInit}
+   * @see [initPlugin]{@link PluginTemplate#initPlugin}
    * @see [Scripter]{@link Scripter}
    * @see [Plugin.deploy]{@link Plugin.deploy}
    * @throws {"EngineAccessFault"}
    */
   set engine (engine) {
     finalise(this, `engine`, engine)
-    this.onInit()
+    this.initPlugin()
   }
 
   get engine () {
@@ -115,13 +115,11 @@ class PluginTemplate extends Plugin {
   }
 
   /**
-   * @todo rename to initPlugin
-   * @todo move impl to Plugin class
-   * A JIT convenience method to initialise the plugin prior to Scripter integration.
+   * A JIT convenience method to initialise the plugin prior to deployment.
    *
    * @example
-   *  class InitPlugin extends PluginTemplate {
-   *    onInit() {
+   *  class BespokePlugin extends PluginTemplate {
+   *    initPlugin() {
    *      this.needsTiming = true
    *      this.needsDefaults = false
    *      this.params = [
@@ -133,8 +131,9 @@ class PluginTemplate extends Plugin {
    * @abstract
    * @return {void}
    * @see [engine]{@link PluginTemplate#engine}
+   * @see [Plugin.deploy]{@link Plugin.deploy}
    */
-  onInit () {}
+  initPlugin () {}
 
   /**
    * Manage Scripter.ParameterChanged events by treating the plugin instance as a

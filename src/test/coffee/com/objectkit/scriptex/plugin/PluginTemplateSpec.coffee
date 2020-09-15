@@ -110,19 +110,19 @@ describe "PluginTemplate", ->
 
       specify "Then #engine is redefined as a data property ", ->
         plugin = new PluginTemplate()
-        expect(plugin.onInit).not.called
+        expect(plugin.initPlugin).not.called
         expect(plugin).not.to.have.ownPropertyDescriptor("engine", expectedDescriptor)
         plugin.engine = mockEngine
-        expect(plugin.onInit).calledOnce
+        expect(plugin.initPlugin).calledOnce
         expect(plugin).to.have.ownPropertyDescriptor("engine", expectedDescriptor)
 
         return
 
-      specify "And #onInit is self-invoked", ->
+      specify "And #initPlugin is self-invoked", ->
         plugin = new PluginTemplate()
-        expect(plugin.onInit).not.called
+        expect(plugin.initPlugin).not.called
         plugin.engine = mockEngine
-        expect(plugin.onInit).calledOnce
+        expect(plugin.initPlugin).calledOnce
 
         return
 
