@@ -216,7 +216,6 @@ class PluginTemplate extends Plugin {
    * @see [onControlChange]{@link PluginTemplate#onControlChange}
    * @see [onPitchBend]{@link PluginTemplate#onPitchBend}
    * @see [onTargetEvent]{@link PluginTemplate#onTargetEvent}
-   * @see {@link PluginTemplate#eventNames}
    * @see [getEventName]{@link PluginTemplate#getEventName}
    */
    delegateMidi (midi) {
