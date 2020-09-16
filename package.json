@@ -1,8 +1,8 @@
 {
   "name": "com.objectkit.scriptex",
-  "version": "1.0.0-rc1",
+  "version": "1.0.0-rc3",
   "description": "A metaplugin for deploying custom Scripter MIDI-FX processors",
-  "exports": "out/com.objectkit.scriptex/1.0.0-b3/com.objectkit.scriptex.js",
+  "exports": "out/com.objectkit.scriptex/1.0.0-rc3/com.objectkit.scriptex.js",
   "scripts": {
     "test": "npm run test/lint && npm run test/specs",
     "test/watch": "npm run test/specs -- -w --watch-files src/**/*.*",
