@@ -4,29 +4,29 @@ import Scriptex from "com/objectkit/scriptex/Scriptex"
 class Plugin {
 
   /**
-   * The Scripter/Scriptex API that the Plugin will conform to.
-   * The default API is Scriptex.API.
+   * The Scripter/Scriptex interface that the Plugin will conform to.
+   * The default interface is Scriptex.INTERFACE.
    * Subclasses can return a list of their own bindings for custom integrations
    * @example
    *  class CustomPlugin extends Plugin {
    *    // @override
-   *    static get API () {
+   *    static get INTERFACE () {
    *      return [
-   *        ...super.API
+   *        ...super.INTERFACE
    *      , [ `ParameterChanged`, `updateModel` ]
    *      , [ `PluginParameters`, `views`]
    *      , [ `ResetParameterDefaults`, `needsViewResets`]
    *      ]
    *    }
    *
-   *    // @alias Scripter.PluginParameters
+   *    // @lends Scripter.PluginParameters
    *    get views () {
    *      return [
    *        // parameter definintions
    *      ]
    *    }
    *
-   *    // @alias Scripter.ResetParameterDefaults
+   *    // @lends Scripter.ResetParameterDefaults
    *    get needsViewResets () {
    *      return true
    *    }
@@ -37,19 +37,19 @@ class Plugin {
    *    }
    *
    *    // @alias Scripter.HandleMIDI
-   *    // as defined in Scriptex.API, available via super.API in example
+   *    // as defined in Scriptex.INTERFACE, available via super.INTERFACE in example
    *    onMidi (midi) {
    *      midi.send()
    *    }
    *  }
    *
    *  Trace(CustomPlugin.deploy()) // [ParameterChanged, ResetParameterDefaults, PluginParameters]
-   * 
+   *
    * @type {Map<string, string>}
-   * @see [Scriptex.API]{@link Scriptex.API}
+   * @see [Scriptex.INTERFACE]{@link Scriptex.INTERFACE}
    */
-  static get API () {
-    return Scriptex.API
+  static get INTERFACE () {
+    return Scriptex.INTERFACE
   }
 
   /**
@@ -65,9 +65,10 @@ class Plugin {
    */
   static deploy (engine=Scriptex.ENGINE, configurable=false, ...ctorArgs) {
     let deployee = new this(...ctorArgs)
-    let deployer = new Scriptex(engine, this.API, configurable)
+    let deployer = new Scriptex(engine, this.INTERFACE, configurable)
     return deployer.deploy(deployee)
   }
+
 }
 
 export default Plugin

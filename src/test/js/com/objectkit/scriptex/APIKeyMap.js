@@ -2,7 +2,7 @@ import Scriptex from "com/objectkit/scriptex/Scriptex"
 
 class APIKeyMap extends Map {
   constructor () {
-    super(Scriptex.API)
+    super(Scriptex.INTERFACE)
   }
 
   getScripterKeys () {

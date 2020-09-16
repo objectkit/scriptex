@@ -2,12 +2,11 @@ import Plugin from "com/objectkit/scriptex/plugin/Plugin"
 
 /**
  * @classdesc
- * The GenericPlugin class is a lightweight implementation designed for experimentation and quick
+ * The GenericPlugin class is a lightweight implementation designed for quick experimentation and
  * protoyping of bespoke processors.
  *
  * It has been designed to solve common view and midi management problems with the native Scripter
- * API while keepin file size low and performance relatively high. Dedicated classes that
- * utilise the same solutions with tighter integration are recommended for more performant plugins.
+ * API while keepin file size low and performance relatively high. .
  *
  * The needsTiming, needsResets and params properties have been intentionally left out of the
  * base implementation and you are encouraged to add them to subclasses only as needed.
