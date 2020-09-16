@@ -2,16 +2,77 @@ import Plugin from "com/objectkit/scriptex/plugin/Plugin"
 
 /**
  * @classdesc
- * The GenericPlugin class is a minimal implementation useful for quick debelopment and testing.
- * The implementation of onParam essentialy treats the Plugin as a "ParamModelView", while
- * the implementation of onMidi delegates midi events to dedicated handlers.
+ * The GenericPlugin class is a lightweight implementation designed for experimentation and quick
+ * protoyping of bespoke processors.
+ *
+ * It has been designed to solve common view and midi management problems with the native Scripter
+ * API while keepin file size low and performance relatively high. Dedicated classes that
+ * utilise the same solutions with tighter integration are recommended for more performant plugins.
+ *
+ * The needsTiming, needsResets and params properties have been intentionally left out of the
+ * base implementation and you are encouraged to add them to subclasses only as needed.
+ *
+ * @example
+ * class BespokePlugin extends GenericPlugin {
+ *
+ *   // @lends Scripter.NeedsTimingInfo
+ *   get needsTiming () {
+ *     return true
+ *   }
+ *
+ *   // @lends Scripter.ResetParameterDefaults
+ *   get needsDefaults () {
+ *     return false
+ *   }
+ *
+ *   // @lends Scripter.PluginParameters
+ *   get params () {
+ *     return [{ type: "text", name: this.constructor.name }]
+ *   }
+ *
+ *   // intercept midi events and scripter events as needed...
+ * }
+ *
+ * // Instantiate and deploy the plugin, printing the integration keys to console
+ * BespokePlugin.deploy()
+ *  .forEach(Trace)
  *
  * @extends Plugin
+ * @see [onParam]{@link GenericPlugin#onParam}
+ * @see [onMidi]{@link GenericPlugin#onMidi}
+ * @see [Plugin.deploy]{@link Plugin.deploy}
  */
 class GenericPlugin extends Plugin {
 
   /**
-   * Manage calls to Scripter.ParameterChanged
+   * Manage calls to Scripter.ParameterChanged.
+   *
+   * This implementation essentially treats the plugin itself as a "ParamViewModel".
+   *
+   * Given onParam is called with a parameter index and data value
+   *   When the param as a property named ID
+   *     Then ID is treated as a property key of the plugin
+   *     And the data value is assigned to the plugin.
+   *
+   * This enables the use of properties to store parameter state and also provides the convenience
+   * of property interceptors for advanced use cases
+   *
+   * @example
+   * class MidiStop extends GenericPlugin {
+   *   get params () {
+   *     return [
+   *       {
+   *         ID: "midiStop"
+   *       , type: "momentary"
+   *       , name: "MIDI Stop"
+   *       }
+   *     ]
+   *   }
+   *
+   *   set midiStop (any) {
+   *     this.engine.MIDI.allNotesStop()
+   *   }
+   * }
    *
    * @param  {number} key The index of a param
    * @param  {number} val The new value of the param
@@ -22,7 +83,31 @@ class GenericPlugin extends Plugin {
   }
 
   /**
-   * Manage calls to Scripter.HandleMIDI
+   * Manage calls to Scripter.HandleMIDI.
+   *
+   * This implementation filters out midi events to appropriate hanlders to facilitate
+   * quick interception of key events.
+   *
+   * @example
+   * class Transposer {
+   *   get params () {
+   *     return [
+   *       {
+   *         ID: "semitones"
+   *       , name: "Semitones"
+   *       , type: "lin"
+   *       , defaultValue: 0
+   *       , minValue: -12
+   *       , maxValue: 12
+   *       }
+   *     ]
+   *   }
+   *
+   *   onNote (noteOnOrOff) {
+   *     noteOnOrOff.pitch += this.semitones
+   *     return super.onNote(noteOnOrOff)
+   *   }
+   * }
    *
    * @param  {Event} midi A Scripter MIDI event
    * @return {number}     The beatPos that the midi event was sent at
