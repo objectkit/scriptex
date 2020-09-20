@@ -78,6 +78,7 @@ class GenericPlugin extends Plugin {
    * @return {void}
    */
   onParam (key, val) {
+    /** @todo support MENU key to return selected items as opposed to selected index */
     (key = this.params[key].ID) && (this[key] = val)
   }
 
@@ -291,15 +292,25 @@ class GenericPlugin extends Plugin {
    */
   sendMidi (event) {
     let beatPos = event.beatPos || 0
-
-    /** @todo send needs support for cases when NeedsTimingInfo is false */
-    /** @todo sendAtBeat should be priority */
-    0 > beatPos
-      ? event.sendAfterBeats(beatPos *= -1)
-      : !Number.isFinite(beatPos)
-        ? event.sendAfterMilliseconds(beatPos = +Math.abs(beatPos))
-        : event.sendAtBeat(beatPos)
-
+    /* Given beatPos is empty */
+    if (0 === beatPos) {
+      /* Then invoke send() and store beatPos as 0 for return value */
+      event.send()
+    }
+    /* Given beatPos is less than zero */
+    else if (0 > beatPos) {
+      /* When beatPos is of type number */
+      beatPos === +beatPos
+        /* Then invoke sendAfterBeats */
+        ? event.sendAfterBeats(beatPos *= -1)
+        /* When beatPos is of assumed type string, then invoke sendAfterMilliseconds */
+        : event.sendAfterMilliseconds(beatPos = +Math.abs(beatPos))
+    }
+    /* Given beatPos is a positive number */
+    else {
+      /* Then invoke sendAtBeat */
+      event.sendAtBeat(beatPos)
+    }
     return beatPos
   }
 }

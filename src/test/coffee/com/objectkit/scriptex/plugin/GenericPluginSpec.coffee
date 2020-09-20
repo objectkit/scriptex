@@ -160,36 +160,109 @@ describe "GenericPlugin", ->
   context "sendMidi(event:Event):number", ->
 
     describe "Given event.beatPos is empty", ->
-      specify "Then event.sendAtBeat(0) is invoked", ->
+      specify "Then event.send() is invoked", ->
+        empties = [ null, undefined, 0, '' ]
+        fixture = new GenericPlugin()
+
         event = new Event()
         expect(event).not.property("beatPos")
-        fixture = new GenericPlugin()
+        expect(event.send).not.called
+
         beatPos = fixture.sendMidi(event)
+
         expect(beatPos).eql(0)
-        expect(Event::sendAtBeat).calledWith(beatPos)
+        expect(event.send).calledOnce
+        expect(event.sendAtBeat).not.called
+        expect(event.sendAfterBeats).not.called
+        expect(event.sendAfterMilliseconds).not.called
+        return
 
     describe "Given event.beatPos is a negative number", ->
       specify "Then beatPos is cast to positive number", ->
       specify "Then event.sendAfterBeats is invoked", ->
-        mockBeatPos = -1
-        mockEvent = new Event()
-        mockEvent.beatPos = mockBeatPos
+
+        event = new Event()
+        event.beatPos = -1
+
         fixture = new GenericPlugin()
-        beatPos = fixture.sendMidi(mockEvent)
-        expect(beatPos).to.be.a("number").greaterThan(-1)
-        expect(Event::sendAfterBeats).calledWith(beatPos)
+        beatPos = fixture.sendMidi(event)
+
+        expect(beatPos).eql(1)
+        expect(event.sendAfterBeats).calledOnce
+        expect(event.sendAfterBeats).calledWith(beatPos)
+        expect(event.sendAfterMilliseconds).not.called
+        expect(event.sendAtBeat).not.called
+        expect(event.send).not.called
+
+        return
+
+    describe "Given event.beatPos is a positive number", ->
+      specify "Then event.sendAtBeat is invoked", ->
+        mockBeatPos = 1
+
+        event = new Event
+        event.beatPos = mockBeatPos
+
+        fixture = new GenericPlugin
+        beatPos = fixture.sendMidi(event)
+
+        expect(beatPos).eql(1)
+        expect(event.sendAtBeat).calledOnce
+        expect(event.sendAtBeat).calledWith(beatPos)
+        expect(event.send).not.called
+        expect(event.sendAfterMilliseconds).not.called
+        expect(event.sendAfterBeats).not.called
+
+        return
 
     describe "Given event.beatPos is a string or non-number", ->
       specify "Then beatPos is cast to positive number", ->
       specify "Then event.sendAfterMilliseconds(beatPos) is invoked", ->
-        mockBeatPos = "5000"
-        mockEvent = new Event()
-        mockEvent.beatPos = mockBeatPos
-        fixture = new GenericPlugin()
-        beatPos = fixture.sendMidi(mockEvent)
+
+        event = new Event()
+        event.beatPos = "-1000"
+        expect(event.beatPos).to.be.a("string")
+        fixture = new GenericPlugin
+        beatPos = fixture.sendMidi(event)
         expect(beatPos).to.be.a("number")
-        expect(Event::sendAfterMilliseconds).calledWith(beatPos)
+        expect(beatPos).eql(1000)
+        expect(event.sendAfterMilliseconds).calledOnce
+        expect(event.sendAfterMilliseconds).calledWith(1000)
+        expect(event.sendAfterBeats).not.called
+        expect(event.sendAtBeat).not.called
+        expect(event.send).not.called
+
         return
+
+    describe "Given beatPos is a string or a number", ->
+      specify "Then discernment OK between sendAfterBeats and sendAfterMilliseconds", ->
+        numVal = -200
+        strVal = "#{numVal}"
+        expVal = 200
+
+        plugin = new GenericPlugin
+        event = new Event()
+
+        event.beatPos = numVal
+        beatPos = plugin.sendMidi(event)
+        expect(beatPos).eql(expVal)
+        expect(event.sendAfterBeats).calledOnce
+        expect(event.sendAfterMilliseconds).not.called
+
+        Event::sendAfterBeats.resetHistory()
+        Event::sendAfterMilliseconds.resetHistory()
+
+        event.beatPos = strVal
+        beatPos = plugin.sendMidi(event)
+        expect(beatPos).eql(expVal)
+        expect(event.sendAfterBeats).not.called
+        expect(event.sendAfterMilliseconds).calledOnce
+
+        return
+
+      return
+
+    return
 
   context "getEventName(event:Event):string", ->
 
