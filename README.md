@@ -1,61 +1,77 @@
 # Scriptex
-> A micro library for Scripter MIDI-FX plugins.
+**PRE-RELEASE**
+> A microlib and metaplugin for the Scripter MIDI-FX Plugin.
 
-### Example
+## Quick Start
 ```js
-/* context: Scripter Code Editor with minified scriptex library here */
+/* Quickly prototype MIDI processors with bespoke classes */
+class Microtone extends GenericPlugin {
 
-class PitchModifier extends PluginTemplate {
-
-  /* Scripter.NeedsTimingInfo */
+  /** @lends Scripter.NeedsTimingInfo */
   get needsTiming () {
+    return false
+  }
+
+  /** @lends Scripter.ResetParameterDefaults */
+  get needsDefaults () {
     return true
   }
 
-  /* Scripter.PluginParameters */
+  /** @lends Scripter.PluginParameters */
   get params () {
     return [
       {
-        ID: `semitones`
+        name: `< M i c r o t o n e >`
+      , type: `text`
+      }
+    , {
+        ID: `microtone`
+      , name: ` `
       , type: `lin`
-      , name: `Semitones`
-      , minValue: -12
-      , maxValue: 12
+      , minValue: -8192
+      , maxValue: 8191
       , defaultValue: 0
-      , numberOfSteps: 24
+      , numberOfSteps: 16383
       }
     ]
   }
 
-  /* intercept changes to the "Semitones" parameter */
-  set semitones (semitones) {
-    if (semitones !== this._semitones) {
-      this.midi.allNotesOff()
-      this._semitones = semitones
-    }
+  /* intercept changes to the "microtone" parameter */
+  set microtone (val) {
+    this.applyMicrotone(val)
   }
 
-  /* exclusively manage NoteOn and NoteOff events */
-  /** @override */
-  onNote (noteOnOrOff) {
-    noteOnOrOff.pitch += this._semitones
-    return super.onNote(noteOnOrOff)
+  /* send a pitch bend each time the slider moves */
+  applyMicrotone (val) {
+    const pitchBend = new PitchBend()
+    pitchBend.value = val
+    this.sendMidi(pitchBend)  
   }
 }
 
-/* Deploy the plugin and trace details of the linked configuration to console */
-PitchModifier.deploy()
-  .forEach(Trace)
+/* Deploy the plugin and trace its linked Scripter integration keys to console */
+Microtone.deploy().forEach(Trace)
+```
+[Visit the docs](objectkit.github.io/scriptex)
+## Requirements
+- Logic Pro X 10.5.0+ _or_ Mainstage 3.4+
+- macOS Catalina
 
+## Getting Started
+
+### Edit-In-Place Workflow
+- Download the [latest release](https://github.com/objectkit/scriptex/releases/latest)
+- Create a new Logic Pro X or Mainstage project
+- Add Scripter as a MIDI plugin a new instrument strip
+- Press `Open Script in Editor`
+- Add the compressed content of the Scriptex library (2kb) to `Code Editor`
+- Save that as a template preset named "Scriptex-1.0.0-rc4"
+
+### IDE Workflow
+[Available with 1.0.0 release]
+```bash
+npm i @objectkit/scriptex
 ```
 
-### Using The Beta
-Create a Scripter preset template:
-- Add a Scripter MIDI-FX plugin to an instrument strip
-- Press `Open Script in Editor` to open `Code Editor`
-- Paste the contents of [com.objectkit.scriptex-global.js](https://github.com/objectkit/scriptex/releases/latest) into `Code Editor`
-- Save the new preset as "Scriptex 1.0.0-b3"
-
-### Compatibility
-- Logic Pro X 10.4.5+ (?)
-- MainStage (?)
+## License
+[Apache-2.0](https://opensource.org/licenses/Apache-2.0) © ObjectKit 2020
