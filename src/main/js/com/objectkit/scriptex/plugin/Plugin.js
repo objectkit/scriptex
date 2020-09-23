@@ -55,7 +55,7 @@ class Plugin {
   /**
    * Instantiate and integrate a new plugin with the Scripter environment.
    *
-   * @param  {Object}  [engine=Scripter]
+   * @param  {Object}  [system=Scripter]
    * @param  {Boolean} [configurable=false]
    * @param  {...*}  [ctorArgs=[]]
    *  Any arguments to pass to Plugin subclass constructors.
@@ -63,9 +63,9 @@ class Plugin {
    *  An enumeration of the Scripter integrations
    * @see [Scriptex]{@link Scriptex#deploy}
    */
-  static deploy (engine=Scriptex.SYSTEM, configurable=false, ...ctorArgs) {
+  static deploy (system=Scriptex.SYSTEM, configurable=false, ...ctorArgs) {
     let deployee = new this(...ctorArgs)
-    let deployer = new Scriptex(engine, this.API, configurable)
+    let deployer = new Scriptex(system, this.API, configurable)
     return deployer.deploy(deployee)
   }
 

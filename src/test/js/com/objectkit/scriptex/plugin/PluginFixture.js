@@ -61,12 +61,12 @@ export default class PluginFixture extends Plugin {
   }
 
   set midiPanic (pressed) {
-    this.engine.MIDI.allNotesOff()
+    this.system.MIDI.allNotesOff()
   }
 
   set minVelocity (val) {
     if (val > this._maxVelocity) {
-      this.engine.SetParameter("Minimum Velocity", this._maxVelocity - 1)
+      this.system.SetParameter("Minimum Velocity", this._maxVelocity - 1)
     }
     else {
       this._minVelocity = val
@@ -75,7 +75,7 @@ export default class PluginFixture extends Plugin {
 
   set maxVelocity (val) {
     if (val < this._minVelocity) {
-      this.engine.SetParameter("Maximum Velocity", this._minVelocity + 1)
+      this.system.SetParameter("Maximum Velocity", this._minVelocity + 1)
     }
     else {
       this._maxVelocity = val
@@ -96,10 +96,10 @@ export default class PluginFixture extends Plugin {
       midi.velocity = velocity
     }
 
-    this.engine.SendMIDIEventNow(midi)
+    this.system.SendMIDIEventNow(midi)
 
     if (this.loggingEnabled) {
-      this.engine.Trace(midi)
+      this.system.Trace(midi)
     }
   }
 
@@ -108,7 +108,7 @@ export default class PluginFixture extends Plugin {
   }
 
   onReset () {
-    this.engine.Trace("RESET")
+    this.system.Trace("RESET")
   }
 
   /*
@@ -118,13 +118,13 @@ export default class PluginFixture extends Plugin {
    */
   onIdle () {
     if (!(this.needsDefaults)){
-      this.engine.UpdatePluginParameters()
+      this.system.UpdatePluginParameters()
     }
   }
 
   onProcess () {
     if (this.needsTiming){
-      this.hostState = this.engine.GetTimingInfo()
+      this.hostState = this.system.GetTimingInfo()
     }
   }
 }

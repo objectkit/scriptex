@@ -42,18 +42,18 @@ describe "DelayLinePlugin", ->
       , lastArg:plugin
       } = Scriptex::deploy.lastCall
 
-      engine = plugin.engine
+      system = plugin.system
 
       # balance the test
       expect(api).instanceof(Array)
       expect(plugin).instanceof(Plugin)
-      expect(engine).instanceof(ScripterFixture)
+      expect(system).instanceof(ScripterFixture)
 
       # emulated system call at time of script evaluation, thus deployment
-      engine.UpdatePluginParameters()
+      system.UpdatePluginParameters()
 
       # return metadata as an object
-      return { api, plugin, engine }
+      return { api, plugin, system }
 
 
   beforeEach ->
@@ -68,23 +68,23 @@ describe "DelayLinePlugin", ->
     describe "When Scripter.Reset is triggered", ->
 
       it "Scripter.Reset hook is deployed", ->
-        { plugin, engine, api } = Help.newDelayLinePluginDeployment()
+        { plugin, system, api } = Help.newDelayLinePluginDeployment()
         expect(api).includes("Reset")
-        expect(engine).property("Reset").instanceof(Function)
+        expect(system).property("Reset").instanceof(Function)
         expect(plugin.doAutomaticUpdates).equal(1)
         # this needs to be 1 in order for the calculation to proceed
         expect(plugin.doUpdateDelayLines).equal(0)
         # demonstrate that Reset prepares the plugin for calculation
-        engine.Reset()
+        system.Reset()
         expect(plugin.doUpdateDelayLines).equal(true)
         # and only does calculation when ProcessMIDI is invoked
-        engine.ProcessMIDI()
+        system.ProcessMIDI()
 
         textBlock = Help.getScripterTraces().join("\n")
         # confirm it equals same for manual calculation
 
         calc = new DelayLineCalculator()
-        view = new DelayLineRenderer(engine)
+        view = new DelayLineRenderer(system)
         info = Help.getLastTimingInfo()
 
         result = calc.calculateDelayLines(info.tempo, info.meterNumerator, info.meterDenominator)
