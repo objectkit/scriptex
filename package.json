@@ -1,8 +1,8 @@
 {
   "name": "com.objectkit.scriptex",
-  "version": "1.0.0-rc3",
-  "description": "A metaplugin for deploying custom Scripter MIDI-FX processors",
-  "exports": "out/com.objectkit.scriptex/1.0.0-rc3/com.objectkit.scriptex.js",
+  "version": "1.0.0-rc4",
+  "description": "A microlib and metaplugin for the Scripter MIDI-FX Plugin.",
+  "exports": "out/com.objectkit.scriptex/1.0.0-rc4/com.objectkit.scriptex.js",
   "scripts": {
     "test": "npm run test/lint && npm run test/specs",
     "test/watch": "npm run test/specs -- -w --watch-files src/**/*.*",
@@ -14,7 +14,7 @@
     "build/clean": "rm -rf out",
     "postinstall": "npm run test"
   },
-  "author": "david@objectkit.com",
+  "author": "David Foley <david@objectkit.com>",
   "homepage": "https://objectkit.github.io/scriptex",
   "license": "Apache-2.0",
   "repository": {
