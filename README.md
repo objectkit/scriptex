@@ -52,7 +52,7 @@ class Microtone extends GenericPlugin {
 /* Deploy the plugin and trace its linked Scripter integration keys to console */
 Microtone.deploy().forEach(Trace)
 ```
-[Visit the docs](objectkit.github.io/scriptex)
+[Visit the docs](https://objectkit.github.io/scriptex)
 ## Requirements
 - Logic Pro X 10.5.0+ _or_ Mainstage 3.4+
 - macOS Catalina
