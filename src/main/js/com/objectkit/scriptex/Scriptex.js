@@ -37,7 +37,7 @@ class Scriptex {
    *
    * @type {Map<string, string>}
    */
-  static get INTERFACE() {
+  static get API() {
    return [
       [ `NeedsTimingInfo`, `needsTiming` ]
     , [ `ResetParameterDefaults`, `needsDefaults` ]
@@ -54,13 +54,13 @@ class Scriptex {
    * Create a new Scripter instance.
    *
    * @param {Object}  [engine=Scripter] The integration environment to use.
-   * @param {Map}  [iface=new.target.INTERFACE] The plugin integration INTERFACE to use.
+   * @param {Map}  [iface=new.target.API] The plugin integration API to use.
    * @param {Boolean} [configurable=false] Define integration properties as configurable or not.
-   * @see [Scriptex.INTERFACE]{@link Scriptex.INTERFACE}
+   * @see [Scriptex.API]{@link Scriptex.API}
    * @see [Scriptex.ENGINE]{@link Scriptex.ENGINE}
    * @see [Object.defineProperty]{@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty#Description}
    */
-  constructor (engine= new.target.ENGINE, iface = new.target.INTERFACE, configurable = false) {
+  constructor (engine= new.target.ENGINE, iface = new.target.API, configurable = false) {
     this._engine = engine
     this._interface = new Map([...iface])
     this._configurable = configurable
@@ -68,11 +68,11 @@ class Scriptex {
 
   /**
    * Deploy a plugin to the Scripter runtime, comparing its methods and proeprties to those of the
-   * Scriptex.INTERFACE and binding them to the Scripter API as appropriate.
+   * Scriptex.API and binding them to the Scripter API as appropriate.
    *
    * @param  {Object} plugin The plugin instance to deploy.
    * @return {Array<string>} An enumeration of the Scripter integration properties.
-   * @see [INTERFACE]{@link Scriptex.INTERFACE}
+   * @see [API]{@link Scriptex.API}
    */
   deploy(plugin) {
     /* the integration manifest that list all Scripter keys involved */

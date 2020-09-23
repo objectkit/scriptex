@@ -5,14 +5,14 @@ class Plugin {
 
   /**
    * The Scripter/Scriptex interface that the Plugin will conform to.
-   * The default interface is Scriptex.INTERFACE.
+   * The default interface is Scriptex.API.
    * Subclasses can return a list of their own bindings for custom integrations
    * @example
    *  class CustomPlugin extends Plugin {
    *    // @override
-   *    static get INTERFACE () {
+   *    static get API () {
    *      return [
-   *        ...super.INTERFACE
+   *        ...super.API
    *      , [ `ParameterChanged`, `updateModel` ]
    *      , [ `PluginParameters`, `views`]
    *      , [ `ResetParameterDefaults`, `needsViewResets`]
@@ -37,7 +37,7 @@ class Plugin {
    *    }
    *
    *    // @alias Scripter.HandleMIDI
-   *    // as defined in Scriptex.INTERFACE, available via super.INTERFACE in example
+   *    // as defined in Scriptex.API, available via super.API in example
    *    onMidi (midi) {
    *      midi.send()
    *    }
@@ -46,10 +46,10 @@ class Plugin {
    *  Trace(CustomPlugin.deploy()) // [ParameterChanged, ResetParameterDefaults, PluginParameters]
    *
    * @type {Map<string, string>}
-   * @see [Scriptex.INTERFACE]{@link Scriptex.INTERFACE}
+   * @see [Scriptex.API]{@link Scriptex.API}
    */
-  static get INTERFACE () {
-    return Scriptex.INTERFACE
+  static get API () {
+    return Scriptex.API
   }
 
   /**
@@ -65,7 +65,7 @@ class Plugin {
    */
   static deploy (engine=Scriptex.ENGINE, configurable=false, ...ctorArgs) {
     let deployee = new this(...ctorArgs)
-    let deployer = new Scriptex(engine, this.INTERFACE, configurable)
+    let deployer = new Scriptex(engine, this.API, configurable)
     return deployer.deploy(deployee)
   }
 
