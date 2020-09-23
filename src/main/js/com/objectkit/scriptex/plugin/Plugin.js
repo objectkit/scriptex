@@ -4,8 +4,8 @@ import Scriptex from "com/objectkit/scriptex/Scriptex"
 class Plugin {
 
   /**
-   * The Scripter/Scriptex API that the Plugin will conform to.
-   * The default API is Scriptex.API.
+   * The Scripter/Scriptex interface that the Plugin will conform to.
+   * The default interface is Scriptex.API.
    * Subclasses can return a list of their own bindings for custom integrations
    * @example
    *  class CustomPlugin extends Plugin {
@@ -19,14 +19,14 @@ class Plugin {
    *      ]
    *    }
    *
-   *    // @alias Scripter.PluginParameters
+   *    // @lends Scripter.PluginParameters
    *    get views () {
    *      return [
    *        // parameter definintions
    *      ]
    *    }
    *
-   *    // @alias Scripter.ResetParameterDefaults
+   *    // @lends Scripter.ResetParameterDefaults
    *    get needsViewResets () {
    *      return true
    *    }
@@ -44,7 +44,7 @@ class Plugin {
    *  }
    *
    *  Trace(CustomPlugin.deploy()) // [ParameterChanged, ResetParameterDefaults, PluginParameters]
-   * 
+   *
    * @type {Map<string, string>}
    * @see [Scriptex.API]{@link Scriptex.API}
    */
@@ -55,7 +55,7 @@ class Plugin {
   /**
    * Instantiate and integrate a new plugin with the Scripter environment.
    *
-   * @param  {Object}  [engine=Scripter]
+   * @param  {Object}  [system=Scripter]
    * @param  {Boolean} [configurable=false]
    * @param  {...*}  [ctorArgs=[]]
    *  Any arguments to pass to Plugin subclass constructors.
@@ -63,11 +63,12 @@ class Plugin {
    *  An enumeration of the Scripter integrations
    * @see [Scriptex]{@link Scriptex#deploy}
    */
-  static deploy (engine=Scriptex.ENGINE, configurable=false, ...ctorArgs) {
+  static deploy (system=Scriptex.SYSTEM, configurable=false, ...ctorArgs) {
     let deployee = new this(...ctorArgs)
-    let deployer = new Scriptex(engine, this.API, configurable)
+    let deployer = new Scriptex(system, this.API, configurable)
     return deployer.deploy(deployee)
   }
+
 }
 
 export default Plugin

@@ -5,7 +5,8 @@ import multiEntry from "@rollup/plugin-multi-entry"
 import { terser } from "rollup-plugin-terser"
 
 const MINIFY = !(process.env.npm_config_MINIFIER_OFF)
-
+const BANNER =
+`/* Scriptex v${pkg.version} (c) ObjectKit 2020 | license: Apache-2.0 */`
 let buildRelease =
   {
     input: [
@@ -16,6 +17,7 @@ let buildRelease =
       file: `${pkg.exports}`,
       format: "esm"
     },
+    cache: true,
     plugins: [
       includePaths({
         paths: [
@@ -33,6 +35,9 @@ let buildRelease =
             regex: /^_|_$/
           }
         }
+      , format: {
+          preamble: BANNER
+        }
       })
     ]
   }
@@ -47,6 +52,7 @@ let buildTest = {
     file: `${pkg.exports}/../${pkg.name}-test.js`,
     format: "cjs"
   },
+  cache: true,
   plugins: [
     includePaths({
       paths: [
@@ -66,12 +72,26 @@ let buildTest = {
           }
         }
       , keep_classnames: true
+      , format: {
+          preamble: BANNER
+        }
       }
     )
   ]
 }
-
+let buildRuntime = Object.assign(
+  Object.create(null)
+, buildRelease
+, {
+    output: {
+      file: `${pkg.exports}/../${pkg.name}-runtime.js`,
+      format: "iife",
+      name: `scriptex`
+    }
+  }
+)
 export default [
   buildRelease
+, buildRuntime
 , buildTest
 ]
