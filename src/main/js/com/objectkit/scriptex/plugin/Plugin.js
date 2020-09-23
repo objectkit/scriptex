@@ -63,7 +63,7 @@ class Plugin {
    *  An enumeration of the Scripter integrations
    * @see [Scriptex]{@link Scriptex#deploy}
    */
-  static deploy (engine=Scriptex.ENGINE, configurable=false, ...ctorArgs) {
+  static deploy (engine=Scriptex.SYSTEM, configurable=false, ...ctorArgs) {
     let deployee = new this(...ctorArgs)
     let deployer = new Scriptex(engine, this.API, configurable)
     return deployer.deploy(deployee)

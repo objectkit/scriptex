@@ -17,7 +17,7 @@ class Scriptex {
    * @type {Object}
    * @see [Scripter]{@link Scripter}
    */
-  static get ENGINE() {
+  static get SYSTEM() {
     return Scripter
   }
 
@@ -57,10 +57,10 @@ class Scriptex {
    * @param {Map}  [iface=new.target.API] The plugin integration API to use.
    * @param {Boolean} [configurable=false] Define integration properties as configurable or not.
    * @see [Scriptex.API]{@link Scriptex.API}
-   * @see [Scriptex.ENGINE]{@link Scriptex.ENGINE}
+   * @see [Scriptex.SYSTEM]{@link Scriptex.SYSTEM}
    * @see [Object.defineProperty]{@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty#Description}
    */
-  constructor (engine= new.target.ENGINE, iface = new.target.API, configurable = false) {
+  constructor (engine= new.target.SYSTEM, iface = new.target.API, configurable = false) {
     this._engine = engine
     this._interface = new Map([...iface])
     this._configurable = configurable
