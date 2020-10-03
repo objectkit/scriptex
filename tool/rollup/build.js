@@ -5,8 +5,9 @@ import multiEntry from "@rollup/plugin-multi-entry"
 import { terser } from "rollup-plugin-terser"
 
 const MINIFY = !(process.env.npm_config_MINIFIER_OFF)
-const BANNER =
-`/* Scriptex v${pkg.version} (c) ObjectKit 2020 | license: Apache-2.0 */`
+const BANNER = `/* Scriptex v${pkg.version} (c) ObjectKit 2020 | license: Apache-2.0 */`
+const FOOTER = `/* @todo implement MIDI processor with the Scriptex library */\n`
+
 let buildRelease =
   {
     input: [
@@ -14,7 +15,7 @@ let buildRelease =
       `src/main/js/**/*.js`
     ],
     output: {
-      file: `${pkg.exports}`,
+      file: `out/scriptex.js`,
       format: "esm"
     },
     cache: true,
@@ -49,7 +50,7 @@ let buildTest = {
     `src/test/js/**/*.js`
   ],
   output: {
-    file: `${pkg.exports}/../${pkg.name}-test.js`,
+    file: `out/scriptex.test.js`,
     format: "cjs"
   },
   cache: true,
@@ -84,7 +85,7 @@ let buildRuntime = Object.assign(
 , buildRelease
 , {
     output: {
-      file: `${pkg.exports}/../${pkg.name}-runtime.js`,
+      file: `out/scriptex.preset.js`,
       format: "iife",
       name: `scriptex`
     }
