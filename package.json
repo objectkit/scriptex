@@ -1,18 +1,27 @@
 {
   "name": "@objectkit/scriptex",
-  "version": "1.0.0-rc4",
+  "version": "1.0.0-rc.4.2",
   "description": "A microlib and metaplugin for the Scripter MIDI-FX Plugin.",
-  "main": "out/scriptex.js",
+  "main": "lib/scriptex.js",
+  "module": "lib/scriptex.js",
+  "unpkg": "lib/scriptex.preset.js",
+  "files": [
+    "lib/scriptex.js"
+  , "lib/scriptex.preset.js"
+  , "doc"
+  ],
   "scripts": {
     "test": "npm run test/lint && npm run test/specs",
     "test/watch": "npm run test/specs -- -w --watch-files src/**/*.*",
-    "test/specs": "npm run build && mocha src/test/coffee/**/*Spec.coffee --file tool/mocha/env.coffee --require coffeescript/register && rm ./out/scriptex.test.js",
+    "test/specs": "npm run build && mocha src/test/coffee/**/*Spec.coffee --file tool/mocha/env.coffee --require coffeescript/register && npm run test/clean",
+    "test/clean": "rm out/scriptex.test.js",
     "test/lint": "eslint -c tool/eslint/config.json src/main/js/**/*.js",
     "build": "npm run build/clean && npm run build/lib && npm run build/doc",
-    "build/lib": "rollup -c tool/rollup/build.js",
-    "build/doc": "jsdoc -c tool/jsdoc/config.json -d ${npm_package_main}/../doc/",
-    "build/clean": "rm -rf out",
-    "postinstall": "npm run test"
+    "build/lib": "rollup -c tool/rollup/config.js",
+    "build/doc": "jsdoc -c tool/jsdoc/config.json -d ./doc",
+    "build/clean": "rm -rf out doc lib",
+    "prepack": "npm run build && npm run test/clean && mkdir lib && mv ./out/* ./lib/",
+    "postpublish": "npm run build/clean"
   },
   "author": "David Foley <david@objectkit.com>",
   "homepage": "https://objectkit.github.io/scriptex",
@@ -39,5 +48,6 @@
     "sinon": "9.0.3",
     "sinon-chai": "3.5.0",
     "uuid": "8.3.0"
-  }
+  },
+  "dependencies": {}
 }

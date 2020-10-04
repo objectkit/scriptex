@@ -8,8 +8,10 @@
 # suchness
 .npmrc
 
-# project artefacts directory
+# ignore built project artefacts
 out/
+lib/
+doc/
 
 # Edit at https://www.gitignore.io/?templates=node,linux,macos,windows
 
