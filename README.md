@@ -1,6 +1,6 @@
 # Scriptex
-**PRE-RELEASE**
-> A microlib and metaplugin for the Scripter MIDI-FX Plugin.
+**1.0.0-rc.5**
+> A metaplugin and microlib for the Scripter MIDI-FX Plugin.
 
 ## Quick Start
 ```js
@@ -70,19 +70,20 @@ Microtone.deploy().forEach(Trace)
 ## Getting Started
 
 ### Code Editor Workflow
-- Download the [latest release](https://github.com/objectkit/scriptex/releases/latest)
+- Download the [latest scriptex preset](https://unpkg.com/@objectkit/scriptex)
 - Create a new Logic Pro X or Mainstage project
 - Add Scripter as a MIDI plugin a new instrument strip
 - Press `Open Script in Editor`
 - Add the compressed content of the Scriptex library (2kb) to `Code Editor`
-- Save a template preset named "Scriptex-1.0.0-rc4"
+- Save a template preset named "Scriptex-1.0.0-rc.5"
 - Crete your own Scriptex MIDI plugins
 
 ### IDE Workflow
-[Available with 1.0.0 release]
 ```bash
 npm i @objectkit/scriptex
 ```
+
+[standalone project template will coincide with 1.0.0 release]
 
 ## License
 [Apache-2.0](https://opensource.org/licenses/Apache-2.0) © ObjectKit 2020
