@@ -1,28 +1,25 @@
 {
   "name": "@objectkit/scriptex",
-  "version": "1.0.0-rc.4.2",
-  "description": "A microlib and metaplugin for the Scripter MIDI-FX Plugin.",
+  "version": "1.0.0-rc.5",
+  "description": "A metaplugin and microlib for the Scripter MIDI-FX Plugin.",
   "main": "lib/scriptex.js",
   "module": "lib/scriptex.js",
   "unpkg": "lib/scriptex.preset.js",
   "files": [
-    "lib/scriptex.js"
-  , "lib/scriptex.preset.js"
-  , "doc"
+    "lib/scriptex.js",
+    "lib/scriptex.preset.js",
+    "doc"
   ],
-  "scripts": {
-    "test": "npm run test/lint && npm run test/specs",
-    "test/watch": "npm run test/specs -- -w --watch-files src/**/*.*",
-    "test/specs": "npm run build && mocha src/test/coffee/**/*Spec.coffee --file tool/mocha/env.coffee --require coffeescript/register && npm run test/clean",
-    "test/clean": "rm out/scriptex.test.js",
-    "test/lint": "eslint -c tool/eslint/config.json src/main/js/**/*.js",
-    "build": "npm run build/clean && npm run build/lib && npm run build/doc",
-    "build/lib": "rollup -c tool/rollup/config.js",
-    "build/doc": "jsdoc -c tool/jsdoc/config.json -d ./doc",
-    "build/clean": "rm -rf out doc lib",
-    "prepack": "npm run build && npm run test/clean && mkdir lib && mv ./out/* ./lib/",
-    "postpublish": "npm run build/clean"
-  },
+  "keywords": [
+    "MIDI",
+    "logic pro x",
+    "mainstage",
+    "scripter",
+    "midi-fx",
+    "midi-plugin",
+    "library",
+    "es6"
+  ],
   "author": "David Foley <david@objectkit.com>",
   "homepage": "https://objectkit.github.io/scriptex",
   "license": "Apache-2.0",
@@ -32,6 +29,18 @@
   },
   "bugs": {
     "url": "https://github.com/objectkit/scriptex/issues"
+  },
+  "scripts": {
+    "test": "npm run test/lint && npm run test/specs",
+    "test/specs": "npm run build && mocha src/test/coffee/**/*Spec.coffee --file tool/mocha/env.coffee --require coffeescript/register -R progress",
+    "test/lint": "eslint -c tool/eslint/config.json src/main/js/**/*.js",
+    "build": "npm run clean && npm run build/out && npm run build/doc",
+    "build/out": "rollup -c tool/rollup/config.js --silent",
+    "build/doc": "jsdoc -c tool/jsdoc/config.json -d ./doc",
+    "clean": "rm -rf out doc lib",
+    "prepack": "npm run test && mkdir lib && mv out/* lib/ && rm -rf out lib/scriptex.test.js",
+    "postpublish": "npm run clean",
+    "install": "npm run test && npm run clean"
   },
   "devDependencies": {
     "@rollup/plugin-multi-entry": "4.0.0",
