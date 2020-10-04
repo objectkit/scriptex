@@ -45,7 +45,7 @@ const terserConf = {
  */
 const releaseConf = {
   input: [
-    `tool/rollup/index.js`,
+    `tool/rollup/manifest/index.js`,
     `src/main/js/**/*.js`
   ],
   output: {
@@ -66,7 +66,7 @@ const releaseConf = {
  */
 const testConf = {
   input: [
-    `tool/rollup/index.test.js`,
+    `tool/rollup/manifest/index.test.js`,
     `src/main/js/**/*.js`,
     `src/test/js/**/*.js`
   ],
@@ -97,7 +97,7 @@ const testConf = {
  */
 const presetConf = {
   input: [
-    `tool/rollup/index.js`,
+    `tool/rollup/manifest/index.js`,
     `src/main/js/**/*.js`
   ],
   output: {
