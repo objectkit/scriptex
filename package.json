@@ -1,6 +1,6 @@
 {
   "name": "@objectkit/scriptex",
-  "version": "1.0.0-rc.5",
+  "version": "1.0.0-rc.6",
   "description": "A metaplugin and microlib for the Scripter MIDI-FX Plugin.",
   "main": "lib/scriptex.js",
   "module": "lib/scriptex.js",
@@ -25,7 +25,7 @@
   "license": "Apache-2.0",
   "publishConfig": {
     "access": "public"
-  },  
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/objectkit/scriptex.git"
