@@ -1,5 +1,5 @@
 # Scriptex
-**1.0.0-rc.5**
+**1.0.0-rc.6**
 > A metaplugin and microlib for the Scripter MIDI-FX Plugin.
 
 ## Quick Start
@@ -75,13 +75,25 @@ Microtone.deploy().forEach(Trace)
 - Add Scripter as a MIDI plugin a new instrument strip
 - Press `Open Script in Editor`
 - Add the compressed content of the Scriptex library (2kb) to `Code Editor`
-- Save a template preset named "Scriptex-1.0.0-rc.5"
-- Crete your own Scriptex MIDI plugins
+- Save the preset as "Scriptex-1.0.0-rc.6"
+- Use this preset as a template for making bespoke MIDI processors
 
 ### IDE Workflow
-```bash
-npm i @objectkit/scriptex
-```
+- Obtain an [IDE](https://atom.io) of your choice
+- Create a new [NodeJS project](https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/development_environment)
+- Add the [Scriptex package](https://www.npmjs.com/package/@objectkit/scriptex) as an [NPM package dependency](https://www.npmjs.com/search?q=scriptex)
+  ```bash
+  npm i -D @objectkit/scriptex
+  ```
+- Import classes as needed
+  ```js
+  import { Plugin } from "@objeckit/scriptex"
+  class MidiTrace extends Plugin {
+    onMidi (event) {
+      event.trace()
+    }
+  }
+  ```
 
 [standalone project template will coincide with 1.0.0 release]
 
