@@ -2,7 +2,7 @@ import Plugin from "com/objectkit/scriptex/plugin/Plugin"
 
 /**
  * @classdesc
- * The GenericPlugin class is a lightweight implementation designed for quick experimentation and
+ * The DefaultPlugin class is a lightweight implementation designed for quick experimentation and
  * protoyping of bespoke processors.
  *
  * It has been designed to solve common view and midi management problems with the native Scripter
@@ -12,7 +12,7 @@ import Plugin from "com/objectkit/scriptex/plugin/Plugin"
  * base implementation and you are encouraged to add them to subclasses only as needed.
  *
  * @example
- * class BespokePlugin extends GenericPlugin {
+ * class BespokePlugin extends DefaultPlugin {
  *
  *   // @lends Scripter.NeedsTimingInfo
  *   get needsTiming () {
@@ -37,11 +37,11 @@ import Plugin from "com/objectkit/scriptex/plugin/Plugin"
  *  .forEach(Trace)
  *
  * @extends Plugin
- * @see [onParam]{@link GenericPlugin#onParam}
- * @see [onMidi]{@link GenericPlugin#onMidi}
+ * @see [onParam]{@link DefaultPlugin#onParam}
+ * @see [onMidi]{@link DefaultPlugin#onMidi}
  * @see [Plugin.deploy]{@link Plugin.deploy}
  */
-class GenericPlugin extends Plugin {
+class DefaultPlugin extends Plugin {
 
   /**
    * Manage calls to Scripter.ParameterChanged.
@@ -57,7 +57,7 @@ class GenericPlugin extends Plugin {
    * of property interceptors for advanced use cases
    *
    * @example
-   * class MidiStop extends GenericPlugin {
+   * class MidiStop extends DefaultPlugin {
    *   get params () {
    *     return [
    *       {
@@ -111,13 +111,13 @@ class GenericPlugin extends Plugin {
    *
    * @param  {Event} midi A Scripter MIDI event
    * @return {number}     The beatPos that the midi event was sent at
-   * @see [onNoteOn]{@link GenericPlugin#onNoteOn}
-   * @see [onNoteOff]{@link GenericPlugin#onNoteOn}
-   * @see [onControlChange]{@link GenericPlugin#onControlChange}
-   * @see [onProgramChange]{@link GenericPlugin#onProgramChange}
-   * @see [onTargetEvent]{@link GenericPlugin#onTargetEvent}
-   * @see [onPitchBend]{@link GenericPlugin#onPitchBend}
-   * @see [onEvent]{@link GenericPlugin#onEvent}
+   * @see [onNoteOn]{@link DefaultPlugin#onNoteOn}
+   * @see [onNoteOff]{@link DefaultPlugin#onNoteOn}
+   * @see [onControlChange]{@link DefaultPlugin#onControlChange}
+   * @see [onProgramChange]{@link DefaultPlugin#onProgramChange}
+   * @see [onTargetEvent]{@link DefaultPlugin#onTargetEvent}
+   * @see [onPitchBend]{@link DefaultPlugin#onPitchBend}
+   * @see [onEvent]{@link DefaultPlugin#onEvent}
    */
   onMidi (midi) {
     return this[("on"+this.getEventName(midi))](midi)
@@ -128,8 +128,8 @@ class GenericPlugin extends Plugin {
    *
    * @param  {NoteOn} event A NoteOn event
    * @return {number}       The beatPos that the event was sent at
-   * @see [onMidi]{@link GenericPlugin#onMidi}
-   * @see [onNote]{@link GenericPlugin#onNote}
+   * @see [onMidi]{@link DefaultPlugin#onMidi}
+   * @see [onNote]{@link DefaultPlugin#onNote}
    */
   onNoteOn (event) {
     return this.onNote(event)
@@ -141,8 +141,8 @@ class GenericPlugin extends Plugin {
    *
    * @param  {NoteOff} event A NoteOff event
    * @return {number}       The beatPos that the event was sent at
-   * @see [onMidi]{@link GenericPlugin#onMidi}
-   * @see [onNote]{@link GenericPlugin#onNote}
+   * @see [onMidi]{@link DefaultPlugin#onMidi}
+   * @see [onNote]{@link DefaultPlugin#onNote}
    */
   onNoteOff (event) {
     return this.onNote(event)
@@ -153,9 +153,9 @@ class GenericPlugin extends Plugin {
    *
    * @param  {NoteOff|NoteOn} event A NoteOff or NoteOn event
    * @return {number}       The beatPos that the event was sent at
-   * @see [onNoteOn]{@link GenericPlugin#onNote}
-   * @see [onNoteOff]{@link GenericPlugin#onNote}
-   * @see [sendMidi]{@link GenericPlugin#sendMidi}
+   * @see [onNoteOn]{@link DefaultPlugin#onNote}
+   * @see [onNoteOff]{@link DefaultPlugin#onNote}
+   * @see [sendMidi]{@link DefaultPlugin#sendMidi}
    */
   onNote (event) {
     return this.sendMidi(event)
@@ -166,8 +166,8 @@ class GenericPlugin extends Plugin {
    *
    * @param  {ControlChange} event A ControlChange event
    * @return {number}       The beatPos that the event was sent at
-   * @see [onMidi]{@link GenericPlugin#onMidi}
-   * @see [sendMidi]{@link GenericPlugin#sendMidi}
+   * @see [onMidi]{@link DefaultPlugin#onMidi}
+   * @see [sendMidi]{@link DefaultPlugin#sendMidi}
    */
   onControlChange (event) {
     return this.sendMidi(event)
@@ -178,8 +178,8 @@ class GenericPlugin extends Plugin {
    *
    * @param  {ProgramChange} event  A ProgramChange event
    * @return {number}               The beatPos that the event was sent at
-   * @see [onMidi]{@link GenericPlugin#onMidi}
-   * @see [sendMidi]{@link GenericPlugin#sendMidi}
+   * @see [onMidi]{@link DefaultPlugin#onMidi}
+   * @see [sendMidi]{@link DefaultPlugin#sendMidi}
    */
   onProgramChange (event) {
     return this.sendMidi(event)
@@ -190,8 +190,8 @@ class GenericPlugin extends Plugin {
    *
    * @param  {PolyPressure} event   A PolyPressure event
    * @return {number}              The beatPos that the event was sent at
-   * @see [onMidi]{@link GenericPlugin#onMidi}
-   * @see [sendMidi]{@link GenericPlugin#sendMidi}
+   * @see [onMidi]{@link DefaultPlugin#onMidi}
+   * @see [sendMidi]{@link DefaultPlugin#sendMidi}
    */
   onPolyPressure (event) {
     return this.sendMidi(event)
@@ -202,8 +202,8 @@ class GenericPlugin extends Plugin {
    *
    * @param  {ChannelPressure} event   A ChannelPressure event
    * @return {number}              The beatPos that the event was sent at
-   * @see [onMidi]{@link GenericPlugin#onMidi}
-   * @see [sendMidi]{@link GenericPlugin#sendMidi}
+   * @see [onMidi]{@link DefaultPlugin#onMidi}
+   * @see [sendMidi]{@link DefaultPlugin#sendMidi}
    */
   onChannelPressure (event) {
     return this.sendMidi(event)
@@ -214,8 +214,8 @@ class GenericPlugin extends Plugin {
    *
    * @param  {TargetEvent} event   A TargetEvent event
    * @return {number}              The beatPos that the event was sent at
-   * @see [onMidi]{@link GenericPlugin#onMidi}
-   * @see [sendMidi]{@link GenericPlugin#sendMidi}
+   * @see [onMidi]{@link DefaultPlugin#onMidi}
+   * @see [sendMidi]{@link DefaultPlugin#sendMidi}
    */
   onTargetEvent (event) {
     return this.sendMidi(event)
@@ -226,8 +226,8 @@ class GenericPlugin extends Plugin {
    *
    * @param  {PitchBend} event    A TargetEvent event
    * @return {number}             The beatPos that the event was sent at
-   * @see [onMidi]{@link GenericPlugin#onMidi}
-   * @see [sendMidi]{@link GenericPlugin#sendMidi}
+   * @see [onMidi]{@link DefaultPlugin#onMidi}
+   * @see [sendMidi]{@link DefaultPlugin#sendMidi}
    */
   onPitchBend (event) {
     return this.sendMidi(event)
@@ -238,8 +238,8 @@ class GenericPlugin extends Plugin {
    *
    * @param  {PitchBend} event    A generic Event instance
    * @return {number}             The beatPos that the event was sent at
-   * @see [onMidi]{@link GenericPlugin#onMidi}
-   * @see [sendMidi]{@link GenericPlugin#sendMidi}
+   * @see [onMidi]{@link DefaultPlugin#onMidi}
+   * @see [sendMidi]{@link DefaultPlugin#sendMidi}
    */
   onEvent (event) {
     return this.sendMidi(event)
@@ -315,4 +315,4 @@ class GenericPlugin extends Plugin {
   }
 }
 
-export default GenericPlugin
+export default DefaultPlugin

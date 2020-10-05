@@ -1,5 +1,5 @@
 {
-  GenericPlugin
+  DefaultPlugin
   Event
   TargetEvent
   ChannelPressure
@@ -11,7 +11,7 @@
   PitchBend
 } = require(SCRIPTEX_TEST)
 
-describe "GenericPlugin", ->
+describe "DefaultPlugin", ->
 
   Help =
 
@@ -19,7 +19,7 @@ describe "GenericPlugin", ->
 
     setupSpec: ->
       @SANDBOX = sinon.createSandbox()
-      @SANDBOX.spy(GenericPlugin::)
+      @SANDBOX.spy(DefaultPlugin::)
       @SANDBOX.spy(Event::)
 
     teardownSpec: ->
@@ -27,20 +27,20 @@ describe "GenericPlugin", ->
       @SANDBOX = null
 
     validateCallOrder: (event, calls) ->
-      fixture = new GenericPlugin()
+      fixture = new DefaultPlugin()
       fixture.onMidi(event)
       for call in calls
         expect(fixture).property(call).calledOnce
       return
 
     validateGetEventName: (event, expectedName) ->
-      fixture = new GenericPlugin()
+      fixture = new DefaultPlugin()
       eventName = fixture.getEventName(event)
       expect(expectedName).eql(eventName)
       return
 
     validateParamIDAssignment: () ->
-      fixture = new GenericPlugin()
+      fixture = new DefaultPlugin()
 
     newMockParamsWithIDs: (count=3) ->
       mockParams = []
@@ -124,7 +124,7 @@ describe "GenericPlugin", ->
     describe "Given param at index has an ID", ->
       specify "Then plugin[ID] is assigned that value", ->
 
-        fixture = new GenericPlugin
+        fixture = new DefaultPlugin
         fixture.params = Help.newMockParamsWithIDs()
 
         for param, index in fixture.params
@@ -145,7 +145,7 @@ describe "GenericPlugin", ->
       ]
 
       specify "Then no assignment occurs", ->
-        fixture = new GenericPlugin()
+        fixture = new DefaultPlugin()
         fixture.params = MOCK_PARAMS
 
         beforeKeys = Object.keys(fixture)
@@ -162,7 +162,7 @@ describe "GenericPlugin", ->
     describe "Given event.beatPos is empty", ->
       specify "Then event.send() is invoked", ->
         empties = [ null, undefined, 0, '' ]
-        fixture = new GenericPlugin()
+        fixture = new DefaultPlugin()
 
         event = new Event()
         expect(event).not.property("beatPos")
@@ -184,7 +184,7 @@ describe "GenericPlugin", ->
         event = new Event()
         event.beatPos = -1
 
-        fixture = new GenericPlugin()
+        fixture = new DefaultPlugin()
         beatPos = fixture.sendMidi(event)
 
         expect(beatPos).eql(1)
@@ -203,7 +203,7 @@ describe "GenericPlugin", ->
         event = new Event
         event.beatPos = mockBeatPos
 
-        fixture = new GenericPlugin
+        fixture = new DefaultPlugin
         beatPos = fixture.sendMidi(event)
 
         expect(beatPos).eql(1)
@@ -222,7 +222,7 @@ describe "GenericPlugin", ->
         event = new Event()
         event.beatPos = "-1000"
         expect(event.beatPos).to.be.a("string")
-        fixture = new GenericPlugin
+        fixture = new DefaultPlugin
         beatPos = fixture.sendMidi(event)
         expect(beatPos).to.be.a("number")
         expect(beatPos).eql(1000)
@@ -240,7 +240,7 @@ describe "GenericPlugin", ->
         strVal = "#{numVal}"
         expVal = 200
 
-        plugin = new GenericPlugin
+        plugin = new DefaultPlugin
         event = new Event()
 
         event.beatPos = numVal
@@ -268,16 +268,16 @@ describe "GenericPlugin", ->
 
     describe "Given object without status code", ->
       specify "Then \"EventNameNotFound\" is thrown", ->
-        expect( -> new GenericPlugin().getEventName(new Object)).throws("EventNameNotFound")
+        expect( -> new DefaultPlugin().getEventName(new Object)).throws("EventNameNotFound")
 
     describe "Given object with unsupported status code", ->
       specify "The \"EventNameNotFound\" is thrown", ->
         badEvent = { status: Number.MAX_INTEGER }
-        expect( -> new GenericPlugin().getEventName(badEvent)).throws("EventNameNotFound")
+        expect( -> new DefaultPlugin().getEventName(badEvent)).throws("EventNameNotFound")
 
     describe "Given non-object", ->
       specify "Then \"TypeError\" is thrown", ->
-        expect(-> new GenericPlugin().getEventName(null)).throws(TypeError)
+        expect(-> new DefaultPlugin().getEventName(null)).throws(TypeError)
 
     describe "Given event:Event", ->
       specify "Then \"Event\" is returned", ->

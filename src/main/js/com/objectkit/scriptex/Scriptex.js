@@ -5,7 +5,7 @@ import Scripter from "com/objectkit/scriptex/system/Scripter"
  * Scriptex is a metaplugin loader for the Scripter MIDI-FX runtime.
  *
  * @see [Plugin]{@link Plugin}
- * @see [GenericPlugin]{@link GenericPlugin}
+ * @see [DefaultPlugin]{@link DefaultPlugin}
  */
 class Scriptex {
 

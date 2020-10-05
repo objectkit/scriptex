@@ -5,7 +5,7 @@
 ## Quick Start
 ```js
 /* Quickly prototype bespoke MIDI processors */
-class Microtone extends GenericPlugin {
+class Microtone extends DefaultPlugin {
 
   /** @lends Scripter.NeedsTimingInfo */
   get needsTiming () {
