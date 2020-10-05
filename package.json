@@ -1,22 +1,31 @@
 {
-  "name": "com.objectkit.scriptex",
-  "version": "1.0.0-rc4",
-  "description": "A microlib and metaplugin for the Scripter MIDI-FX Plugin.",
-  "exports": "out/com.objectkit.scriptex/1.0.0-rc4/com.objectkit.scriptex.js",
-  "scripts": {
-    "test": "npm run test/lint && npm run test/specs",
-    "test/watch": "npm run test/specs -- -w --watch-files src/**/*.*",
-    "test/specs": "npm run build && mocha src/test/coffee/**/*Spec.coffee --file tool/mocha/env.coffee --require coffeescript/register",
-    "test/lint": "eslint -c tool/eslint/config.json src/main/js/**/*.js",
-    "build": "npm run build/clean && npm run build/lib && npm run build/doc",
-    "build/lib": "rollup -c tool/rollup/build.js",
-    "build/doc": "jsdoc -c tool/jsdoc/config.json -d ${npm_package_exports}/../doc/",
-    "build/clean": "rm -rf out",
-    "postinstall": "npm run test"
-  },
+  "name": "@objectkit/scriptex",
+  "version": "1.0.0-rc.6.2",
+  "description": "A metaplugin and microlib for the Scripter MIDI-FX Plugin.",
+  "main": "lib/scriptex.js",
+  "module": "lib/scriptex.js",
+  "unpkg": "lib/scriptex.preset.js",
+  "files": [
+    "lib/scriptex.js",
+    "lib/scriptex.preset.js",
+    "doc"
+  ],
+  "keywords": [
+    "MIDI",
+    "logic pro x",
+    "mainstage",
+    "scripter",
+    "midi-fx",
+    "midi-plugin",
+    "library",
+    "es6"
+  ],
   "author": "David Foley <david@objectkit.com>",
   "homepage": "https://objectkit.github.io/scriptex",
   "license": "Apache-2.0",
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/objectkit/scriptex.git"
@@ -24,20 +33,33 @@
   "bugs": {
     "url": "https://github.com/objectkit/scriptex/issues"
   },
+  "scripts": {
+    "test": "npm run test/lint && npm run test/specs",
+    "test/specs": "npm run build && mocha src/test/coffee/**/*Spec.coffee --file tool/mocha/env.coffee --require coffeescript/register -R progress",
+    "test/lint": "eslint -c tool/eslint/config.json src/main/js/**/*.js",
+    "build": "npm run clean && npm run build/out && npm run build/doc",
+    "build/out": "rollup -c tool/rollup/config.js --silent",
+    "build/doc": "jsdoc -c tool/jsdoc/config.json -d ./doc",
+    "clean": "rm -rf out doc lib",
+    "prepack": "npm run test && mkdir lib && mv out/* lib/ && rm -rf out lib/scriptex.test.js",
+    "postpublish": "npm run clean",
+    "install": "npm run test && npm run clean"
+  },
   "devDependencies": {
     "@rollup/plugin-multi-entry": "4.0.0",
     "app-module-path": "2.2.0",
     "chai": "4.2.0",
     "coffeescript": "2.5.1",
-    "eslint": "7.7.0",
-    "jsdoc": "3.6.5",
+    "eslint": "7.10.0",
+    "jsdoc": "3.6.6",
     "minami": "1.2.3",
     "mocha": "8.1.3",
-    "rollup": "2.26.8",
+    "rollup": "2.28.2",
     "rollup-plugin-includepaths": "0.2.4",
-    "rollup-plugin-terser": "7.0.1",
+    "rollup-plugin-terser": "7.0.2",
     "sinon": "9.0.3",
     "sinon-chai": "3.5.0",
     "uuid": "8.3.0"
-  }
+  },
+  "dependencies": {}
 }

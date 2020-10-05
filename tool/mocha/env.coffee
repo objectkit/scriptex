@@ -3,7 +3,7 @@ global.PACKAGE = require("../../package.json")
 # Fix path resolution for mocha require
 require("app-module-path").addPath(process.cwd())
 # Define path to module built for tests
-global.SCRIPTEX_TEST= "#{PACKAGE.exports}/../#{PACKAGE.name}-test.js"
+global.SCRIPTEX_TEST= "out/scriptex.test.js"
 # Export test framework to reduce need for require
 global.chai = require("chai")
 global.sinon = require("sinon")

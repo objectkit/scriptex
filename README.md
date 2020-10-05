@@ -1,10 +1,10 @@
 # Scriptex
-**PRE-RELEASE**
-> A microlib and metaplugin for the Scripter MIDI-FX Plugin.
+**1.0.0-rc.6**
+> A metaplugin and microlib for the Scripter MIDI-FX Plugin.
 
 ## Quick Start
 ```js
-/* Quickly prototype MIDI processors with bespoke classes */
+/* Quickly prototype bespoke MIDI processors */
 class Microtone extends GenericPlugin {
 
   /** @lends Scripter.NeedsTimingInfo */
@@ -62,24 +62,40 @@ Microtone.deploy().forEach(Trace)
 [Visit the docs](https://objectkit.github.io/scriptex)
 
 ## Requirements
+- Familiarity with [ECMAScript 6](https://exploringjs.com/es6/)
+- Familiarity with the [Scripter MIDI-FX Plugin](https://support.apple.com/kb/PH27734) ([Mainstage ](https://help.apple.com/mainstage/mac/3.4/#/lgce728c68f6))
 - Logic Pro X 10.5.0+ _or_ Mainstage 3.4+
-- macOS Catalina
+- macOS 10.14+ Mojave or higher
 
 ## Getting Started
 
-### Edit-In-Place Workflow
-- Download the [latest release](https://github.com/objectkit/scriptex/releases/latest)
+### Code Editor Workflow
+- Download the [latest scriptex preset](https://unpkg.com/@objectkit/scriptex)
 - Create a new Logic Pro X or Mainstage project
 - Add Scripter as a MIDI plugin a new instrument strip
 - Press `Open Script in Editor`
 - Add the compressed content of the Scriptex library (2kb) to `Code Editor`
-- Save that as a template preset named "Scriptex-1.0.0-rc4"
+- Save the preset as "Scriptex-1.0.0-rc.6"
+- Use this preset as a template for making bespoke MIDI processors
 
 ### IDE Workflow
-[Available with 1.0.0 release]
-```bash
-npm i @objectkit/scriptex
-```
+- Obtain an [IDE](https://atom.io) of your choice
+- Create a new [NodeJS project](https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/development_environment)
+- Add the [Scriptex package](https://www.npmjs.com/package/@objectkit/scriptex) as an [NPM package dependency](https://www.npmjs.com/search?q=scriptex)
+  ```bash
+  npm i -D @objectkit/scriptex
+  ```
+- Import classes as needed
+  ```js
+  import { Plugin } from "@objeckit/scriptex"
+  class MidiTrace extends Plugin {
+    onMidi (event) {
+      event.trace()
+    }
+  }
+  ```
+
+[standalone project template will coincide with 1.0.0 release]
 
 ## License
 [Apache-2.0](https://opensource.org/licenses/Apache-2.0) © ObjectKit 2020

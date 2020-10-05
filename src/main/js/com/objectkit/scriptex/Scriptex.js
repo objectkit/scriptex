@@ -18,6 +18,7 @@ class Scriptex {
    * @see [Scripter]{@link Scripter}
    */
   static get SYSTEM() {
+    /** @todo (0, eval)(`this`) */
     return Scripter
   }
 
@@ -37,16 +38,16 @@ class Scriptex {
    *
    * @type {Map<string, string>}
    */
-  static get API() {
-   return [
-      [ `NeedsTimingInfo`, `needsTiming` ]
-    , [ `ResetParameterDefaults`, `needsDefaults` ]
-    , [ `PluginParameters`, `params` ]
-    , [ `ParameterChanged`, `onParam` ]
-    , [ `ProcessMIDI`, `onProcess` ]
-    , [ `HandleMIDI`, `onMidi` ]
-    , [ `Reset`, `onReset` ]
-    , [ `Idle`, `onIdle` ]
+  static get API () {
+    return [
+      [ `NeedsTimingInfo`, `needsTiming`]
+    , [ `ResetParameterDefaults`, `needsDefaults`]
+    , [ `PluginParameters`, `params`]
+    , [ `HandleMIDI`, `onMidi`]
+    , [ `ProcessMIDI`, `onProcess`]
+    , [ `ParameterChanged`, `onParam`]
+    , [ `Reset`, `onReset`]
+    , [ `Idle`, `onIdle`]
     ]
   }
 
@@ -54,47 +55,51 @@ class Scriptex {
    * Create a new Scripter instance.
    *
    * @param {Object}  [system=Scripter] The integration environment to use.
-   * @param {Map}  [iface=new.target.API] The plugin integration API to use.
+   * @param {Map}  [api=new.target.API] The plugin integration API to use.
    * @param {Boolean} [configurable=false] Define integration properties as configurable or not.
    * @see [Scriptex.API]{@link Scriptex.API}
    * @see [Scriptex.SYSTEM]{@link Scriptex.SYSTEM}
    * @see [Object.defineProperty]{@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty#Description}
    */
-  constructor (system= new.target.SYSTEM, iface = new.target.API, configurable = false) {
-    this._system = system
-    this._interface = new Map([...iface])
-    this._configurable = configurable
+  constructor (system= new.target.SYSTEM, api= new.target.API, configurable=false) {
+    this._system= system
+    this._api= new Map([...api])
+    this._configurable= configurable
   }
 
   /**
-   * Deploy a plugin to the Scripter runtime, comparing its methods and proeprties to those of the
-   * Scriptex.API and binding them to the Scripter API as appropriate.
+   * Deploy a plugin to the Scripter runtime by integrating appropriate properties with
+   * the Scripter API.
    *
    * @param  {Object} plugin The plugin instance to deploy.
    * @return {Array<string>} An enumeration of the Scripter integration properties.
    * @see [API]{@link Scriptex.API}
    */
-  deploy(plugin) {
-    /* the integration manifest that list all Scripter keys involved */
-    let api = []
+  deploy (plugin) {
+    /* a property stash */
+    let mem= null
+    /* all Scripter property keys that have been integrated with the plugin */
+    let api= []
     /* a reference to the system that the plugin as been deployed to */
-    let ngn = plugin.system = this._system
-    /* define an object property */
-    let def = (obj, key, val, tag, configurable = this._configurable) =>
-      Reflect.defineProperty(obj, key, {configurable, [tag]: val })
-    /* define a method on Scripter */
-    let fun = (pluginKey, systemKey) =>
-      typeof(plugin[pluginKey]) === `function`
-        && def(ngn, systemKey, (...args) => plugin[pluginKey](...args), `value`)
-    /* define an accessor on Scripter */
-    let get = (pluginKey, systemKey) =>
-      pluginKey in plugin
-        && def(plugin, pluginKey, plugin[pluginKey], `value`, true)
-          && def(ngn, systemKey, () => plugin[pluginKey], `get`)
+    let sys= (plugin.system = this._system)
+    /* define a propetyu on an object */
+    let def= (target, key, val, atr=`value`, configurable=this._configurable) =>
+      Reflect.defineProperty(target, key, { [atr]: val, configurable} )
+    /* define a plugin accessor delegate on Scripter */
+    let get= (systemKey, pluginKey) =>
+      def(plugin, pluginKey, mem, `value`, true)
+        && def(sys, systemKey, () => plugin[pluginKey], `get`)
+    /* define a plugin method delegate on Scripter */
+    let fun = (systemKey, pluginKey) =>
+      (typeof(mem) === `function`)
+        && def(sys, systemKey, (...args) => plugin[pluginKey](...args))
     /* integrate the plugin with Scripter */
-    for (let [systemKey, pluginKey] of this._interface)
-      (fun(pluginKey, systemKey) || get(pluginKey, systemKey))
-        && api.push(systemKey)
+    let put= (pluginKey, systemKey) =>
+      (mem = plugin[pluginKey], pluginKey in plugin)
+        && (fun(systemKey, pluginKey) || get(systemKey, pluginKey))
+          && api.push(systemKey)
+    /* start integrating */
+    this._api.forEach(put)
     /* return the manifest */
     return api
   }
