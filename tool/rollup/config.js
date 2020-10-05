@@ -2,7 +2,7 @@ import pkg from "../../package.json"
 import includePaths from "rollup-plugin-includepaths"
 import multiEntry from "@rollup/plugin-multi-entry"
 import { terser } from "rollup-plugin-terser"
-import removeExports from "./plugin/removeExports"
+import replaceExportStatement from "./plugin/replaceExportStatement"
 
 /* conditional terser compression */
 const MINIFY = !(process.env.npm_config_MINIFIER_OFF)
@@ -109,7 +109,10 @@ const presetConf = {
     includePaths(includePathsConf)
   , multiEntry(multiEntryConf)
   , (MINIFY && terser(terserConf))
-  , removeExports()
+  , replaceExportStatement(`
+/* @todo custom midi processor */
+Scripter.Trace("Scriptex v${pkg.version}")
+    `)
   ]
 }
 
