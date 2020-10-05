@@ -1,5 +1,5 @@
 # Scriptex
-**1.0.0-rc.6**
+**1.0.0-rc.5**
 > A metaplugin and microlib for the Scripter MIDI-FX Plugin.
 
 ## Quick Start
@@ -75,7 +75,7 @@ Microtone.deploy().forEach(Trace)
 - Add Scripter as a MIDI plugin a new instrument strip
 - Press `Open Script in Editor`
 - Add the compressed content of the Scriptex library (2kb) to `Code Editor`
-- Save the preset as "Scriptex-1.0.0-rc.6"
+- Save the preset as "Scriptex-1.0.0-rc.5"
 - Use this preset as a template for making bespoke MIDI processors
 
 ### IDE Workflow
