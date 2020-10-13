@@ -63,7 +63,7 @@ Microtone.deploy().forEach(Trace)
 
 ## Requirements
 - Familiarity with [ECMAScript 6](https://exploringjs.com/es6/)
-- Familiarity with the [Scripter MIDI-FX Plugin](https://support.apple.com/kb/PH27734) ([Mainstage ](https://help.apple.com/mainstage/mac/3.4/#/lgce728c68f6))
+- Familiarity with the **Scripter MIDI-FX Plugin** ([Logic Pro X](https://support.apple.com/en-gb/guide/logicpro/lgce728c68f6/mac) | [Mainstage ](https://help.apple.com/mainstage/mac/3.4/#/lgce728c68f6))
 - Logic Pro X 10.5.0+ _or_ Mainstage 3.4+
 - macOS 10.14+ Mojave or higher
 
