@@ -1,4 +1,4 @@
-import Scripter from "com/objectkit/scriptex/system/Scripter"
+import { Scripter } from "com/objectkit/scriptex/system/Scripter"
 
 /**
  * @classDesc
@@ -105,4 +105,4 @@ class Scriptex {
   }
 }
 
-export default Scriptex
+export { Scriptex }

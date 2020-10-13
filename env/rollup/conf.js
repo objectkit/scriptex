@@ -49,7 +49,7 @@ const releaseConf = {
     `src/main/js/**/*.js`
   ],
   output: {
-    file: `out/scriptex.js`,
+    file: process.env.npm_package_exports,
     format: "es"
   },
   cache: true,
@@ -64,28 +64,28 @@ const releaseConf = {
  * The test build configuration
  * @type {Object}
  */
-const testConf = {
-  input: [
-    `tool/rollup/manifest/index.test.js`,
-    `src/main/js/**/*.js`,
-    `src/test/js/**/*.js`
-  ],
-  output: {
-    file: `out/scriptex.test.js`,
-    format: "cjs"
-  },
-  cache: true,
-  plugins: [
-    includePaths({
-      paths: [
-        `src/main/js`,
-        `src/test/js`
-      ]
-    }),
-    multiEntry(multiEntryConf),
-    MINIFY && terser(terserConf)
-  ]
-}
+// const testConf = {
+//   input: [
+//     `tool/rollup/manifest/index.test.js`,
+//     `src/main/js/**/*.js`,
+//     `src/test/js/**/*.js`
+//   ],
+//   output: {
+//     file: `out/scriptex.test.js`,
+//     format: "cjs"
+//   },
+//   cache: true,
+//   plugins: [
+//     includePaths({
+//       paths: [
+//         `src/main/js`,
+//         `src/test/js`
+//       ]
+//     }),
+//     multiEntry(multiEntryConf),
+//     MINIFY && terser(terserConf)
+//   ]
+// }
 
 /**
  * The "preset" build configuration.
@@ -117,5 +117,5 @@ Scripter.Trace("Scriptex v${pkg.version}")
 }
 
 export default [
-  releaseConf, presetConf, testConf
+  releaseConf, presetConf
 ]

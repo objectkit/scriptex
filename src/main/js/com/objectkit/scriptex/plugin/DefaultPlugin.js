@@ -1,4 +1,4 @@
-import Plugin from "com/objectkit/scriptex/plugin/Plugin"
+import { Plugin } from "com/objectkit/scriptex/plugin/Plugin"
 
 /**
  * @classdesc
@@ -315,4 +315,4 @@ class DefaultPlugin extends Plugin {
   }
 }
 
-export default DefaultPlugin
+export { DefaultPlugin }

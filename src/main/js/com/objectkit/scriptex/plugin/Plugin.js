@@ -1,4 +1,4 @@
-import Scriptex from "com/objectkit/scriptex/Scriptex"
+import { Scriptex } from "com/objectkit/scriptex/Scriptex"
 
 /** @class */
 class Plugin {
@@ -71,4 +71,4 @@ class Plugin {
 
 }
 
-export default Plugin
+export { Plugin }

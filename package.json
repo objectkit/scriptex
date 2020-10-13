@@ -2,8 +2,8 @@
   "name": "@objectkit/scriptex",
   "version": "1.0.0-rc.6.2",
   "description": "A metaplugin and microlib for the Scripter MIDI-FX Plugin.",
-  "main": "lib/scriptex.js",
-  "module": "lib/scriptex.js",
+  "exports": "./out/scriptex.js",
+  "type": "module",
   "unpkg": "lib/scriptex.preset.js",
   "files": [
     "lib/scriptex.js",
@@ -34,12 +34,13 @@
     "url": "https://github.com/objectkit/scriptex/issues"
   },
   "scripts": {
+    "pretest": "npm run clean && npm run build/out",
     "test": "npm run test/lint && npm run test/specs",
-    "test/specs": "npm run build && mocha src/test/coffee/**/*Spec.coffee --file tool/mocha/env.coffee --require coffeescript/register -R progress",
-    "test/lint": "eslint -c tool/eslint/config.json src/main/js/**/*.js",
+    "test/specs": "mocha src/test/js/**/*Spec.js --file env/mocha/conf.js",
+    "test/lint": "eslint -c env/eslint/conf.json src/main/js/**/*.js",
     "build": "npm run clean && npm run build/out && npm run build/doc",
-    "build/out": "rollup -c tool/rollup/config.js --silent",
-    "build/doc": "jsdoc -c tool/jsdoc/config.json -d ./doc",
+    "build/out": "rollup -c env/rollup/conf.js --silent",
+    "build/doc": "jsdoc -c env/jsdoc/conf.json -d ./doc",
     "clean": "rm -rf out doc lib",
     "prepack": "npm run test && mkdir lib && mv out/* lib/ && rm -rf out lib/scriptex.test.js",
     "postpublish": "npm run clean",
@@ -47,9 +48,7 @@
   },
   "devDependencies": {
     "@rollup/plugin-multi-entry": "4.0.0",
-    "app-module-path": "2.2.0",
     "chai": "4.2.0",
-    "coffeescript": "2.5.1",
     "eslint": "7.10.0",
     "jsdoc": "3.6.6",
     "minami": "1.2.3",
