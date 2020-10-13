@@ -61,33 +61,6 @@ const releaseConf = {
 };
 
 /**
- * The test build configuration
- * @type {Object}
- */
-// const testConf = {
-//   input: [
-//     `tool/rollup/manifest/index.test.js`,
-//     `src/main/js/**/*.js`,
-//     `src/test/js/**/*.js`
-//   ],
-//   output: {
-//     file: `out/scriptex.test.js`,
-//     format: "cjs"
-//   },
-//   cache: true,
-//   plugins: [
-//     includePaths({
-//       paths: [
-//         `src/main/js`,
-//         `src/test/js`
-//       ]
-//     }),
-//     multiEntry(multiEntryConf),
-//     MINIFY && terser(terserConf)
-//   ]
-// }
-
-/**
  * The "preset" build configuration.
  *
  * This build defines the Scriptex library in the global scope.
