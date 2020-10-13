@@ -63,12 +63,22 @@ class Plugin {
    *  An enumeration of the Scripter integrations
    * @see [Scriptex]{@link Scriptex#deploy}
    */
-  static deploy (system=Scriptex.SYSTEM, configurable=false, ...ctorArgs) {
-    let deployee = new this(...ctorArgs)
-    let deployer = new Scriptex(system, this.API, configurable)
+  static deploy (...ctorArgs) {
+    const deployee = new this(...ctorArgs)
+    const deployer = new Scriptex(Scriptex.SYSTEM, this.API, deployee.configurable)
     return deployer.deploy(deployee)
   }
 
+  set system (system) {
+    Reflect.defineProperty(this, `system`, { value: system })
+    this.init()
+  }
+
+  get system () {
+    throw new ReferenceError(`SystemAccessFault`)
+  }
+
+  init () {}
 }
 
 export { Plugin }
