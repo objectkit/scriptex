@@ -2,9 +2,9 @@
   "name": "@objectkit/scriptex",
   "version": "1.0.0-rc.6.2",
   "description": "A metaplugin and microlib for the Scripter MIDI-FX Plugin.",
-  "exports": "./out/scriptex.js",
+  "exports": "./lib/scriptex.js",
   "type": "module",
-  "unpkg": "lib/scriptex.preset.js",
+  "unpkg": "./lib/scriptex.preset.js",
   "files": [
     "lib/scriptex.js",
     "lib/scriptex.preset.js",
@@ -34,17 +34,16 @@
     "url": "https://github.com/objectkit/scriptex/issues"
   },
   "scripts": {
-    "pretest": "npm run clean && npm run build/out",
+    "pretest": "npm run clean && npm run build/lib",
     "test": "npm run test/lint && npm run test/specs",
     "test/specs": "mocha src/test/js/**/*Spec.js --file env/mocha/conf.js",
     "test/lint": "eslint -c env/eslint/conf.json src/main/js/**/*.js",
-    "build": "npm run clean && npm run build/out && npm run build/doc",
-    "build/out": "rollup -c env/rollup/conf.js --silent",
+    "build": "npm run clean && npm run build/lib && npm run build/doc",
+    "build/lib": "rollup -c env/rollup/conf.js --silent",
     "build/doc": "jsdoc -c env/jsdoc/conf.json -d ./doc",
-    "clean": "rm -rf out doc lib",
-    "prepack": "npm run test && mkdir lib && mv out/* lib/ && rm -rf out lib/scriptex.test.js",
-    "postpublish": "npm run clean",
-    "install": "npm run test && npm run clean"
+    "clean": "rm -rf doc lib",
+    "prepack": "npm run build",
+    "install": "npm run test && npm run build/doc"
   },
   "devDependencies": {
     "@rollup/plugin-multi-entry": "4.0.0",
