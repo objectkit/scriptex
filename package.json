@@ -46,6 +46,7 @@
     "install": "npm run test && npm run build/doc"
   },
   "devDependencies": {
+    "@objectkit/scripter-mocks": "1.0.0-rc.4",
     "@rollup/plugin-multi-entry": "4.0.0",
     "chai": "4.2.0",
     "eslint": "7.10.0",
