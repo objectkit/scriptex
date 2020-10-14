@@ -74,7 +74,7 @@ const presetConf = {
     `src/main/js/**/*.js`
   ],
   output: {
-    file: `out/scriptex.preset.js`,
+    file: process.env.npm_package_unpkg,
     format: "es"
   },
   cache: true,
