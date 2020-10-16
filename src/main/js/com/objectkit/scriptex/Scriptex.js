@@ -39,16 +39,18 @@ class Scriptex {
    * @type {Map<string, string>}
    */
   static get API () {
-    return [
-      [ `NeedsTimingInfo`, `needsTiming`]
-    , [ `ResetParameterDefaults`, `needsDefaults`]
-    , [ `PluginParameters`, `params`]
-    , [ `HandleMIDI`, `onMidi`]
-    , [ `ProcessMIDI`, `onProcess`]
-    , [ `ParameterChanged`, `onParam`]
-    , [ `Reset`, `onReset`]
-    , [ `Idle`, `onIdle`]
-    ]
+    return new Map(
+      [
+        [ `NeedsTimingInfo`, `needsTiming`]
+      , [ `ResetParameterDefaults`, `needsDefaults`]
+      , [ `PluginParameters`, `params`]
+      , [ `HandleMIDI`, `onMidi`]
+      , [ `ProcessMIDI`, `onProcess`]
+      , [ `ParameterChanged`, `onParam`]
+      , [ `Reset`, `onReset`]
+      , [ `Idle`, `onIdle`]
+      ]
+    )
   }
 
   /**
@@ -63,7 +65,7 @@ class Scriptex {
    */
   constructor (system= new.target.SYSTEM, api= new.target.API, configurable=false) {
     this._system= system
-    this._api= new Map([...api])
+    this._api= api
     this._configurable= configurable
   }
 
@@ -82,7 +84,7 @@ class Scriptex {
     let api= []
     /* a reference to the system that the plugin as been deployed to */
     let sys= (plugin.system = this._system)
-    /* define a propetyu on an object */
+    /* define a propety on an object target */
     let def= (target, key, val, atr=`value`, configurable=this._configurable) =>
       Reflect.defineProperty(target, key, { [atr]: val, configurable} )
     /* define a plugin accessor delegate on Scripter */
