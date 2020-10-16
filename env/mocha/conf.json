@@ -1,0 +1,7 @@
+{
+  "diff": true,
+  "extension": ["js"],
+  "reporter": "dot",
+  "ui": "bdd",
+  "parallel": true
+}

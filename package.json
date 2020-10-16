@@ -36,11 +36,13 @@
   "scripts": {
     "pretest": "npm run clean && npm run build/lib",
     "test": "npm run test/lint && npm run test/specs",
-    "test/specs": "mocha src/test/js/**/*Spec.js --file env/mocha/conf.js",
+    "test/specs": "mocha \"src/test/js/**/[A-Z]*Spec.js\" --config env/mocha/conf.json",
     "test/lint": "eslint -c env/eslint/conf.json src/main/js/**/*.js",
     "build": "npm run clean && npm run build/lib && npm run build/doc",
     "build/lib": "rollup -c env/rollup/conf.js --silent",
     "build/doc": "jsdoc -c env/jsdoc/conf.json -d ./doc",
+    "watch/test": "mocha -w \"src/test/js/**/[A-Z]*Spec.js\" --config env/mocha/conf.json",
+    "watch/build": "rollup -w -c env/rollup/conf.js --silent",
     "clean": "rm -rf doc lib",
     "prepack": "npm run build",
     "install": "npm run test && npm run build/doc"
@@ -50,6 +52,7 @@
     "@rollup/plugin-multi-entry": "4.0.0",
     "chai": "4.2.0",
     "eslint": "7.10.0",
+    "esm": "3.2.25",
     "jsdoc": "3.6.6",
     "minami": "1.2.3",
     "mocha": "8.1.3",
