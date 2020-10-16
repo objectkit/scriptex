@@ -79,7 +79,9 @@ class DefaultPlugin extends Plugin {
    */
   onParam (key, val) {
     /** @todo support MENU key to return selected items as opposed to selected index */
-    (key = this.params[key].ID) && (this[key] = val)
+    (key= this.params[key])
+      && (key= key.ID)
+        && (this[key]= val)
   }
 
   /**
@@ -290,26 +292,21 @@ class DefaultPlugin extends Plugin {
    * @param  {Event} event Any supported Scripter MIDI Event instance.
    * @return {number}      The beatPos at which the event was sent.
    */
-  sendMidi (event) {
-    let beatPos = event.beatPos || 0
-    /* Given beatPos is empty */
-    if (0 === beatPos) {
-      /* Then invoke send() and store beatPos as 0 for return value */
-      event.send()
+  sendMidi (midi) {
+    const beatPos = midi.beatPos || 0
+    if (beatPos === 0) {
+      midi.send()
     }
-    /* Given beatPos is less than zero */
-    else if (0 > beatPos) {
-      /* When beatPos is of type number */
-      beatPos === +beatPos
-        /* Then invoke sendAfterBeats */
-        ? event.sendAfterBeats(beatPos *= -1)
-        /* When beatPos is of assumed type string, then invoke sendAfterMilliseconds */
-        : event.sendAfterMilliseconds(beatPos = +Math.abs(beatPos))
+    else if (beatPos < 0) {
+      if (+beatPos === beatPos) {
+        midi.sendAfterBeats(beatPos * -1)
+      }
+      else {
+        midi.sendAfterMilliseconds(beatPos * -1)
+      }
     }
-    /* Given beatPos is a positive number */
     else {
-      /* Then invoke sendAtBeat */
-      event.sendAtBeat(beatPos)
+      midi.sendAtBeat(beatPos)
     }
     return beatPos
   }
