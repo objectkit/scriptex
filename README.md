@@ -1,5 +1,5 @@
 # Scriptex
-**1.0.0-rc.6**
+**1.0.0-rc**
 > A metaplugin and microlib for the Scripter MIDI-FX Plugin.
 
 ## Quick Start
