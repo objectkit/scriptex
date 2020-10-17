@@ -7,24 +7,30 @@ import replaceExportStatement from "./plugin/replaceExportStatement"
 /* conditional terser compression */
 const MINIFY = !(process.env.npm_config_MINIFIER_OFF)
 
-/* @see presetConf */
-/* @see releaseConf */
-/* @see testConf */
+/*
+ * @see presetConf
+ * @see releaseConf
+ * @see testConf
+ */
 const multiEntryConf = {
   exports: true
 }
 
-/* @see presetConf */
-/* @see releaseConf */
+/*
+ * @see presetConf
+ * @see releaseConf
+ */
 const includePathsConf = {
   paths: [
     `src/main/js`
   ]
 }
 
-/* @see releaseConf */
-/* @see presetConf */
-/* @see testConf */
+/*
+ * @see releaseConf
+ * @see presetConf
+ * @see testConf
+ */
 const terserConf = {
   mangle: {
     safari10: true,
@@ -63,9 +69,10 @@ const releaseConf = {
 /**
  * The "preset" build configuration.
  *
- * This build defines the Scriptex library in the global scope.
- * The intention is that the contents of this file will be used
- * to create a template preset in the Scripter plugin.
+ * This build defines the Scriptex library in the global scope
+ * for deployment to the Scripter Code Editor.
+ *
+ * @see lib/scriptex.preset.js
  * @type {Object}
  */
 const presetConf = {
@@ -84,8 +91,7 @@ const presetConf = {
   , (MINIFY && terser(terserConf))
   , replaceExportStatement(`
 /* @todo custom midi processor */
-Scripter.Trace("Scriptex v${pkg.version}")
-    `)
+Scripter.Trace("\\n> Scriptex v${pkg.version}\\n")`)
   ]
 }
 
