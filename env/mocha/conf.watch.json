@@ -1,10 +1,9 @@
 {
-  "spec": "src/test/js/**/[A-Z]*Spec.js",
+  "ui": "bdd",
   "diff": true,
   "watch": true,
   "parallel": true,
-  "extension": ["js"],
-  "reporter": "dot",
-  "ui": "bdd",
-  "watchFiles": ["src/test"]
+  "reporter": "min",
+  "watchFiles": ["src/test"],
+  "spec": "src/test/js/**/[A-Z]*Spec.js"
 }

@@ -1,8 +1,7 @@
 {
-  "spec": "src/test/js/**/[A-Z]*Spec.js",
-  "diff": true,
-  "extension": ["js"],
-  "reporter": "spec",
   "ui": "bdd",
-  "parallel": true
+  "diff": true,
+  "parallel": true,
+  "reporter": "min",
+  "spec": "src/test/js/**/[A-Z]*Spec.js"
 }
