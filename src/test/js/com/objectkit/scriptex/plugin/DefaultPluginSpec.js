@@ -13,7 +13,7 @@ import {
 , ProgramChange
 , TargetEvent
 , Scripter
-} from "@objectkit/scripter-mocks"
+} from "@objectkit/scriptex-mox"
 
 describe(`DefaultPlugin`, () => {
 
@@ -41,17 +41,17 @@ describe(`DefaultPlugin`, () => {
       })
     })
     context(`Given #params exists`, () => {
-      context(`When #params[key] refers to a legitimate param`, () => {
+      context(`When #params[key] refers to an existing param`, () => {
         context(`When param.ID exists`, () => {
           specify(`Then plugin[param.ID] is assigned val`, ()=> {
             const defaultPlugin= new DefaultPlugin
             defaultPlugin.params= [
               {
                 ID: "davidHume"
-              , name: "Probability"
+              , name: "Connexions"
               , type: "menu"
               , valueStrings: [
-                  "", "Contiguity", "Causality"
+                  "Resemblance", "Contiguity", "Causality"
                 ]
               , defaultValue: 0
               }
