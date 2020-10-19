@@ -55,7 +55,7 @@ const releaseConf = {
     `src/main/js/**/*.js`
   ],
   output: {
-    file: process.env.npm_package_exports,
+    file: process.env.npm_package_main,
     format: "es"
   },
   cache: true,
