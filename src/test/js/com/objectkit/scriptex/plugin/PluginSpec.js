@@ -11,21 +11,6 @@ describe(`Plugin`, () => {
     sandbox.restore()
   })
 
-  describe(`static API:Map<string,string>`, () =>{
-    context(`Given Plugin.API is accessed`, () => {
-      specify(`Then Scriptex.API is returned [default]`, () => {
-        const scriptexApiSpy= sandbox.spy(Scriptex, `API`, [`get`]).get
-        let apiMap= null
-        sandbox.assert.notCalled(scriptexApiSpy)
-        {
-          apiMap= Plugin.API // access
-        }
-        sandbox.assert.calledOnce(scriptexApiSpy)
-        assert.deepEqual(Plugin.API, Scriptex.API)
-      })
-    })
-  })
-
   /** @todo Plugin.API use case demonstration test */
   describe(`static deploy(...ctorArgs):Array<string>`, () => {
     context(`Given parameters supplied to Plugin.deploy`, () => {

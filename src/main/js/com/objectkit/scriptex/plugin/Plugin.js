@@ -4,92 +4,71 @@ import { Scriptex } from "com/objectkit/scriptex/Scriptex"
 class Plugin {
 
   /**
-   * Plugins may add an optional static CONFIGURABLE property to influence
-   * the configurablility of system properties created by Scriptex during
-   * the deployment process. Its primary benefit is for debugging the
-   * Scripter environment itself rather than the plugin instance.
-   *
-   * @example
-   *  class SystemDebugPlugin extends Plugin {
-   *    //... Scriptex api hooks here
-   *  }
-   *
-   *  // instruct Scriptex to make Scripter properties configurable
-   *  SystemDebugPlugin.CONFIGURABLE= true
-   *  SystemDebugPlugin.deploy()
-   *  // debug Scripter here
-   *  // e.g Reflect.deleteProperty(Scripter, `PluginParameters`)
-   *
-   * As this is to handle transient edge cases, this capacity is not
-   * formally implemented here.
-   * @static
-   * @abstract
-   * @see [Plugin.deploy]{@link Plugin.deploy}
-   */
-
-
-  /**
-   * The Scripter/Scriptex interface that the Plugin will conform to.
-   * The default interface is Scriptex.API.
-   * Subclasses can return a list of their own bindings for custom integrations
-   * @example
-   *  class CustomPlugin extends Plugin {
-   *    // @override
-   *    static get API () {
-   *      return [
-   *        ...super.API
-   *      , [ `ParameterChanged`, `updateModel` ]
-   *      , [ `PluginParameters`, `views`]
-   *      , [ `ResetParameterDefaults`, `needsViewResets`]
-   *      ]
-   *    }
-   *
-   *    // @lends Scripter.PluginParameters
-   *    get views () {
-   *      return [
-   *        // parameter definintions
-   *      ]
-   *    }
-   *
-   *    // @lends Scripter.ResetParameterDefaults
-   *    get needsViewResets () {
-   *      return true
-   *    }
-   *
-   *    // @alias Scripter.ParameterChanged
-   *    updateModel (key, val) {
-   *      key = this.views[key].ID && this[key] = val
-   *    }
-   *
-   *    // @alias Scripter.HandleMIDI
-   *    // as defined in Scriptex.API, available via super.API in example
-   *    onMidi (midi) {
-   *      midi.send()
-   *    }
-   *  }
-   *
-   *  Trace(CustomPlugin.deploy()) // [ParameterChanged, ResetParameterDefaults, PluginParameters]
-   *
-   * @type {Map<string, string>}
-   * @see [Scriptex.API]{@link Scriptex.API}
-   */
-  static get API () {
-    return Scriptex.API
-  }
-
-  /**
    * Instantiate and integrate a new plugin with the Scripter environment.
    *
+   * There are three opt-in static Plugin properties to be aware of.
+   *
+   * - Plugin.API
+   * - Plugin.SYSTEM
+   * - Plugin.CONFIGURABLE
+   *
+   * ###### Plugin.API (default: Scriptex.API)
+   * Subclasses can add a static API field to return a list of their own
+   * bindings for custom integrations.
+   *
+   * ###### Plugin.SYSTEM (default: Scriptex.SYSTEM i.e. global scope)
+   * Primarily for use in test cases, adding a SYSTEM property will influence which
+   * object is targeted during deployment.
+   *
+   * ###### Plugin.CONFIGURABLE (default: false)
+   * Subclasses or test classes can add a static CONFIGURABLE field that will
+   * define the configurable state of all Scripter/Scriptex integration properties.
+   * Though possibly redundant, this is intended be of assistence when debugging complex
+   * applications, most likely in the Scripter Code Editor scope rather than test scope.
+   *
+   * @example <caption>Plugin.API</caption>
+   * class CustomPlugin extends Plugin {
+   *    // define an alternative to Scriptex.API
+   *   static get API () {
+   *     return [
+   *       // keep most of the original bindings...
+   *       ...super.API
+   *       // ...and redefine these bindings
+   *     , [ `ParameterChanged`, `updateModel` ]
+   *     , [ `PluginParameters`, `views`]
+   *     , [ `ResetParameterDefaults`, `needsViewResets`]
+   *     ]
+   *   }
+   * }
+   *
+   * @example <caption>Plugin.CONFIGURABLE</caption>
+   * class DebuggablePlugin extends Plugin {
+   *   // define an alternative to false
+   *   static get CONFIGURABLE () {
+   *     return true
+   *   }
+   * }
+   *
+   * @example <caption>Plugin.SYSTEM</caption>
+   * class Fixture extends Plugin {
+   *   // define an alternative to Scriptex.SYSTEM
+   *   static get SYSTEM () {
+   *     return new VirtualScripter()
+   *   }
+   * }
+   *
+   * @final
    * @param  {...*}  [ctorArgs=[]]
    *  Any arguments to pass to Plugin subclass constructors.
    * @return {Array<string>}
    *  An enumeration of the Scripter integrations
    * @see [Scriptex]{@link Scriptex#deploy}
+   * @see [Scriptex.API]{@link Scriptex.API}
+   * @see [Scriptex.SYSTEM]{@link Scriptex.SYSTEM}
    */
   static deploy (...ctorArgs) {
-    const deployee = new this(...ctorArgs)
-    const deployer = new Scriptex(Scriptex.SYSTEM, this.API, this.CONFIGURABLE)
-    return deployer.deploy(deployee)
+    return new Scriptex(this.SYSTEM, this.API, this.CONFIGURABLE)
+      .deploy(new this(...ctorArgs))
   }
 
   /**
@@ -111,6 +90,7 @@ class Plugin {
   }
 
   get system () {
+    /* for merit during deployment to Scripter - explicit error */
     throw new ReferenceError(`SystemAccessFault`)
   }
 
