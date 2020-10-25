@@ -18,7 +18,6 @@ class Scriptex {
    * @see [Scripter]{@link Scripter}
    */
   static get SYSTEM() {
-    /** @todo (0, eval)(`this`) */
     return Scripter
   }
 
