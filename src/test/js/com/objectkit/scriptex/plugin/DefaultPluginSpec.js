@@ -13,7 +13,7 @@ import {
 , ProgramChange
 , TargetEvent
 , Scripter
-} from "@objectkit/scriptex-mox"
+} from "@objectkit/scriptex.mock"
 
 describe(`DefaultPlugin`, () => {
 
