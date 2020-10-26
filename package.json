@@ -25,16 +25,16 @@
   ],
   "author": "David Foley <david@objectkit.com>",
   "homepage": "https://objectkit.github.io/scriptex",
-  "license": "Apache-2.0",
-  "publishConfig": {
-    "access": "public"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/objectkit/scriptex.git"
   },
   "bugs": {
     "url": "https://github.com/objectkit/scriptex/issues"
+  },
+  "license": "Apache-2.0",
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "build": "npm run clean && npm run build/lib && npm run build/doc",
@@ -51,7 +51,7 @@
     "prepublishOnly": "npm run build && npm run test"
   },
   "devDependencies": {
-    "@objectkit/scriptex-mox": "1.0.0-rc.1",
+    "@objectkit/scriptex.mock": "^=1.0.0-rc.0",
     "@rollup/plugin-multi-entry": "4.0.0",
     "chai": "4.2.0",
     "eslint": "7.10.0",
@@ -63,6 +63,5 @@
     "rollup-plugin-terser": "7.0.2",
     "sinon": "9.0.3",
     "uuid": "8.3.0"
-  },
-  "dependencies": {}
+  }
 }
