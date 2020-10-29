@@ -38,7 +38,7 @@ import { Plugin } from "com/objectkit/scriptex/plugin/Plugin"
  *
  * @extends Plugin
  * @see [onParam]{@link DefaultPlugin#onParam}
- * @see [onMidi]{@link DefaultPlugin#onMidi}
+ * @see [onMIDI]{@link DefaultPlugin#onMIDI}
  * @see [Plugin.deploy]{@link Plugin.deploy}
  */
 class DefaultPlugin extends Plugin {
@@ -121,7 +121,7 @@ class DefaultPlugin extends Plugin {
    * @see [onPitchBend]{@link DefaultPlugin#onPitchBend}
    * @see [onEvent]{@link DefaultPlugin#onEvent}
    */
-  onMidi (midi) {
+  onMIDI (midi) {
     return this[("on"+this.getEventName(midi))](midi)
   }
 
@@ -130,7 +130,7 @@ class DefaultPlugin extends Plugin {
    *
    * @param  {NoteOn} event A NoteOn event
    * @return {number}       The beatPos that the event was sent at
-   * @see [onMidi]{@link DefaultPlugin#onMidi}
+   * @see [onMIDI]{@link DefaultPlugin#onMIDI}
    * @see [onNote]{@link DefaultPlugin#onNote}
    */
   onNoteOn (event) {
@@ -143,7 +143,7 @@ class DefaultPlugin extends Plugin {
    *
    * @param  {NoteOff} event A NoteOff event
    * @return {number}       The beatPos that the event was sent at
-   * @see [onMidi]{@link DefaultPlugin#onMidi}
+   * @see [onMIDI]{@link DefaultPlugin#onMIDI}
    * @see [onNote]{@link DefaultPlugin#onNote}
    */
   onNoteOff (event) {
@@ -157,10 +157,10 @@ class DefaultPlugin extends Plugin {
    * @return {number}       The beatPos that the event was sent at
    * @see [onNoteOn]{@link DefaultPlugin#onNote}
    * @see [onNoteOff]{@link DefaultPlugin#onNote}
-   * @see [sendMidi]{@link DefaultPlugin#sendMidi}
+   * @see [sendMIDI]{@link DefaultPlugin#sendMIDI}
    */
   onNote (event) {
-    return this.sendMidi(event)
+    return this.sendMIDI(event)
   }
 
   /**
@@ -168,11 +168,11 @@ class DefaultPlugin extends Plugin {
    *
    * @param  {ControlChange} event A ControlChange event
    * @return {number}       The beatPos that the event was sent at
-   * @see [onMidi]{@link DefaultPlugin#onMidi}
-   * @see [sendMidi]{@link DefaultPlugin#sendMidi}
+   * @see [onMIDI]{@link DefaultPlugin#onMIDI}
+   * @see [sendMIDI]{@link DefaultPlugin#sendMIDI}
    */
   onControlChange (event) {
-    return this.sendMidi(event)
+    return this.sendMIDI(event)
   }
 
   /**
@@ -180,11 +180,11 @@ class DefaultPlugin extends Plugin {
    *
    * @param  {ProgramChange} event  A ProgramChange event
    * @return {number}               The beatPos that the event was sent at
-   * @see [onMidi]{@link DefaultPlugin#onMidi}
-   * @see [sendMidi]{@link DefaultPlugin#sendMidi}
+   * @see [onMIDI]{@link DefaultPlugin#onMIDI}
+   * @see [sendMIDI]{@link DefaultPlugin#sendMIDI}
    */
   onProgramChange (event) {
-    return this.sendMidi(event)
+    return this.sendMIDI(event)
   }
 
   /**
@@ -192,11 +192,11 @@ class DefaultPlugin extends Plugin {
    *
    * @param  {PolyPressure} event   A PolyPressure event
    * @return {number}              The beatPos that the event was sent at
-   * @see [onMidi]{@link DefaultPlugin#onMidi}
-   * @see [sendMidi]{@link DefaultPlugin#sendMidi}
+   * @see [onMIDI]{@link DefaultPlugin#onMIDI}
+   * @see [sendMIDI]{@link DefaultPlugin#sendMIDI}
    */
   onPolyPressure (event) {
-    return this.sendMidi(event)
+    return this.sendMIDI(event)
   }
 
   /**
@@ -204,11 +204,11 @@ class DefaultPlugin extends Plugin {
    *
    * @param  {ChannelPressure} event   A ChannelPressure event
    * @return {number}              The beatPos that the event was sent at
-   * @see [onMidi]{@link DefaultPlugin#onMidi}
-   * @see [sendMidi]{@link DefaultPlugin#sendMidi}
+   * @see [onMIDI]{@link DefaultPlugin#onMIDI}
+   * @see [sendMIDI]{@link DefaultPlugin#sendMIDI}
    */
   onChannelPressure (event) {
-    return this.sendMidi(event)
+    return this.sendMIDI(event)
   }
 
   /**
@@ -216,11 +216,11 @@ class DefaultPlugin extends Plugin {
    *
    * @param  {TargetEvent} event   A TargetEvent event
    * @return {number}              The beatPos that the event was sent at
-   * @see [onMidi]{@link DefaultPlugin#onMidi}
-   * @see [sendMidi]{@link DefaultPlugin#sendMidi}
+   * @see [onMIDI]{@link DefaultPlugin#onMIDI}
+   * @see [sendMIDI]{@link DefaultPlugin#sendMIDI}
    */
   onTargetEvent (event) {
-    return this.sendMidi(event)
+    return this.sendMIDI(event)
   }
 
   /**
@@ -228,11 +228,11 @@ class DefaultPlugin extends Plugin {
    *
    * @param  {PitchBend} event    A TargetEvent event
    * @return {number}             The beatPos that the event was sent at
-   * @see [onMidi]{@link DefaultPlugin#onMidi}
-   * @see [sendMidi]{@link DefaultPlugin#sendMidi}
+   * @see [onMIDI]{@link DefaultPlugin#onMIDI}
+   * @see [sendMIDI]{@link DefaultPlugin#sendMIDI}
    */
   onPitchBend (event) {
-    return this.sendMidi(event)
+    return this.sendMIDI(event)
   }
 
   /**
@@ -240,11 +240,11 @@ class DefaultPlugin extends Plugin {
    *
    * @param  {PitchBend} event    A generic Event instance
    * @return {number}             The beatPos that the event was sent at
-   * @see [onMidi]{@link DefaultPlugin#onMidi}
-   * @see [sendMidi]{@link DefaultPlugin#sendMidi}
+   * @see [onMIDI]{@link DefaultPlugin#onMIDI}
+   * @see [sendMIDI]{@link DefaultPlugin#sendMIDI}
    */
   onEvent (event) {
-    return this.sendMidi(event)
+    return this.sendMIDI(event)
   }
 
   /**
@@ -292,7 +292,7 @@ class DefaultPlugin extends Plugin {
    * @param  {Event} event Any supported Scripter MIDI Event instance.
    * @return {number}      The beatPos at which the event was sent.
    */
-  sendMidi (midi) {
+  sendMIDI (midi) {
     const beatPos = midi.beatPos || 0
     if (beatPos === 0) {
       midi.send()

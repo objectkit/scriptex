@@ -41,8 +41,8 @@ describe(`Scriptex`, () => {
         })
       })
       context(`When Scriptex.API.get("HandleMIDI") is accessed`, () => {
-        specify(`Then "onMidi" is returned`, () => {
-          assert.strictEqual(Scriptex.API.get(`HandleMIDI`), `onMidi`)
+        specify(`Then "onMIDI" is returned`, () => {
+          assert.strictEqual(Scriptex.API.get(`HandleMIDI`), `onMIDI`)
         })
       })
       context(`When Scriptex.API.get("ParameterChanged") is accessed`, () => {
@@ -100,7 +100,7 @@ describe(`Scriptex`, () => {
           get needsTiming () {}
           get needsDefaults () {}
           get params() {}
-          onMidi () {}
+          onMIDI () {}
           onParam () {}
           onProcess () {}
           onReset () {}

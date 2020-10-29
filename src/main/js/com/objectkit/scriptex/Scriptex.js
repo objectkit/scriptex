@@ -31,7 +31,7 @@ class Scriptex {
    * | ResetParameterDefaults | needsDefaults |
    * | ParameterChanged       | onParam       |
    * | ProcessMIDI            | onProcess     |
-   * | HandleMIDI             | onMidi        |
+   * | HandleMIDI             | onMIDI        |
    * | Reset                  | onReset       |
    * | Idle                   | onIdle        |
    *
@@ -43,7 +43,7 @@ class Scriptex {
         [ `NeedsTimingInfo`, `needsTiming`]
       , [ `ResetParameterDefaults`, `needsDefaults`]
       , [ `PluginParameters`, `params`]
-      , [ `HandleMIDI`, `onMidi`]
+      , [ `HandleMIDI`, `onMIDI`]
       , [ `ProcessMIDI`, `onProcess`]
       , [ `ParameterChanged`, `onParam`]
       , [ `Reset`, `onReset`]
