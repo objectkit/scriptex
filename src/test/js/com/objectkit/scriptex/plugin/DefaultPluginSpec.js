@@ -304,7 +304,7 @@ describe(`DefaultPlugin`, () => {
     })
   })
 
-  describe(`#getEventName(event:Event):string`, () => {
+  describe(`#getMIDIName(event:Event):string`, () => {
     context(`Given event.status is not a Scripter midi status code`, () => {
       specify(`Then "EventNameNotFound" is thrown`, () => {
         const statuses= [
@@ -320,8 +320,8 @@ describe(`DefaultPlugin`, () => {
         ]
         const plugin= new DefaultPlugin()
         for (const status of statuses) {
-          const ok= () => plugin.getEventName( { status } )
-          const notOk= () => plugin.getEventName( { status: status - 1 })
+          const ok= () => plugin.getMIDIName( { status } )
+          const notOk= () => plugin.getMIDIName( { status: status - 1 })
           assert.doesNotThrow(ok)
           assert.throws(notOk, ReferenceError, "EventNameNotFound")
         }
@@ -334,7 +334,7 @@ describe(`DefaultPlugin`, () => {
           assert.strictEqual(Event.STATUS, status )
           assert.strictEqual(
             Event.name
-          , new DefaultPlugin().getEventName( { status } )
+          , new DefaultPlugin().getMIDIName( { status } )
           )
         })
       })
@@ -344,7 +344,7 @@ describe(`DefaultPlugin`, () => {
           assert.strictEqual(TargetEvent.STATUS, status )
           assert.strictEqual(
             TargetEvent.name
-          , new DefaultPlugin().getEventName( { status } )
+          , new DefaultPlugin().getMIDIName( { status } )
           )
         })
       })
@@ -354,7 +354,7 @@ describe(`DefaultPlugin`, () => {
           assert.strictEqual(NoteOff.STATUS, status )
           assert.strictEqual(
             NoteOff.name
-          , new DefaultPlugin().getEventName( { status } )
+          , new DefaultPlugin().getMIDIName( { status } )
           )
         })
       })
@@ -366,7 +366,7 @@ describe(`DefaultPlugin`, () => {
           assert.notStrictEqual(NoteOn.name, Note.name)
           assert.strictEqual(
             NoteOn.name
-          , new DefaultPlugin().getEventName( { status } )
+          , new DefaultPlugin().getMIDIName( { status } )
           )
         })
       })
@@ -376,7 +376,7 @@ describe(`DefaultPlugin`, () => {
           assert.strictEqual(PolyPressure.STATUS, status )
           assert.strictEqual(
             PolyPressure.name
-          , new DefaultPlugin().getEventName( { status } )
+          , new DefaultPlugin().getMIDIName( { status } )
           )
         })
       })
@@ -386,7 +386,7 @@ describe(`DefaultPlugin`, () => {
           assert.strictEqual(ControlChange.STATUS, status )
           assert.strictEqual(
             ControlChange.name
-          , new DefaultPlugin().getEventName( { status } )
+          , new DefaultPlugin().getMIDIName( { status } )
           )
         })
       })
@@ -396,7 +396,7 @@ describe(`DefaultPlugin`, () => {
           assert.strictEqual(ProgramChange.STATUS, status )
           assert.strictEqual(
             ProgramChange.name
-          , new DefaultPlugin().getEventName( { status } )
+          , new DefaultPlugin().getMIDIName( { status } )
           )
         })
       })
@@ -406,7 +406,7 @@ describe(`DefaultPlugin`, () => {
           assert.strictEqual(ChannelPressure.STATUS, status )
           assert.strictEqual(
             ChannelPressure.name
-          , new DefaultPlugin().getEventName( { status } )
+          , new DefaultPlugin().getMIDIName( { status } )
           )
         })
       })
@@ -416,7 +416,7 @@ describe(`DefaultPlugin`, () => {
           assert.strictEqual(PitchBend.STATUS, status )
           assert.strictEqual(
             PitchBend.name
-          , new DefaultPlugin().getEventName( { status } )
+          , new DefaultPlugin().getMIDIName( { status } )
           )
         })
       })

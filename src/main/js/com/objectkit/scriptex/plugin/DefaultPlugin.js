@@ -122,7 +122,7 @@ class DefaultPlugin extends Plugin {
    * @see [onEvent]{@link DefaultPlugin#onEvent}
    */
   onMIDI (midi) {
-    return this[("on"+this.getEventName(midi))](midi)
+    return this[("on"+this.getMIDIName(midi))](midi)
   }
 
   /**
@@ -259,7 +259,7 @@ class DefaultPlugin extends Plugin {
    * @param  {Event} event Any Scripter MIDI event
    * @return {string}      The name of the MIDI event
    */
-  getEventName (event) {
+  getMIDIName (event) {
     let status = event.status
     switch(status) {
       case   0: return "Event"
