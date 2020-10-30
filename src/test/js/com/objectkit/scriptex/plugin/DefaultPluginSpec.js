@@ -24,28 +24,28 @@ describe(`DefaultPlugin`, () => {
     sandbox.restore()
   })
 
-  describe(`#onParam(key:number, val:number):void`, () => {
+  describe(`#onParameter(key:number, val:number):void`, () => {
     /*
-      When no #params property exists
+      When no #parameters property exists
         Then "TypeError: Cannot read property '0' of undefined"
 
       It does an unsafe lookup to improve performance
       The rule is limited to unit testing and accidental use.
      */
-    context(`Given #params does not exist`, () => {
-      context(`When #onParam is invoked`, () => {
-        specify(`Then #onParam thows TypeError`, () => {
-          const fn= () => new DefaultPlugin().onParam(0, 0)
+    context(`Given #parameters does not exist`, () => {
+      context(`When #onParameter is invoked`, () => {
+        specify(`Then #onParameter thows TypeError`, () => {
+          const fn= () => new DefaultPlugin().onParameter(0, 0)
           assert.throws(fn, TypeError, "Cannot read property '0' of undefined")
         })
       })
     })
-    context(`Given #params exists`, () => {
-      context(`When #params[key] refers to an existing param`, () => {
+    context(`Given #parameters exists`, () => {
+      context(`When #parameters[key] refers to an existing param`, () => {
         context(`When param.ID exists`, () => {
           specify(`Then plugin[param.ID] is assigned val`, ()=> {
             const defaultPlugin= new DefaultPlugin
-            defaultPlugin.params= [
+            defaultPlugin.parameters= [
               {
                 ID: "davidHume"
               , name: "Connexions"
@@ -56,14 +56,14 @@ describe(`DefaultPlugin`, () => {
               , defaultValue: 0
               }
             ]
-            const ID= defaultPlugin.params[0].ID
+            const ID= defaultPlugin.parameters[0].ID
             assert.strictEqual("davidHume", ID)
             assert.notProperty(defaultPlugin, ID)
-            defaultPlugin.onParam(0, 2)
+            defaultPlugin.onParameter(0, 2)
             assert.propertyVal(defaultPlugin, ID, 2)
-            defaultPlugin.onParam(0, 1)
+            defaultPlugin.onParameter(0, 1)
             assert.propertyVal(defaultPlugin, ID, 1)
-            defaultPlugin.onParam(0, 0)
+            defaultPlugin.onParameter(0, 0)
             assert.propertyVal(defaultPlugin, ID, 0)
           })
         })
@@ -71,11 +71,11 @@ describe(`DefaultPlugin`, () => {
         context(`When param.ID does not exist`, () => {
           specify(`Then plugin is not assigned val`, () => {
             const defaultPlugin= new DefaultPlugin()
-            defaultPlugin.params= []
-            defaultPlugin.onParam(0, 2)
-            defaultPlugin.onParam(0, 1)
-            defaultPlugin.onParam(0, 0)
-            assert.deepEqual([`params`], Reflect.ownKeys(defaultPlugin))
+            defaultPlugin.parameters= []
+            defaultPlugin.onParameter(0, 2)
+            defaultPlugin.onParameter(0, 1)
+            defaultPlugin.onParameter(0, 0)
+            assert.deepEqual([`parameters`], Reflect.ownKeys(defaultPlugin))
           })
         })
       })

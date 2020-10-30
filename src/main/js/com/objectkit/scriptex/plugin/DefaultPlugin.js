@@ -8,7 +8,7 @@ import { Plugin } from "com/objectkit/scriptex/plugin/Plugin"
  * It has been designed to solve common view and midi management problems with the native Scripter
  * API while keepin file size low and performance relatively high. .
  *
- * The needsTiming, needsResets and params properties have been intentionally left out of the
+ * The needsTiming, needsResets and parameters properties have been intentionally left out of the
  * base implementation and you are encouraged to add them to subclasses only as needed.
  *
  * @example
@@ -25,7 +25,7 @@ import { Plugin } from "com/objectkit/scriptex/plugin/Plugin"
  *   }
  *
  *   // @lends Scripter.PluginParameters
- *   get params () {
+ *   get parameters () {
  *     return [{ type: "text", name: this.constructor.name }]
  *   }
  *
@@ -37,7 +37,7 @@ import { Plugin } from "com/objectkit/scriptex/plugin/Plugin"
  *  .forEach(Trace)
  *
  * @extends Plugin
- * @see [onParam]{@link DefaultPlugin#onParam}
+ * @see [onParameter]{@link DefaultPlugin#onParameter}
  * @see [onMIDI]{@link DefaultPlugin#onMIDI}
  * @see [Plugin.deploy]{@link Plugin.deploy}
  */
@@ -48,7 +48,7 @@ class DefaultPlugin extends Plugin {
    *
    * This implementation essentially treats the plugin itself as a "ParamViewModel".
    *
-   * Given onParam is called with a parameter index and data value
+   * Given onParameter is called with a parameter index and data value
    *   When the param as a property named ID
    *     Then ID is treated as a property key of the plugin
    *     And the data value is assigned to the plugin.
@@ -58,7 +58,7 @@ class DefaultPlugin extends Plugin {
    *
    * @example
    * class MidiStop extends DefaultPlugin {
-   *   get params () {
+   *   get parameters () {
    *     return [
    *       {
    *         ID: "midiStop"
@@ -77,9 +77,9 @@ class DefaultPlugin extends Plugin {
    * @param  {number} val The new value of the param
    * @return {void}
    */
-  onParam (key, val) {
+  onParameter (key, val) {
     /** @todo support MENU key to return selected items as opposed to selected index */
-    (key= this.params[key])
+    (key= this.parameters[key])
       && (key= key.ID)
         && (this[key]= val)
   }
@@ -92,7 +92,7 @@ class DefaultPlugin extends Plugin {
    *
    * @example
    * class Transposer {
-   *   get params () {
+   *   get parameters () {
    *     return [
    *       {
    *         ID: "semitones"

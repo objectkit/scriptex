@@ -41,7 +41,7 @@ describe(`Plugin`, () => {
 
       class ConfigurableSystemPlugin extends Plugin {
         /* hook for testing */
-        onParam () {}
+        onParameter () {}
       }
       const { isTrue, isFalse } = assert
       const assertSystemIsConfigurable= (configurable, assertion) => {

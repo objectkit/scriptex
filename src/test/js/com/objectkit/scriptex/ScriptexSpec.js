@@ -26,8 +26,8 @@ describe(`Scriptex`, () => {
         assert.lengthOf(Scriptex.API, 8)
       })
       context(`When Scriptex.API.get("PluginParameters") is accessed`, () => {
-        specify(`Then "params" is returned`, () => {
-          assert.strictEqual(Scriptex.API.get(`PluginParameters`), `params`)
+        specify(`Then "parameters" is returned`, () => {
+          assert.strictEqual(Scriptex.API.get(`PluginParameters`), `parameters`)
         })
       })
       context(`When Scriptex.API.get("NeedsTimingInfo") is accessed`, () => {
@@ -46,8 +46,8 @@ describe(`Scriptex`, () => {
         })
       })
       context(`When Scriptex.API.get("ParameterChanged") is accessed`, () => {
-        specify(`Then "onParam" is returned`, () => {
-          assert.strictEqual(Scriptex.API.get(`ParameterChanged`), `onParam`)
+        specify(`Then "onParameter" is returned`, () => {
+          assert.strictEqual(Scriptex.API.get(`ParameterChanged`), `onParameter`)
         })
       })
       context(`When Scriptex.API.get("ProcessMIDI") is accessed`, () => {
@@ -99,9 +99,9 @@ describe(`Scriptex`, () => {
         class Deployee {
           get needsTiming () {}
           get needsDefaults () {}
-          get params() {}
+          get parameters() {}
           onMIDI () {}
-          onParam () {}
+          onParameter () {}
           onProcess () {}
           onReset () {}
           onIdle () {}
