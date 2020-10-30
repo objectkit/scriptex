@@ -82,147 +82,147 @@ describe(`DefaultPlugin`, () => {
     })
   })
 
-  describe(`#onMidi(midi:Event):number`, () => {
+  describe(`#onMIDI(midi:Event):number`, () => {
 
-    context(`Given a midi event passed to the #onMidi method`, () => {
+    context(`Given a midi event passed to the #onMIDI method`, () => {
 
       context(`When ChannelPressure is the midi event type`, () => {
-        specify(`Then the event is delegated from #onMidi to #onChannelPressure, #sendMidi`, () => {
+        specify(`Then the event is delegated from #onMIDI to #onChannelPressure, #sendMIDI`, () => {
           const event= sandbox.spy(new ChannelPressure())
           const plugin= sandbox.spy(new DefaultPlugin())
-          const { onMidi, onChannelPressure, sendMidi } = plugin
+          const { onMIDI, onChannelPressure, sendMIDI } = plugin
           {
-            plugin.onMidi(event)
+            plugin.onMIDI(event)
           }
-          sandbox.assert.callOrder(onMidi, onChannelPressure, sendMidi)
+          sandbox.assert.callOrder(onMIDI, onChannelPressure, sendMIDI)
           sandbox.assert.calledOnce(event.send)
-          assert.isNumber(onMidi.lastCall.returnValue)
+          assert.isNumber(onMIDI.lastCall.returnValue)
         })
       })
 
       context(`When ControlChange is the midi event type`, () => {
-        specify(`Then the event is delegated from #onMidi to #onChannelPressure, #sendMidi`, () => {
+        specify(`Then the event is delegated from #onMIDI to #onChannelPressure, #sendMIDI`, () => {
           const event= sandbox.spy(new ControlChange())
           const plugin= sandbox.spy(new DefaultPlugin())
-          const { onMidi, onControlChange, sendMidi } = plugin
+          const { onMIDI, onControlChange, sendMIDI } = plugin
           {
-            plugin.onMidi(event)
+            plugin.onMIDI(event)
           }
-          sandbox.assert.callOrder(onMidi, onControlChange, sendMidi)
+          sandbox.assert.callOrder(onMIDI, onControlChange, sendMIDI)
           sandbox.assert.calledOnce(event.send)
-          assert.isNumber(onMidi.lastCall.returnValue)
+          assert.isNumber(onMIDI.lastCall.returnValue)
         })
       })
 
       context(`When Event is the midi event type`, () => {
-        specify(`Then the event is delegated from #onMidi to #onEvent, #sendMidi`, () => {
+        specify(`Then the event is delegated from #onMIDI to #onEvent, #sendMIDI`, () => {
           const event= sandbox.spy(new Event())
           const plugin= sandbox.spy(new DefaultPlugin())
-          const { onMidi, onEvent, sendMidi } = plugin
+          const { onMIDI, onEvent, sendMIDI } = plugin
           {
-            plugin.onMidi(event)
+            plugin.onMIDI(event)
           }
-          sandbox.assert.callOrder(onMidi, onEvent, sendMidi)
+          sandbox.assert.callOrder(onMIDI, onEvent, sendMIDI)
           sandbox.assert.calledOnce(event.send)
-          assert.isNumber(onMidi.lastCall.returnValue)
+          assert.isNumber(onMIDI.lastCall.returnValue)
         })
       })
 
       context(`When Note is the midi event type`, () => {
-        specify(`Then the event is delegated from #onMidi to #onNote, #sendMidi`, () => {
+        specify(`Then the event is delegated from #onMIDI to #onNote, #sendMIDI`, () => {
           const event= sandbox.spy(new Note())
           const plugin= sandbox.spy(new DefaultPlugin())
-          const { onMidi, onNoteOff, onNote, sendMidi } = plugin
+          const { onMIDI, onNoteOff, onNote, sendMIDI } = plugin
           {
-            plugin.onMidi(event)
+            plugin.onMIDI(event)
           }
-          sandbox.assert.callOrder(onMidi, onNote, sendMidi)
+          sandbox.assert.callOrder(onMIDI, onNote, sendMIDI)
           sandbox.assert.calledOnce(event.send)
-          assert.isNumber(onMidi.lastCall.returnValue)
+          assert.isNumber(onMIDI.lastCall.returnValue)
         })
       })
 
       context(`When NoteOff is the midi event type`, () => {
-        specify(`Then the event is delegated from #onMidi to #onNoteOff, #onNote, #sendMidi`, () => {
+        specify(`Then the event is delegated from #onMIDI to #onNoteOff, #onNote, #sendMIDI`, () => {
           const event= sandbox.spy(new NoteOff())
           const plugin= sandbox.spy(new DefaultPlugin())
-          const { onMidi, onNoteOff, onNote, sendMidi } = plugin
+          const { onMIDI, onNoteOff, onNote, sendMIDI } = plugin
           {
-            plugin.onMidi(event)
+            plugin.onMIDI(event)
           }
-          sandbox.assert.callOrder(onMidi, onNoteOff, onNote, sendMidi)
+          sandbox.assert.callOrder(onMIDI, onNoteOff, onNote, sendMIDI)
           sandbox.assert.calledOnce(event.send)
-          assert.isNumber(onMidi.lastCall.returnValue)
+          assert.isNumber(onMIDI.lastCall.returnValue)
         })
       })
 
       context(`When NoteOn is the midi event type`, () => {
-        specify(`Then the event is delegated from #onMidi to #onNoteOn, #onNote, #sendMidi`, () => {
+        specify(`Then the event is delegated from #onMIDI to #onNoteOn, #onNote, #sendMIDI`, () => {
           const event= sandbox.spy(new NoteOn())
           const plugin= sandbox.spy(new DefaultPlugin())
-          const { onMidi, onNoteOn, onNote, sendMidi } = plugin
+          const { onMIDI, onNoteOn, onNote, sendMIDI } = plugin
           {
-            plugin.onMidi(event)
+            plugin.onMIDI(event)
           }
-          sandbox.assert.callOrder(onMidi, onNoteOn, onNote, sendMidi)
+          sandbox.assert.callOrder(onMIDI, onNoteOn, onNote, sendMIDI)
           sandbox.assert.calledOnce(event.send)
-          assert.isNumber(onMidi.lastCall.returnValue)
+          assert.isNumber(onMIDI.lastCall.returnValue)
         })
       })
 
       context(`When PitchBend is the midi event type`, () => {
-        specify(`Then the event is delegated from #onMidi to #onPitchBend, #sendMidi`, () => {
+        specify(`Then the event is delegated from #onMIDI to #onPitchBend, #sendMIDI`, () => {
           const event= sandbox.spy(new PitchBend())
           const plugin= sandbox.spy(new DefaultPlugin())
-          const { onMidi, onPitchBend, sendMidi } = plugin
+          const { onMIDI, onPitchBend, sendMIDI } = plugin
           {
-            plugin.onMidi(event)
+            plugin.onMIDI(event)
           }
-          sandbox.assert.callOrder(onMidi, onPitchBend, sendMidi)
+          sandbox.assert.callOrder(onMIDI, onPitchBend, sendMIDI)
           sandbox.assert.calledOnce(event.send)
-          assert.isNumber(onMidi.lastCall.returnValue)
+          assert.isNumber(onMIDI.lastCall.returnValue)
         })
       })
 
       context(`When PolyPressure is the midi event type`, () => {
-        specify(`Then the event is delegated from #onMidi to #onPolyPressure, #sendMidi`, () => {
+        specify(`Then the event is delegated from #onMIDI to #onPolyPressure, #sendMIDI`, () => {
           const event= sandbox.spy(new PolyPressure())
           const plugin= sandbox.spy(new DefaultPlugin())
-          const { onMidi, onPolyPressure, sendMidi } = plugin
+          const { onMIDI, onPolyPressure, sendMIDI } = plugin
           {
-            plugin.onMidi(event)
+            plugin.onMIDI(event)
           }
-          sandbox.assert.callOrder(onMidi, onPolyPressure, sendMidi)
+          sandbox.assert.callOrder(onMIDI, onPolyPressure, sendMIDI)
           sandbox.assert.calledOnce(event.send)
-          assert.isNumber(onMidi.lastCall.returnValue)
+          assert.isNumber(onMIDI.lastCall.returnValue)
         })
       })
 
       context(`When ProgramChange is the midi event type`, () => {
-        specify(`Then the event is delegated from #onMidi to #onProgramChange, #sendMidi`, () => {
+        specify(`Then the event is delegated from #onMIDI to #onProgramChange, #sendMIDI`, () => {
           const event= sandbox.spy(new ProgramChange())
           const plugin= sandbox.spy(new DefaultPlugin())
-          const { onMidi, onProgramChange, sendMidi } = plugin
+          const { onMIDI, onProgramChange, sendMIDI } = plugin
           {
-            plugin.onMidi(event)
+            plugin.onMIDI(event)
           }
-          sandbox.assert.callOrder(onMidi, onProgramChange, sendMidi)
+          sandbox.assert.callOrder(onMIDI, onProgramChange, sendMIDI)
           sandbox.assert.calledOnce(event.send)
-          assert.isNumber(onMidi.lastCall.returnValue)
+          assert.isNumber(onMIDI.lastCall.returnValue)
         })
       })
 
       context(`When TargetEvent is the midi event type`, () => {
-        specify(`Then the event is delegated from #onMidi to #onTargetEvent, #sendMidi`, () => {
+        specify(`Then the event is delegated from #onMIDI to #onTargetEvent, #sendMIDI`, () => {
           const event= sandbox.spy(new TargetEvent())
           const plugin= sandbox.spy(new DefaultPlugin())
-          const { onMidi, onTargetEvent, sendMidi } = plugin
+          const { onMIDI, onTargetEvent, sendMIDI } = plugin
           {
-            plugin.onMidi(event)
+            plugin.onMIDI(event)
           }
-          sandbox.assert.callOrder(onMidi, onTargetEvent, sendMidi)
+          sandbox.assert.callOrder(onMIDI, onTargetEvent, sendMIDI)
           sandbox.assert.calledOnce(event.send)
-          assert.isNumber(onMidi.lastCall.returnValue)
+          assert.isNumber(onMIDI.lastCall.returnValue)
         })
       })
     })
@@ -235,17 +235,17 @@ describe(`DefaultPlugin`, () => {
           const plugin= sandbox.spy(new DefaultPlugin())
           const event = sandbox.spy(new Event())
           event.beatPos= undefined
-          const whenPos= plugin.sendMidi(event)
+          const whenPos= plugin.sendMIDI(event)
           assert.strictEqual(0, whenPos)
           sandbox.assert.calledOnce(event.send)
           sandbox.assert.notCalled(event.sendAtBeat)
           sandbox.assert.notCalled(event.sendAfterBeats)
           sandbox.assert.notCalled(event.sendAfterMilliseconds)
           event.beatPos= null
-          assert.strictEqual(0, plugin.sendMidi(event))
+          assert.strictEqual(0, plugin.sendMIDI(event))
           sandbox.assert.calledTwice(event.send)
           event.beatPos= ``
-          assert.strictEqual(0, plugin.sendMidi(event))
+          assert.strictEqual(0, plugin.sendMIDI(event))
           sandbox.assert.calledThrice(event.send)
         })
       })
@@ -254,7 +254,7 @@ describe(`DefaultPlugin`, () => {
           const plugin= sandbox.spy(new DefaultPlugin())
           const event = sandbox.spy(new Event())
           event.beatPos= 0
-          const whenPos= plugin.sendMidi(event)
+          const whenPos= plugin.sendMIDI(event)
           assert.strictEqual(0, whenPos)
           sandbox.assert.calledOnce(event.send)
           sandbox.assert.notCalled(event.sendAtBeat)
@@ -267,7 +267,7 @@ describe(`DefaultPlugin`, () => {
           const plugin= sandbox.spy(new DefaultPlugin())
           const event = sandbox.spy(new Event())
           event.beatPos= 1
-          const whenPos= plugin.sendMidi(event)
+          const whenPos= plugin.sendMIDI(event)
           assert.strictEqual(1, whenPos)
           sandbox.assert.notCalled(event.send)
           sandbox.assert.calledOnce(event.sendAtBeat)
@@ -280,7 +280,7 @@ describe(`DefaultPlugin`, () => {
           const plugin= sandbox.spy(new DefaultPlugin())
           const event = sandbox.spy(new Event())
           event.beatPos= -1
-          const whenPos= plugin.sendMidi(event)
+          const whenPos= plugin.sendMIDI(event)
           assert.strictEqual(-1, whenPos)
           sandbox.assert.notCalled(event.send)
           sandbox.assert.notCalled(event.sendAtBeat)
@@ -293,7 +293,7 @@ describe(`DefaultPlugin`, () => {
           const plugin= sandbox.spy(new DefaultPlugin())
           const event = sandbox.spy(new Event())
           event.beatPos= "-1"
-          const whenPos= plugin.sendMidi(event)
+          const whenPos= plugin.sendMIDI(event)
           assert.strictEqual("-1", whenPos)
           sandbox.assert.notCalled(event.send)
           sandbox.assert.notCalled(event.sendAtBeat)
