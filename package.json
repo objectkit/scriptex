@@ -4,7 +4,7 @@
   "description": "A metaplugin and micro-library for the Scripter MIDI-FX Plugin.",
   "type": "module",
   "main": "./lib/scriptex.js",
-  "unpkg": "./lib/scriptex.preset.js",  
+  "unpkg": "./lib/scriptex.preset.js",
   "exports": {
     ".": {
       "default": "./lib/scriptex.js"
@@ -50,7 +50,7 @@
     "watch": "npm run watch/build & npm run watch/test",
     "watch/test": "mocha --config env/mocha/conf.watch.json || exit 0",
     "watch/build": "rollup -w -c env/rollup/conf.js",
-    "prepublishOnly": "npm run build && npm run test"
+    "prepublishOnly": "npm run build"
   },
   "devDependencies": {
     "@objectkit/scriptex.mock": "^=1.0.0-rc.0",
