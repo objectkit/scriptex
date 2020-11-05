@@ -1,6 +1,6 @@
 {
   "name": "@objectkit/scriptex",
-  "version": "1.0.0-rc.12",
+  "version": "1.0.0-rc.13",
   "description": "A metaplugin and micro-library for the Scripter MIDI-FX Plugin.",
   "type": "module",
   "main": "./lib/scriptex.js",
